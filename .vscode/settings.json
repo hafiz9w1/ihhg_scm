@@ -1,0 +1,15 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.autoComplete.extraPaths": [
+        "C:\\odoodev15",
+        "C:\\odoodev15\\addons",
+        "C:\\odoodev15\\enterprise"
+    ],
+    "python.analysis.extraPaths": [
+        "C:\\odoodev15",
+        "C:\\odoodev15\\addons",
+        "C:\\odoodev15\\enterprise"
+    ],
+}
+
