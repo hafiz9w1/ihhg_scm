@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record id="project_form_inherit" model="ir.ui.view">
+            <field name="name">project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="project_date_deadline"/>
+              </xpath>
+              <notebook>
+                <page name="scm_page" string="SCM and Selection">
+                  <group>
+                    <group>
+                      <field name="scm_entry_id" string="SCM"/>
+                    </group>
+                    <group>
+                      <field name="selection_criteria_id" string="Selection Criteria"/>
+                    </group>
+                  </group>
+                </page>
+              </notebook>
+            </field>
+        </record>
+  </data>
+</odoo>

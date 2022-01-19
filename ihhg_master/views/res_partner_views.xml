@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record id="res_partner_view_form_inherit" model="ir.ui.view">
+            <field name="name">partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <notebook>
+                  <page name="extra_address_page" string="Extra Addresses">
+                    <group>
+                      <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="parent_address"/>
+                        <field name="is_dc"/>
+                        <field name="targets_represented"/>
+                      </group>
+                      <group>
+                        <field name="store_regulation_entry_id"/>
+                        <field name="channel_id"/>
+                        <field name="selection_criteria_id"/>
+                      </group>
+                    </group>
+              </page>
+            </notebook>
+            </field>
+        </record>
+  </data>
+</odoo>

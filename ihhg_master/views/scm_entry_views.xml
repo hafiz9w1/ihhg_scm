@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record model="ir.ui.view" id="view_scm_entry_kanban">
+          <field name="name">scm.entry.kanban</field>
+          <field name="model">scm.entry</field>
+          <field name="arch" type="xml">
+              <kanban class="o_kanban_mobile">
+                  <field name="channel"/>
+                  <field name="originating_regulation"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="date_from"/>
+                  <field name="date_to"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                              <div class="o_kanban_record_top mb16">
+                                  <div class="o_kanban_record_headings mt4">
+                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel"/></div>
+                                  </div>
+                              </div>
+                              <div class="o_kanban_record_top mb16">
+                                  <div class="o_kanban_record_headings mt4">
+                                      <strong>Originating Regulation: </strong><div class="o_kanban_record_title"><field name="originating_regulation"/></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+      </record>
+
+      <record id="view_scm_entry_tree" model="ir.ui.view">
+          <field name="name">scm.entry.tree</field>
+          <field name="model">scm.entry</field>
+          <field name="priority">2</field>
+          <field name="arch" type="xml">
+              <tree string="SCM Entry">
+                  <field name="channel"/>
+                  <field name="originating_regulation"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="date_from"/>
+                  <field name="date_to"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="view_scm_entry_form" model="ir.ui.view">
+          <field name="name">scm.entry.form</field>
+          <field name="model">scm.entry</field>
+          <field name="arch" type="xml">
+              <form string="SCM Entry" >
+              <sheet>
+                  <group>
+                      <group>
+                          <field name="channel"/>
+                          <field name="originating_regulation"/>
+                          <field name="product_tmpl_id"/>
+                          <field name="date_from"/>
+                          <field name="date_to"/>
+                      </group>
+                  </group>
+              </sheet>
+              <div class="oe_chatter">
+                  <field name="message_follower_ids"/>
+                  <field name="activity_ids"/>
+                  <field name="message_ids"/>
+              </div>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_scm_entry_filter" model="ir.ui.view">
+          <field name="name">scm.entry.list.select</field>
+          <field name="model">scm.entry</field>
+          <field name="priority" eval="15"/>
+          <field name="arch" type="xml">
+              <search string="Search SCM Entry">
+                  <field name="channel"/>
+                  <field name="originating_regulation"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="date_from"/>
+                  <field name="date_to"/>
+                  <group expand="0" string="Group By">
+                      <filter string="Channel" name="channel" domain="[]" context="{'group_by': 'channel'}"/>
+                  </group>
+             </search>
+          </field>
+      </record>
+
+      <record id="action_scm_entry_open" model="ir.actions.act_window">
+          <field name="name">SCM Entry</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">scm.entry</field>
+          <field name="view_mode">kanban,tree,form</field>
+          <field name="search_view_id"/>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                  To create a new record
+              </p><p>
+                  <br/> Click on "Create"
+              </p>
+          </field>
+      </record>
+
+      <record id="scm_entry_action_view_kanban" model="ir.actions.act_window.view">
+          <field name="sequence" eval="1"/>
+          <field name="view_mode">kanban</field>
+          <field name="view_id" ref="ihhg_master.view_scm_entry_kanban"/>
+          <field name="act_window_id" ref="action_scm_entry_open"/>
+      </record>
+
+      <record id="scm_entry_action_view_tree" model="ir.actions.act_window.view">
+          <field name="sequence" eval="2"/>
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="ihhg_master.view_scm_entry_tree"/>
+          <field name="act_window_id" ref="action_scm_entry_open"/>
+      </record>
+
+      <record id="scm_entry_action_view_form" model="ir.actions.act_window.view">
+          <field name="sequence" eval="3"/>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="ihhg_master.view_scm_entry_form"/>
+          <field name="act_window_id" ref="action_scm_entry_open"/>
+      </record>
+  </data>
+</odoo>
