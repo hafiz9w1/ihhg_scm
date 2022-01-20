@@ -1,7 +1,4 @@
-import datetime
-from asyncio import tasks
-from numpy import record
-from odoo import models, fields, api
+from odoo import models, fields
 
 
 class Project(models.Model):
