@@ -6,21 +6,24 @@
             <field name="model">project.project</field>
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
+              <!-- Add project_date_deadline, notebook(scm_entry_id, selection_criteria_id) in form view  -->
               <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="project_date_deadline"/>
               </xpath>
-              <notebook>
-                <page name="scm_page" string="SCM and Selection">
-                  <group>
+              <xpath expr="//page[@name='settings']" position="after">
+                <notebook>
+                  <page name="scm_page" string="SCM and Selection">
                     <group>
-                      <field name="scm_entry_id" string="SCM"/>
+                      <group>
+                        <field name="scm_entry_id" string="SCM"/>
+                      </group>
+                      <group>
+                        <field name="selection_criteria_id" string="Selection Criteria"/>
+                      </group>
                     </group>
-                    <group>
-                      <field name="selection_criteria_id" string="Selection Criteria"/>
-                    </group>
-                  </group>
-                </page>
-              </notebook>
+                  </page>
+                </notebook>
+              </xpath>
             </field>
         </record>
   </data>

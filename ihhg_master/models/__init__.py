@@ -1,4 +1,3 @@
-
 from . import res_partner
 from . import channel
 from . import project

@@ -3,10 +3,10 @@ from odoo import models, fields
 
 class SCMEntry(models.Model):
     _name = "scm.entry"
-    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _inherit = 'mail.thread'
     _description = "SCM Entry"
 
-    channel = fields.Many2one('channel', string='Total Volume')
+    channel = fields.Many2one('ihh.channel', string='Total Volume')
     originating_regulation = fields.Char(string='Originating Regulation')
     product_tmpl_id = fields.Many2one('product.template', string='Product Template')
     date_from = fields.Datetime(string='Date From')

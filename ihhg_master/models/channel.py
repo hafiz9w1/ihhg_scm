@@ -2,8 +2,8 @@ from odoo import models, fields
 
 
 class Channel (models.Model):
-    _name = 'channel'
-    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _name = 'ihh.channel'
+    _inherit = 'mail.thread'
     _description = 'Channel'
 
     channel = fields.Char(string='Channel')

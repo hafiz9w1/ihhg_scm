@@ -6,6 +6,7 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+              <xpath expr="//page[@name='internal_notes']" position="after">
                 <notebook>
                   <page name="extra_address_page" string="Extra Addresses">
                     <group>
@@ -22,8 +23,9 @@
                         <field name="selection_criteria_id"/>
                       </group>
                     </group>
-              </page>
-            </notebook>
+                  </page>
+                </notebook>
+              </xpath>
             </field>
         </record>
   </data>

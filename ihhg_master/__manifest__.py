@@ -21,7 +21,7 @@ Functionalities:
     'author': "Hafiz Abbas",
     'email': "hafiz@portcities.net",
     'website': "http://portcities.net",
-    'depends': ['project'],
+    'depends': ['project', 'sale'],
 
     'data': [
         'security/ir.model.access.csv',
