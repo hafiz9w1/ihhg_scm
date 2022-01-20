@@ -11,7 +11,6 @@
                 <field name="project_date_deadline"/>
               </xpath>
               <xpath expr="//page[@name='settings']" position="after">
-                <notebook>
                   <page name="scm_page" string="SCM and Selection">
                     <group>
                       <group>
@@ -22,7 +21,6 @@
                       </group>
                     </group>
                   </page>
-                </notebook>
               </xpath>
             </field>
         </record>

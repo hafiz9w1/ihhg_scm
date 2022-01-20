@@ -6,14 +6,14 @@
           <field name="model">ihh.channel</field>
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
-                  <field name="channel"/>
+                  <field name="name"/>
                   <field name="owner"/>
                   <templates>
                       <t t-name="kanban-box">
                           <div t-attf-class="oe_kanban_card oe_kanban_global_click">
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel"/></div>
+                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="name"/></div>
                                   </div>
                               </div>
                               <div class="o_kanban_record_top mb16">
@@ -34,7 +34,7 @@
           <field name="priority">2</field>
           <field name="arch" type="xml">
               <tree string="Channel">
-                  <field name="channel"/>
+                  <field name="name"/>
                   <field name="owner"/>
               </tree>
           </field>
@@ -48,7 +48,7 @@
               <sheet>
                   <group>
                       <group>
-                          <field name="channel"/>
+                          <field name="name"/>
                           <field name="owner"/>
                       </group>
                   </group>
@@ -63,11 +63,8 @@
           <field name="priority" eval="15"/>
           <field name="arch" type="xml">
               <search string="Search channel">
-                  <field name="channel"/>
+                  <field name="name"/>
                   <field name="owner"/>
-                  <group expand="0" string="Group By">
-                      <filter string="Channel" name="channel" domain="[]" context="{'group_by': 'channel'}"/>
-                  </group>
              </search>
           </field>
       </record>

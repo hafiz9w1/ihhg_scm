@@ -20,6 +20,8 @@ class Project(models.Model):
             previous_project_date_deadline[rec.id] = rec.project_date_deadline
         res = super(Project, self).write(vals)
         for rec in self:
+            if not rec.project_date_deadline or not previous_project_date_deadline[rec.id]:
+                continue
             date_delta = rec.project_date_deadline - previous_project_date_deadline[rec.id]
             for do_task in rec.task_ids:
                 do_task.write({'date_deadline': do_task.date_deadline + date_delta})

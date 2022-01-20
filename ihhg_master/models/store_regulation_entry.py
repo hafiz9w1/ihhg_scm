@@ -3,7 +3,6 @@ from odoo import models, fields
 
 class StoreRegulationEntry(models.Model):
     _name = "store.regulation.entry"
-    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Store Regulation Entry"
 
     name = fields.Char(string='Name')

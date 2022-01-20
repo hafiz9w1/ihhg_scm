@@ -3,7 +3,6 @@ from odoo import models, fields
 
 class SCMEntry(models.Model):
     _name = "scm.entry"
-    _inherit = 'mail.thread'
     _description = "SCM Entry"
 
     channel = fields.Many2one('ihh.channel', string='Total Volume')
