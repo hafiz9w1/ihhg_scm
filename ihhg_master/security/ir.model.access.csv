@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-ihhg_master.access_ihh_channel,access_ihh.channel,ihhg_master.model_ihh_channel,base.group_user,1,1,1,1
+ihhg_master.access_ihh_channel,access_ihh_channel,ihhg_master.model_ihh_channel,base.group_user,1,1,1,1
 ihhg_master.access_scm_entry,access_scm_entry,ihhg_master.model_scm_entry,base.group_user,1,1,1,1
 ihhg_master.access_selection_criteria,access_selection_criteria,ihhg_master.model_selection_criteria,base.group_user,1,1,1,1
 ihhg_master.access_store_regulation_entry,access_store_regulation_entry,ihhg_master.model_store_regulation_entry,base.group_user,1,1,1,1
