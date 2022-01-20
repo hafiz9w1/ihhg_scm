@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record model="ir.ui.view" id="view_store_regulation_entry_kanban">
+          <field name="name">store.regulation.entry.kanban</field>
+          <field name="model">store.regulation.entry</field>
+          <field name="arch" type="xml">
+              <kanban class="o_kanban_mobile">
+                  <field name="name"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="placable_number"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                              <div class="o_kanban_record_top mb16">
+                                  <div class="o_kanban_record_headings mt4">
+                                      <strong>Name: </strong><div class="o_kanban_record_title"><field name="name"/></div>
+                                  </div>
+                              </div>
+                              <div class="o_kanban_record_top mb16">
+                                  <div class="o_kanban_record_headings mt4">
+                                      <strong>Placable Number: </strong><div class="o_kanban_record_title"><field name="placable_number"/></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+      </record>
+
+      <record id="view_store_regulation_entry_tree" model="ir.ui.view">
+          <field name="name">store.regulation.entry.tree</field>
+          <field name="model">store.regulation.entry</field>
+          <field name="priority">2</field>
+          <field name="arch" type="xml">
+              <tree string="Store Regulation Entry">
+                  <field name="name"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="placable_number"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="view_store_regulation_entry_form" model="ir.ui.view">
+          <field name="name">store.regulation.entry.form</field>
+          <field name="model">store.regulation.entry</field>
+          <field name="arch" type="xml">
+              <form string="Channel">
+              <sheet>
+                  <group>
+                      <group>
+                          <field name="name"/>
+                          <field name="product_tmpl_id"/>
+                          <field name="placable_number"/>
+                      </group>
+                  </group>
+              </sheet>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_store_regulation_entry_filter" model="ir.ui.view">
+          <field name="name">store.regulation.entry.list.select</field>
+          <field name="model">store.regulation.entry</field>
+          <field name="priority" eval="15"/>
+          <field name="arch" type="xml">
+              <search string="Search Store Regulation Entry">
+                  <field name="name"/>
+                  <field name="product_tmpl_id"/>
+                  <field name="placable_number"/>
+                  <group expand="0" string="Group By">
+                      <filter string="Name" name="name" domain="[]" context="{'group_by': 'name'}"/>
+                  </group>
+             </search>
+          </field>
+      </record>
+
+      <record id="action_store_regulation_entry_open" model="ir.actions.act_window">
+          <field name="name">Store Regulation Entry</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">store.regulation.entry</field>
+          <field name="view_mode">kanban,tree,form</field>
+          <field name="search_view_id"/>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                  To create a new record
+              </p><p>
+                  <br/> Click on "Create"
+              </p>
+          </field>
+      </record>
+
+      <record id="store_regulation_entry_action_view_kanban" model="ir.actions.act_window.view">
+          <field name="sequence" eval="1"/>
+          <field name="view_mode">kanban</field>
+          <field name="view_id" ref="ihhg_master.view_store_regulation_entry_kanban"/>
+          <field name="act_window_id" ref="action_store_regulation_entry_open"/>
+      </record>
+
+      <record id="store_regulation_entry_action_view_tree" model="ir.actions.act_window.view">
+          <field name="sequence" eval="2"/>
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="ihhg_master.view_store_regulation_entry_tree"/>
+          <field name="act_window_id" ref="action_store_regulation_entry_open"/>
+      </record>
+
+      <record id="store_regulation_entry_action_view_form" model="ir.actions.act_window.view">
+          <field name="sequence" eval="3"/>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="ihhg_master.view_store_regulation_entry_form"/>
+          <field name="act_window_id" ref="action_store_regulation_entry_open"/>
+      </record>
+  </data>
+</odoo>
