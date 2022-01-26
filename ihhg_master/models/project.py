@@ -16,6 +16,7 @@ class Project(models.Model):
     project_template = fields.Many2one('project.project', string='Project Template')
 
     # Function for updating date_deadline (task) - Get number of days between previous and current project_date_deadline (project) and add to task under the project
+    """ Disable FRD #3 pending the outcome of the client meeting on 28/01/2022
     def write(self, vals):
         previous_project_date_deadline = {}
         for rec in self:
@@ -32,6 +33,7 @@ class Project(models.Model):
                     do_task.write({'date_deadline': datetime.now()})
                 do_task.write({'date_deadline': do_task.date_deadline + date_delta})
         return res
+    """
 
     # Create new project based on project template
     @api.model
