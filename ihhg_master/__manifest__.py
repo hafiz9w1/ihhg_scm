@@ -10,6 +10,7 @@
 Functionalities:
 - Extend project model to add selection_criteria_id, scm_entry_id models
 - Extend project model to add project_date_deadline for projects and function to update task date_deadline based on project_date_deadline
+- Eetend project model to add project_template field used to create new projects based on existing projects
 - Extend res_partner to accommodate new address fields
 - Channels model and view
 - SCM Entry model and view
