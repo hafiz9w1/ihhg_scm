@@ -64,7 +64,7 @@
       </record>
 
       <record id="action_selection_criteria_open" model="ir.actions.act_window">
-          <field name="name">Name</field>
+          <field name="name">Selection Criteria</field>
           <field name="type">ir.actions.act_window</field>
           <field name="res_model">selection.criteria</field>
           <field name="view_mode">kanban,tree,form</field>

@@ -12,12 +12,13 @@
                       <group>
                         <field name="date_from"/>
                         <field name="date_to"/>
-                        <field name="parent_address"/>
+                        <field name="scm_shipping_address"/>
                         <field name="is_dc"/>
                         <field name="targets_represented"/>
+                        <field name="represents"/>
                       </group>
                       <group>
-                        <field name="store_regulation_entry_id"/>
+                        <field name="store_regulations_id"/>
                         <field name="channel_id"/>
                         <field name="selection_criteria_id"/>
                       </group>

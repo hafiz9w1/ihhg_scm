@@ -37,6 +37,10 @@
           <field name="priority">2</field>
           <field name="arch" type="xml">
               <tree string="SCM Entry">
+                  <field name="project_id"/>
+                  <field name="project_scm_id"/>
+                  <field name="user_id"/>
+                  <field name="user__project_id"/>
                   <field name="channel"/>
                   <field name="originating_regulation"/>
                   <field name="product_tmpl_id"/>
@@ -51,17 +55,38 @@
           <field name="model">scm.entry</field>
           <field name="arch" type="xml">
               <form string="SCM Entry" >
-              <sheet>
-                  <group>
-                      <group>
-                          <field name="channel"/>
-                          <field name="originating_regulation"/>
-                          <field name="product_tmpl_id"/>
-                          <field name="date_from"/>
-                          <field name="date_to"/>
+                <sheet string="SCM">
+                    <div class="oe_title">
+                      <h1>
+                          <field name="project_id" class="o_text_overflow" placeholder="Related Project"/>
+                      </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_scm_id"/>
+                            <field name="user_id"/>
+                            <field name="user__project_id"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="product_tmpl_id"/>
+                        </group>
                       </group>
-                  </group>
-              </sheet>
+                    <notebook>
+                      <page name="channel_subselection" string="Channel Subselection">
+                          <field name="channel"/>
+                      </page>
+                      <page name="item_selection" string="Item Selection">
+                      </page>
+                      <page name="item_planning" string="Item Planning">
+                      </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
               </form>
           </field>
       </record>

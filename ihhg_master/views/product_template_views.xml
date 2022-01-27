@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record id="product_template_only_form_inherit" model="ir.ui.view">
+            <field name="name">product.template.product.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+              <!-- Add extra fields in product template form view  -->
+              <xpath expr="//page[@name='general_information']" position="after">
+                  <page name="extra_information" string="Extra Information">
+                    <group>
+                      <group>
+                        <field name="scm_entry_id" string="SCM"/>
+                        <field name="project_id" string="Originating Project"/>
+                        <field name="chain" string="Chain"/>
+                        <field name="posm_item_id" string="POSM Item ID"/>
+                        <field name="display_rule" string="Display Rule"/>
+                        <field name="material" string="Material"/>
+                        <field name="final_dimensions" string="Final Dimensions(mm)"/>
+                        <field name="open_dimensions" string="Open Dimensions(mm)"/>
+                      </group>
+                      <group>
+                        <field name="printing_method" string="Printing Method"/>
+                        <field name="surface_coating" string="Surface Coating"/>
+                        <field name="finishing" string="Finishing"/>
+                        <field name="printing_company" string="Printing Company"/>
+                        <field name="disposal_cycle" string="Disposal_Cycle"/>
+                      </group>
+                    </group>
+                  </page>
+              </xpath>
+            </field>
+        </record>
+  </data>
+</odoo>

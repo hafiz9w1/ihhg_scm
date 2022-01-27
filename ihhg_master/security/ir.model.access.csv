@@ -3,3 +3,6 @@ ihhg_master.access_ihh_channel,access_ihh_channel,ihhg_master.model_ihh_channel,
 ihhg_master.access_scm_entry,access_scm_entry,ihhg_master.model_scm_entry,base.group_user,1,1,1,1
 ihhg_master.access_selection_criteria,access_selection_criteria,ihhg_master.model_selection_criteria,base.group_user,1,1,1,1
 ihhg_master.access_store_regulation_entry,access_store_regulation_entry,ihhg_master.model_store_regulation_entry,base.group_user,1,1,1,1
+ihhg_master.access_store_regulations,access_store_regulations,ihhg_master.model_store_regulations,base.group_user,1,1,1,1
+ihhg_master.access_represented_stores,access_represented_stores,ihhg_master.model_represented_stores,base.group_user,1,1,1,1
+ihhg_master.access_product_template,access_product_template,ihhg_master.model_product_template,base.group_user,1,1,1,1

@@ -12,10 +12,13 @@ Functionalities:
 - Extend project model to add project_date_deadline for projects and function to update task date_deadline based on project_date_deadline
 - Eetend project model to add project_template field used to create new projects based on existing projects
 - Extend res_partner to accommodate new address fields
+- Extend product_template to accommodate new fields
 - Channels model and view
 - SCM Entry model and view
 - Selection Criteria model and view
 - Store Regulation Entry model and view
+- Store Regulations model and view
+- Represented Stores model and view
 
     """,
 
@@ -27,11 +30,14 @@ Functionalities:
     'data': [
         'security/ir.model.access.csv',
         'views/channel_views.xml',
+        'views/product_template_views.xml',
         'views/project_views.xml',
+        'views/represented_stores_views.xml',
         'views/res_partner_views.xml',
         'views/scm_entry_views.xml',
         'views/selection_criteria_views.xml',
         'views/store_regulation_entry_views.xml',
+        'views/store_regulations_views.xml',
 
     ],
     'installable': True,
