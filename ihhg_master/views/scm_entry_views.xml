@@ -6,8 +6,8 @@
           <field name="model">scm.entry</field>
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
-                  <field name="channel"/>
-                  <field name="originating_regulation"/>
+                  <field name="channel_id"/>
+                  <field name="originating_regulation_id"/>
                   <field name="product_tmpl_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -16,12 +16,12 @@
                           <div t-attf-class="oe_kanban_card oe_kanban_global_click">
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel"/></div>
+                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel_id"/></div>
                                   </div>
                               </div>
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>Originating Regulation: </strong><div class="o_kanban_record_title"><field name="originating_regulation"/></div>
+                                      <strong>Originating Regulation: </strong><div class="o_kanban_record_title"><field name="originating_regulation_id"/></div>
                                   </div>
                               </div>
                           </div>
@@ -40,9 +40,9 @@
                   <field name="project_id"/>
                   <field name="project_scm_id"/>
                   <field name="user_id"/>
-                  <field name="user__project_id"/>
-                  <field name="channel"/>
-                  <field name="originating_regulation"/>
+                  <field name="user_project_id"/>
+                  <field name="channel_id"/>
+                  <field name="originating_regulation_id"/>
                   <field name="product_tmpl_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -65,7 +65,7 @@
                         <group>
                             <field name="project_scm_id"/>
                             <field name="user_id"/>
-                            <field name="user__project_id"/>
+                            <field name="user_project_id"/>
                         </group>
                         <group>
                             <field name="date_from"/>
@@ -74,7 +74,7 @@
                       </group>
                     <notebook>
                       <page name="channel_subselection" string="Channel Subselection">
-                          <field name="channel"/>
+                          <field name="channel_id"/>
                       </page>
                       <page name="item_selection" string="Item Selection">
                       </page>
@@ -97,13 +97,13 @@
           <field name="priority" eval="15"/>
           <field name="arch" type="xml">
               <search string="Search SCM Entry">
-                  <field name="channel"/>
-                  <field name="originating_regulation"/>
+                  <field name="channel_id"/>
+                  <field name="originating_regulation_id"/>
                   <field name="product_tmpl_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="Channel" name="channel" domain="[]" context="{'group_by': 'channel'}"/>
+                      <filter string="Channel" name="channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>
                   </group>
              </search>
           </field>

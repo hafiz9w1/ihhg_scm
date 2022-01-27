@@ -30,14 +30,14 @@ Functionalities:
     'data': [
         'security/ir.model.access.csv',
         'views/channel_views.xml',
-        'views/product_template_views.xml',
-        'views/project_views.xml',
         'views/represented_stores_views.xml',
-        'views/res_partner_views.xml',
         'views/scm_entry_views.xml',
         'views/selection_criteria_views.xml',
         'views/store_regulation_entry_views.xml',
         'views/store_regulations_views.xml',
+        'views/product_template_views.xml',
+        'views/project_views.xml',
+        'views/res_partner_views.xml',
 
     ],
     'installable': True,
