@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="project_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure">
+                            <h2 class="mt16">
+                                <span t-field="doc.name">Project:</span>
+                            </h2>
+                        </div>
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Project Manager:</strong>
+                                <p class="m-0" t-field="doc.user_id"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Planned Date:</strong>
+                                <p class="m-0" t-field="doc.date_start"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Delivery Date:</strong>
+                                <p class="m-0" t-field="doc.project_date_deadline" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                                <strong>SCM:</strong>
+                                <p class="m-0" t-field="doc.scm_entry_id"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Selection Criteria:</strong>
+                                <p class="m-0" t-field="doc.selection_criteria_id"/>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm o_main_table">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_task" class="text-left">Task</th>
+                                <th name="th_main_task" class="text-left">Main Task</th>
+                                <th name="th_responsible" class="text-right">Responsible</th>
+                                <th name="th_offset" class="text-right">Offset</th>
+                                <th name="th_deadline" class="text-right">Deadline</th>
+                                <th name="th_progress" class="text-right">Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="doc.task_ids" t-as="line">
+                                <tr>
+                                    <t>
+                                        <td name="td_name"><span t-field="line.name"/></td>
+                                        <td name="td_name"><span t-field="line.parent_id.name"/></td>
+                                        <td name="td_responsible" class="text-right">
+                                            <span t-field="line.user_ids"/>
+                                        </td>
+                                        <td name="td_offset" class="text-right">
+                                            <span t-field="line.project_offset"/>
+                                        </td>
+                                        <td name="td_deadline" class="text-right">
+                                            <span t-field="line.date_deadline"/>
+                                        </td>
+                                        <td name="td_progress" class="text-right">
+                                            <span t-field="line.progress"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

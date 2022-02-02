@@ -6,23 +6,32 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-              <xpath expr="//page[@name='internal_notes']" position="after">
-                  <page name="extra_address_page" string="Extra Addresses">
-                    <group>
+              <xpath expr="//page[@name='contact_addresses']" position="before">
+                  <page name="extra_address_page" string="Extra Addresses" autofocus="autofocus">
+                    <sheet>
                       <group>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="scm_shipping_address"/>
-                        <field name="is_dc"/>
-                        <field name="targets_represented"/>
-                        <field name="represents"/>
+                        <group>
+                          <field name="is_dc"/>
+                          <field name="represents"/>
+                          <field name="reserve"/>
+                          <field name="cpid"/>
+                          <field name="date_from"/>
+                          <field name="date_to"/>
+                          <field name="delivery_type"/>
+                          <field name="channel_id"/>
+                          <field name="selection_criteria_id"/>
+                        </group>
+                        <group>
+                          <field name="post_number"/>
+                          <field name="prefecture"/>
+                          <field name="territory_code"/>
+                          <field name="scm_shipping_address"/>
+                          <field name="targets_represented"/>
+                          <field name="user_id"/>
+                          <field name="store_regulations_id"/>
+                        </group>
                       </group>
-                      <group>
-                        <field name="store_regulations_id"/>
-                        <field name="channel_id"/>
-                        <field name="selection_criteria_id"/>
-                      </group>
-                    </group>
+                    </sheet>
                   </page>
               </xpath>
             </field>

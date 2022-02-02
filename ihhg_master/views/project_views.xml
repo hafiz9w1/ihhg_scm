@@ -44,23 +44,7 @@
           <field name="arch" type="xml">
             <!-- Add project_template and project_date_deadline in create project form view  -->
             <xpath expr="//field[@name='name']" position="after">
-                <field name="project_template" />
                 <field name="project_date_deadline" />
-            </xpath>
-          </field>
-        </record>
-
-        <record id="project_form_simplified_footer_inherit" model="ir.ui.view">
-          <field name="name">project.create.form</field>
-          <field name="model">project.project</field>
-          <field name="inherit_id" ref="project.project_project_view_form_simplified_footer"/>
-          <field name="arch" type="xml">
-            <!-- Add copy_project_as_template button in form footer in project form view  -->
-            <xpath expr="//footer/button[@name='action_view_tasks']" position="after">
-                <button type="object" name="copy_project_as_template" string="Create from Template" class="btn-primary o_open_tasks" attrs="{'invisible': [('project_template', '=', False)]}" />
-            </xpath>
-            <xpath expr="//footer/button[@name='action_view_tasks']" position="attributes">
-              <attribute name="attrs" attrs="{'invisible': [('project_template', '=', True)]}"></attribute>
             </xpath>
           </field>
         </record>
