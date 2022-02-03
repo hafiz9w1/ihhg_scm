@@ -22,17 +22,16 @@ class Task(models.Model):
     project_offset = fields.Integer(string='Offset', default=0)
 
     # Make date_deadline a computed field
-    date_deadline = fields.Datetime(compute='_compute_date_deadline', string='Deadline')
+    date_deadline = fields.Datetime(compute='_compute_date_deadline', store=True, string='Deadline')
 
     # The Deadline of all tasks  = (Delivery Date - (Offset * 7)) set from creating a project.
-    @api.depends('date_deadline')
+    @api.depends('project_offset', 'project_id.project_date_deadline')
     def _compute_date_deadline(self):
         for task in self:
-            project = self.env['project.project'].search([('id', '=', task.project_id.id)])
-            if not project.project_date_deadline:
-                project.project_date_deadline = datetime.now()
+            if not task.project_id.project_date_deadline:
+                task.project_id.project_date_deadline = datetime.now()
 
             if not task.project_offset:
                 task.project_offset = 0
             project_offset_delta = timedelta(days=(task.project_offset * 7))
-            task.date_deadline = project.project_date_deadline - project_offset_delta
+            task.date_deadline = task.project_id.project_date_deadline - project_offset_delta

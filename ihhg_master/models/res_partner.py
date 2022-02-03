@@ -17,6 +17,6 @@ class ResPartner(models.Model):
     store_regulations_id = fields.Many2many('store.regulations', string='Store Regulations')
     scm_shipping_address = fields.Char(string='Shipping Address')
     is_dc = fields.Boolean(string='Is DC')
-    represents = fields.Boolean(string='Is Representing')
-    reserve = fields.Boolean(string='Is Reserve')
+    is_represents = fields.Boolean(string='Is Representing')
+    is_reserve = fields.Boolean(string='Is Reserve')
     targets_represented = fields.Char(string='Targets Represented')
