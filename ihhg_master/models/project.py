@@ -11,9 +11,6 @@ class Project(models.Model):
     # Add field in project to capture deadline (Delivery Date) for project
     project_date_deadline = fields.Datetime(string='Delivery Date', tracking=True)
 
-    # Add field in project for project template
-    project_template = fields.Many2one('project.project', string='Project Template')
-
 
 class Task(models.Model):
     _inherit = "project.task"
@@ -22,7 +19,7 @@ class Task(models.Model):
     project_offset = fields.Integer(string='Offset', default=0)
 
     # Make date_deadline a computed field
-    date_deadline = fields.Datetime(compute='_compute_date_deadline', store=True, string='Deadline')
+    date_deadline = fields.Datetime(compute='_compute_date_deadline', tracking=True, store=True, string='Deadline')
 
     # The Deadline of all tasks  = (Delivery Date - (Offset * 7)) set from creating a project.
     @api.depends('project_offset', 'project_id.project_date_deadline')

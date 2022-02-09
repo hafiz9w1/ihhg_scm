@@ -17,6 +17,9 @@ Functionalities:
 - Store Regulation Entry model and view
 - Store Regulations model and view
 - Represented Stores model and view
+- Package model and view
+- Item model and view
+- Category model and view
 
     """,
 
@@ -26,11 +29,14 @@ Functionalities:
     'depends': ['project', 'sale'],
 
     'data': [
+        'security/scm_security.xml',
         'security/ir.model.access.csv',
         'report/project_report.xml',
         'report/project_report_template.xml',
         'views/channel_views.xml',
         'views/represented_stores_views.xml',
+        'views/item_views.xml',
+        'views/category_views.xml',
         'views/scm_entry_views.xml',
         'views/selection_criteria_views.xml',
         'views/store_regulation_entry_views.xml',
@@ -38,6 +44,7 @@ Functionalities:
         'views/product_template_views.xml',
         'views/project_views.xml',
         'views/res_partner_views.xml',
+        'views/package_views.xml',
 
     ],
     'installable': True,

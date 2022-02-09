@@ -42,60 +42,12 @@
           <field name="model">project.project</field>
           <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
           <field name="arch" type="xml">
-            <!-- Add project_template and project_date_deadline in create project form view  -->
+            <!-- Add project_date_deadline in create project form view  -->
             <xpath expr="//field[@name='name']" position="after">
                 <field name="project_date_deadline" />
             </xpath>
           </field>
         </record>
 
-        <!-- SCM menus -->
-          <menuitem id="menu_project_posm"
-            name="POSM"
-            parent="project.menu_main_pm" />
-
-          <menuitem id="menu_project_posm_posm_master"
-            action="product.product_template_action"
-            name="POSM Master"
-            parent="menu_project_posm" />
-
-          <menuitem id="menu_project_scm"
-            name="SCM"
-            parent="project.menu_main_pm" />
-
-          <menuitem id="menu_project_scm_address"
-            action="account.res_partner_action_customer"
-            name="Address"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_scm_entry"
-            action="ihhg_master.action_scm_entry_open"
-            name="SCM Entry"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_channel"
-            action="ihhg_master.action_channel_open"
-            name="Channel"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_represented_store"
-            action="ihhg_master.action_represented_stores_open"
-            name="Represented Stores"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_selection_criteria"
-            action="ihhg_master.action_selection_criteria_open"
-            name="Selection Criteria"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_store_regulations"
-            action="ihhg_master.action_store_regulations_open"
-            name="Store Regulations"
-            parent="menu_project_scm" />
-
-          <menuitem id="menu_project_scm_store_regulation_entry"
-            action="ihhg_master.action_store_regulation_entry_open"
-            name="Store Regulation Entry"
-            parent="menu_project_scm" />
   </data>
 </odoo>
