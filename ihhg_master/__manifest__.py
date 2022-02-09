@@ -37,6 +37,7 @@ Functionalities:
         'views/represented_stores_views.xml',
         'views/item_views.xml',
         'views/category_views.xml',
+        'views/package_views.xml',
         'views/scm_entry_views.xml',
         'views/selection_criteria_views.xml',
         'views/store_regulation_entry_views.xml',
@@ -44,7 +45,6 @@ Functionalities:
         'views/product_template_views.xml',
         'views/project_views.xml',
         'views/res_partner_views.xml',
-        'views/package_views.xml',
 
     ],
     'installable': True,
