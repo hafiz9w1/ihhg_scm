@@ -6,6 +6,7 @@
           <field name="model">scm.entry</field>
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
+                  <field name="name"/>
                   <field name="channel_id"/>
                   <field name="originating_regulation_id"/>
                   <field name="product_tmpl_id"/>
@@ -16,7 +17,7 @@
                           <div t-attf-class="oe_kanban_card oe_kanban_global_click">
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel_id"/></div>
+                                      <strong>SCM Name: </strong><div class="o_kanban_record_title"><field name="name"/></div>
                                   </div>
                               </div>
                               <div class="o_kanban_record_top mb16">
@@ -37,6 +38,7 @@
           <field name="priority">2</field>
           <field name="arch" type="xml">
               <tree string="SCM Entry">
+                  <field name="name"/>
                   <field name="project_id"/>
                   <field name="project_scm_id"/>
                   <field name="user_id"/>
@@ -54,31 +56,36 @@
           <field name="name">scm.entry.form</field>
           <field name="model">scm.entry</field>
           <field name="arch" type="xml">
-              <form string="SCM Entry" >
-                <sheet string="SCM">
+              <form string="SCM Entry" class="o_sale_order">
+                <sheet>
                     <div class="oe_title">
                       <h1>
-                          <field name="project_id" class="o_text_overflow" placeholder="Related Project"/>
+                          <field name="name" class="o_text_overflow" placeholder="SCM Name"/>
                       </h1>
                     </div>
                     <group>
                         <group>
+                            <field name="project_id"/>
                             <field name="project_scm_id"/>
                             <field name="user_id"/>
                             <field name="user_project_id"/>
                         </group>
                         <group>
                             <field name="date_from"/>
+                            <field name="date_to"/>
                             <field name="product_tmpl_id"/>
+                            <field name="category_id"/>
                         </group>
                       </group>
                     <notebook>
                       <page name="channel_subselection" string="Channel Subselection">
                           <field name="channel_id"/>
                       </page>
-                      <page name="item_selection" string="Item Selection">
+                      <page name="package_selection" string="Package Selection">
+                        <field name="package_id"/>
                       </page>
                       <page name="item_planning" string="Item Planning">
+                        <field name="item_id"/>
                       </page>
                     </notebook>
                 </sheet>
@@ -145,5 +152,85 @@
           <field name="view_id" ref="ihhg_master.view_scm_entry_form"/>
           <field name="act_window_id" ref="action_scm_entry_open"/>
       </record>
+
+        <!-- SCM menus -->
+
+      <menuitem id="menu_scm"
+        name="SCM"
+        sequence="4"
+        groups="group_scm_manager"
+        web_icon="ihhg_master,static/description/icon.png" />
+
+      <menuitem id="menu_project_scm_scm_entry"
+        action="ihhg_master.action_scm_entry_open"
+        name="SCM Entry"
+        sequence="1"
+        parent="menu_scm" />
+
+      <menuitem id="menu_project_scm_channel"
+        action="ihhg_master.action_channel_open"
+        name="Channel"
+        sequence="2"
+        parent="menu_scm" />
+
+      <menuitem id="menu_project_scm_represented_store"
+        action="ihhg_master.action_represented_stores_open"
+        name="Represented Stores"
+        sequence="3"
+        parent="menu_scm" />
+
+      <menuitem id="menu_project_scm_selection_criteria"
+        action="ihhg_master.action_selection_criteria_open"
+        name="Selection Criteria"
+        sequence="4"
+        parent="menu_scm" />
+
+      <menuitem id="menu_project_scm_store_regulations"
+        action="ihhg_master.action_store_regulations_open"
+        name="Store Regulations"
+        sequence="5"
+        parent="menu_scm" />
+
+      <menuitem id="menu_project_scm_store_regulation_entry"
+        action="ihhg_master.action_store_regulation_entry_open"
+        name="Store Regulation Entry"
+        sequence="6"
+        parent="menu_scm" />
+
+      <menuitem id="menu_configuration"
+        name="Configuration"
+        sequence="7"
+        parent="menu_scm" />
+
+      <menuitem id="menu_configuration_package"
+        action="ihhg_master.action_package_open"
+        name="Package"
+        sequence="1"
+        parent="menu_configuration" />
+
+      <menuitem id="menu_configuration_item"
+        action="ihhg_master.action_item_open"
+        name="Item"
+        sequence="2"
+        parent="menu_configuration" />
+
+      <menuitem id="menu_configuration_category"
+        action="ihhg_master.action_category_open"
+        name="Category"
+        sequence="3"
+        parent="menu_configuration" />
+
+      <menuitem id="menu_configuration_posm_master"
+        action="product.product_template_action"
+        name="POSM Master"
+        sequence="4"
+        parent="menu_configuration" />
+
+      <menuitem id="menu_configuration_scm_address"
+        action="account.res_partner_action_customer"
+        name="Address"
+        sequence="5"
+        parent="menu_configuration" />
+
   </data>
 </odoo>

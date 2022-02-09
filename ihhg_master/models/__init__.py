@@ -7,3 +7,6 @@ from . import scm_entry
 from . import selection_criteria
 from . import store_regulation_entry
 from . import store_regulations
+from . import package
+from . import item
+from . import category
