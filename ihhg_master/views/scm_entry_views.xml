@@ -9,7 +9,7 @@
                   <field name="name"/>
                   <field name="channel_id"/>
                   <field name="originating_regulation_id"/>
-                  <field name="product_tmpl_id"/>
+                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <templates>
@@ -45,7 +45,7 @@
                   <field name="user_project_id"/>
                   <field name="channel_id"/>
                   <field name="originating_regulation_id"/>
-                  <field name="product_tmpl_id"/>
+                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
               </tree>
@@ -73,7 +73,7 @@
                         <group>
                             <field name="date_from"/>
                             <field name="date_to"/>
-                            <field name="product_tmpl_id"/>
+                            <field name="campaign_type_id"/>
                             <field name="category_id"/>
                         </group>
                       </group>
@@ -106,7 +106,7 @@
               <search string="Search SCM Entry">
                   <field name="channel_id"/>
                   <field name="originating_regulation_id"/>
-                  <field name="product_tmpl_id"/>
+                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
@@ -153,7 +153,7 @@
           <field name="act_window_id" ref="action_scm_entry_open"/>
       </record>
 
-        <!-- SCM menus -->
+      <!-- SCM menus -->
 
       <menuitem id="menu_scm"
         name="SCM"
@@ -197,6 +197,8 @@
         sequence="6"
         parent="menu_scm" />
 
+      <!-- SCM menus - Configuration -->
+
       <menuitem id="menu_configuration"
         name="Configuration"
         sequence="7"
@@ -220,16 +222,22 @@
         sequence="3"
         parent="menu_configuration" />
 
+      <menuitem id="menu_configuration_campaign_type"
+        action="ihhg_master.action_campaign_type_open"
+        name="Campaign Type"
+        sequence="4"
+        parent="menu_configuration" />
+
       <menuitem id="menu_configuration_posm_master"
         action="product.product_template_action"
         name="POSM Master"
-        sequence="4"
+        sequence="5"
         parent="menu_configuration" />
 
       <menuitem id="menu_configuration_scm_address"
         action="account.res_partner_action_customer"
         name="Address"
-        sequence="5"
+        sequence="6"
         parent="menu_configuration" />
 
   </data>

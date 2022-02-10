@@ -13,6 +13,7 @@ Functionalities:
 - Extend res_partner to accommodate new address fields
 - Channels model and view
 - SCM Entry model and view
+    * Filtering for Channel, Package and Item selection
 - Selection Criteria model and view
 - Store Regulation Entry model and view
 - Store Regulations model and view
@@ -20,6 +21,7 @@ Functionalities:
 - Package model and view
 - Item model and view
 - Category model and view
+- Campaign type model and view
 
     """,
 
@@ -38,6 +40,7 @@ Functionalities:
         'views/item_views.xml',
         'views/category_views.xml',
         'views/package_views.xml',
+        'views/campaign_type_views.xml',
         'views/scm_entry_views.xml',
         'views/selection_criteria_views.xml',
         'views/store_regulation_entry_views.xml',

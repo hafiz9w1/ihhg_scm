@@ -10,3 +10,4 @@ from . import store_regulations
 from . import package
 from . import item
 from . import category
+from . import campaign_type
