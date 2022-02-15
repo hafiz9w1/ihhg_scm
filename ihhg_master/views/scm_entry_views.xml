@@ -7,7 +7,7 @@
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
                   <field name="name"/>
-                  <field name="channel_id"/>
+                  <field name="channel_ids"/>
                   <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
@@ -49,9 +49,9 @@
                   <field name="project_scm_id"/>
                   <field name="user_id"/>
                   <field name="user_project_id"/>
-                  <field name="channel_id"/>
-                  <field name="package_id"/>
-                  <field name="item_line_id"/>
+                  <field name="channel_ids"/>
+                  <field name="package_ids"/>
+                  <field name="item_line_ids"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -86,13 +86,13 @@
                       </group>
                     <notebook>
                       <page name="channel_subselection" string="Channel Subselection">
-                          <field name="channel_id"/>
+                          <field name="channel_ids"/>
                       </page>
                       <page name="package_selection" string="Package Selection">
-                        <field name="package_id"/>
+                        <field name="package_ids"/>
                       </page>
                       <page name="item_planning" string="Item Planning">
-                          <field name="item_line_id" widget="section_and_note_one2many">
+                          <field name="item_line_ids" widget="section_and_note_one2many">
                             <form>
                                 <field name="sequence" invisible="1"/>
                                   <group>
@@ -100,12 +100,12 @@
                                     <field name="package_id"/>
                                     <field name="item_date_from"/>
                                     <field name="item_date_to"/>
-                                    <field name="product_tmpl_id"/>
+                                    <field name="product_id"/>
                                     <field name="dimension"/>
                                     <field name="shipping_allocating"/>
                                     <field name="product_uom_id"/>
                                     <field name="quantity"/>
-                                    <field name="item_tags"/>
+                                    <field name="item_tags_ids"/>
                                     <field name="sequence" invisible="1"/>
                                   </group>
                             </form>
@@ -119,12 +119,12 @@
                                 <field name="package_id"/>
                                 <field name="item_date_from"/>
                                 <field name="item_date_to"/>
-                                <field name="product_tmpl_id"/>
+                                <field name="product_id"/>
                                 <field name="dimension" optional="show"/>
                                 <field name="shipping_allocating" optional="show"/>
                                 <field name="product_uom_id"/>
                                 <field name="quantity"/>
-                                <field name="item_tags" widget="many2many_tags" optional="show"/>
+                                <field name="item_tags_ids" widget="many2many_tags" optional="show"/>
                             </tree>
                           </field>
                           <group name="note_group" col="6" class="mt-2 mt-md-0">
@@ -132,11 +132,11 @@
                                 <field name="note" nolabel="1" placeholder="Extra Item Notes..."/>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2">
-                                <field name="package_id_total" colspan="2"/>
-                                <field name="item_line_total" colspan="2"/>
+                                <field name="package_ids_total" colspan="2"/>
+                                <field name="item_line_ids_total" colspan="2"/>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2">
-                                <field name="channel_id_total" colspan="2"/>
+                                <field name="channel_ids_total" colspan="2"/>
                             </group>
                             <div class="oe_clear"/>
                         </group>
@@ -158,16 +158,16 @@
           <field name="priority" eval="15"/>
           <field name="arch" type="xml">
               <search string="Search SCM Entry">
-                  <field name="channel_id"/>
+                  <field name="channel_ids"/>
                   <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
                       <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
-                      <filter string="Channel" name="channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>
-                      <filter string="Package" name="package_id" domain="[]" context="{'group_by': 'package_id'}"/>
-                      <filter string="Item" name="item_line_id" domain="[]" context="{'group_by': 'item_line_id'}"/>
+                      <filter string="Channel" name="channel_ids" domain="[]" context="{'group_by': 'channel_ids'}"/>
+                      <filter string="Package" name="package_ids" domain="[]" context="{'group_by': 'package_ids'}"/>
+                      <filter string="Item" name="item_line_ids" domain="[]" context="{'group_by': 'item_line_ids'}"/>
                       <filter string="Project Manager" name="user_project_id" domain="[]" context="{'group_by': 'user_project_id'}"/>
                       <filter string="Owner" name="user_id" domain="[]" context="{'group_by': 'user_id'}"/>
                   </group>

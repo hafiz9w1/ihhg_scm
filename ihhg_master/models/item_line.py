@@ -9,7 +9,7 @@ class ItemLine (models.Model):
     package_id = fields.Many2one(string='Package', readonly=True, related='item_id.package_id')
     item_date_from = fields.Datetime(string='Date From')
     item_date_to = fields.Datetime(string='Date To')
-    product_tmpl_id = fields.Many2one('product.template', string='POSM Item ID')
+    product_id = fields.Many2one('product.product', string='POSM Item ID')
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
         ('shipping', 'Shipping'),
@@ -17,5 +17,5 @@ class ItemLine (models.Model):
     ], string='Shipping / Allocating')
     product_uom_id = fields.Many2one('uom.uom', string='UoM')
     quantity = fields.Float(string='Quantity', default=0.0)
-    item_tags = fields.Many2many('item.tags', string='Item Tags')
+    item_tags_ids = fields.Many2many('item.tags', string='Item Tags')
     sequence = fields.Integer(string='Sequence', default=10)
