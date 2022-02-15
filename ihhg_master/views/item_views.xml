@@ -7,7 +7,6 @@
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
                   <field name="name"/>
-                  <field name="quantity"/>
                   <field name="package_id"/>
                   <templates>
                       <t t-name="kanban-box">
@@ -36,7 +35,6 @@
           <field name="arch" type="xml">
               <tree string="Item">
                   <field name="name"/>
-                  <field name="quantity"/>
                   <field name="package_id"/>
               </tree>
           </field>
@@ -51,7 +49,6 @@
                   <group>
                       <group>
                           <field name="name"/>
-                          <field name="quantity"/>
                           <field name="package_id"/>
                       </group>
                   </group>
@@ -67,7 +64,6 @@
           <field name="arch" type="xml">
               <search string="Search Item">
                   <field name="name"/>
-                  <field name="quantity"/>
                   <field name="package_id"/>
              </search>
           </field>
