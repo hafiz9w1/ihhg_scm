@@ -13,4 +13,4 @@ class Package (models.Model):
     @api.depends('name')
     def _compute_item_total(self):
         for package in self:
-            package.item_total = self.env['ihh.item'].search_count([('package_id', '=', package.name)])
+            package.item_total = self.env['ihh.item'].search_count([('package_id.name', '=', package.name)])

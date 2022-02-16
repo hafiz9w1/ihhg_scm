@@ -212,6 +212,7 @@
           <field name="act_window_id" ref="action_scm_entry_open"/>
       </record>
 
+
       <!-- SCM menus -->
 
       <menuitem id="menu_scm"
