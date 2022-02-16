@@ -8,5 +8,7 @@ ihhg_master.access_represented_stores,access_represented_stores,ihhg_master.mode
 ihhg_master.access_product_template,access_product_template,ihhg_master.model_product_template,group_scm_manager,1,1,1,1
 ihhg_master.access_ihh_package,access_ihh_package,ihhg_master.model_ihh_package,group_scm_manager,1,1,1,1
 ihhg_master.access_ihh_item,access_ihh_item,ihhg_master.model_ihh_item,group_scm_manager,1,1,1,1
+ihhg_master.access_ihh_item_line,access_ihh_item_line,ihhg_master.model_ihh_item_line,group_scm_manager,1,1,1,1
 ihhg_master.access_ihh_category,access_ihh_category,ihhg_master.model_ihh_category,group_scm_manager,1,1,1,1
 ihhg_master.access_campaign_type,access_campaign_type,ihhg_master.model_campaign_type,group_scm_manager,1,1,1,1
+ihhg_master.access_item_tags,access_item_tags,ihhg_master.model_item_tags,group_scm_manager,1,1,1,1

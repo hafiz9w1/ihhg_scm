@@ -7,7 +7,7 @@
           <field name="arch" type="xml">
               <kanban class="o_kanban_mobile">
                   <field name="name"/>
-                  <field name="channel_id"/>
+                  <field name="channel_ids"/>
                   <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
@@ -17,12 +17,18 @@
                           <div t-attf-class="oe_kanban_card oe_kanban_global_click">
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>SCM Name: </strong><div class="o_kanban_record_title"><field name="name"/></div>
+                                      SCM Name: <div class="o_kanban_record_title"><field name="name"/></div>
+                                  </div>
+                                  <div class="o_kanban_record_headings mt4">
+                                      Related Project: <div class="o_kanban_record_title"><field name="project_id"/></div>
                                   </div>
                               </div>
                               <div class="o_kanban_record_top mb16">
                                   <div class="o_kanban_record_headings mt4">
-                                      <strong>Originating Regulation: </strong><div class="o_kanban_record_title"><field name="originating_regulation_id"/></div>
+                                      Start: <div class="o_kanban_record_title"><field name="date_from"/></div>
+                                  </div>
+                                  <div class="o_kanban_record_headings mt4">
+                                      Stop: <div class="o_kanban_record_title"><field name="date_to"/></div>
                                   </div>
                               </div>
                           </div>
@@ -43,8 +49,9 @@
                   <field name="project_scm_id"/>
                   <field name="user_id"/>
                   <field name="user_project_id"/>
-                  <field name="channel_id"/>
-                  <field name="originating_regulation_id"/>
+                  <field name="channel_ids"/>
+                  <field name="package_ids"/>
+                  <field name="item_line_ids"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -79,13 +86,60 @@
                       </group>
                     <notebook>
                       <page name="channel_subselection" string="Channel Subselection">
-                          <field name="channel_id"/>
+                          <field name="channel_ids"/>
                       </page>
                       <page name="package_selection" string="Package Selection">
-                        <field name="package_id"/>
+                        <field name="package_ids"/>
                       </page>
                       <page name="item_planning" string="Item Planning">
-                        <field name="item_id"/>
+                          <field name="item_line_ids" widget="section_and_note_one2many">
+                            <form>
+                                <field name="sequence" invisible="1"/>
+                                  <group>
+                                    <field name="item_id"/>
+                                    <field name="package_id"/>
+                                    <field name="item_date_from"/>
+                                    <field name="item_date_to"/>
+                                    <field name="product_id"/>
+                                    <field name="dimension"/>
+                                    <field name="shipping_allocating"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="quantity"/>
+                                    <field name="item_tags_ids"/>
+                                    <field name="sequence" invisible="1"/>
+                                  </group>
+                            </form>
+                            <tree string="SCM Item Lines" editable="bottom" >
+                                <control>
+                                  <create name="add_item_control" string="Add an Item"/>
+                                </control>
+
+                                <field name="sequence" widget="handle" />
+                                <field name="item_id"/>
+                                <field name="package_id"/>
+                                <field name="item_date_from"/>
+                                <field name="item_date_to"/>
+                                <field name="product_id"/>
+                                <field name="dimension" optional="show"/>
+                                <field name="shipping_allocating" optional="show"/>
+                                <field name="product_uom_id"/>
+                                <field name="quantity"/>
+                                <field name="item_tags_ids" widget="many2many_tags" optional="show"/>
+                            </tree>
+                          </field>
+                          <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                                <field name="note" nolabel="1" placeholder="Extra Item Notes..."/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2">
+                                <field name="package_ids_total" colspan="2"/>
+                                <field name="item_line_ids_total" colspan="2"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2">
+                                <field name="channel_ids_total" colspan="2"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </group>
                       </page>
                     </notebook>
                 </sheet>
@@ -104,13 +158,18 @@
           <field name="priority" eval="15"/>
           <field name="arch" type="xml">
               <search string="Search SCM Entry">
-                  <field name="channel_id"/>
+                  <field name="channel_ids"/>
                   <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="Channel" name="channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>
+                      <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
+                      <filter string="Channel" name="channel_ids" domain="[]" context="{'group_by': 'channel_ids'}"/>
+                      <filter string="Package" name="package_ids" domain="[]" context="{'group_by': 'package_ids'}"/>
+                      <filter string="Item" name="item_line_ids" domain="[]" context="{'group_by': 'item_line_ids'}"/>
+                      <filter string="Project Manager" name="user_project_id" domain="[]" context="{'group_by': 'user_project_id'}"/>
+                      <filter string="Owner" name="user_id" domain="[]" context="{'group_by': 'user_id'}"/>
                   </group>
              </search>
           </field>
@@ -152,6 +211,7 @@
           <field name="view_id" ref="ihhg_master.view_scm_entry_form"/>
           <field name="act_window_id" ref="action_scm_entry_open"/>
       </record>
+
 
       <!-- SCM menus -->
 
@@ -216,28 +276,34 @@
         sequence="2"
         parent="menu_configuration" />
 
+      <menuitem id="menu_configuration_item_tags"
+        action="ihhg_master.action_item_tags_open"
+        name="Item Tags"
+        sequence="3"
+        parent="menu_configuration" />
+
       <menuitem id="menu_configuration_category"
         action="ihhg_master.action_category_open"
         name="Category"
-        sequence="3"
+        sequence="4"
         parent="menu_configuration" />
 
       <menuitem id="menu_configuration_campaign_type"
         action="ihhg_master.action_campaign_type_open"
         name="Campaign Type"
-        sequence="4"
+        sequence="5"
         parent="menu_configuration" />
 
       <menuitem id="menu_configuration_posm_master"
         action="product.product_template_action"
         name="POSM Master"
-        sequence="5"
+        sequence="6"
         parent="menu_configuration" />
 
       <menuitem id="menu_configuration_scm_address"
         action="account.res_partner_action_customer"
         name="Address"
-        sequence="6"
+        sequence="7"
         parent="menu_configuration" />
 
   </data>

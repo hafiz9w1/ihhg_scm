@@ -9,5 +9,7 @@ from . import store_regulation_entry
 from . import store_regulations
 from . import package
 from . import item
+from . import item_line
+from . import item_tags
 from . import category
 from . import campaign_type
