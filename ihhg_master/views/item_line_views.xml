@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <record id="view_item_line_gantt" model="ir.ui.view">
+        <field name="name">ihh.item.line.gantt</field>
+        <field name="model">ihh.item.line</field>
+        <field name="arch" type="xml">
+            <gantt
+                    date_start="item_date_from"
+                    date_stop="item_date_to"
+                    default_group_by="channel_id"
+                    default_scale="week"
+                    color="name"
+                    scales="day,week,month,year"
+                    precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
+                    thumbnails="{'name': 'image_128'}">
+                <field name="channel_id"/>
+                <field name="package_id"/>
+                <field name="name"/>
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li>
+                                      <strong>Channel:</strong>
+                                      <t t-esc="channel_id"/>
+                                    </li>
+                                    <li>
+                                        <strong>Package:</strong>
+                                        <t t-esc="package_id"/>
+                                    </li>
+                                    <li>
+                                        <strong>Item:</strong>
+                                        <t t-esc="name"/>
+                                    </li>
+                                    <li>
+                                      <strong>Item Line Start:</strong>
+                                      <t t-esc="item_date_from.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                    <li>
+                                      <strong>Item Line Stop:</strong>
+                                      <t t-esc="item_date_to.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+      </record>
+
+      <record id="view_item_line_filter" model="ir.ui.view">
+          <field name="name">ihh.item.line.list.select</field>
+          <field name="model">ihh.item.line</field>
+          <field name="priority" eval="15"/>
+          <field name="arch" type="xml">
+              <search string="Search Item Line">
+                  <field name="name"/>
+                  <field name="package_id"/>
+                  <field name="item_date_from"/>
+                  <field name="item_date_to"/>
+                  <group expand="0" string="Group By">
+                      <filter string="Item Name" name="name" domain="[]" context="{'group_by': 'name'}"/>
+                      <filter string="Package" name="package_id" domain="[]" context="{'group_by': 'package_id'}"/>
+                  </group>
+             </search>
+          </field>
+      </record>
+
+      <record id="action_item_line_gantt_open" model="ir.actions.act_window">
+        <field name="name">Visibility Calendar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ihh.item.line</field>
+        <field name="view_mode">gantt</field>
+        <field name="search_view_id"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                To create a new record
+            </p><p>
+                <br/> Click on "Create"
+            </p>
+        </field>
+      </record>
+
+      <record id="item_line_action_view_gantt" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">gantt</field>
+        <field name="view_id" ref="ihhg_master.view_item_line_gantt"/>
+        <field name="act_window_id" ref="action_item_line_gantt_open"/>
+      </record>
+
+  </data>
+</odoo>

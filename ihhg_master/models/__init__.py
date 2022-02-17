@@ -8,6 +8,7 @@ from . import selection_criteria
 from . import store_regulation_entry
 from . import store_regulations
 from . import package
+from . import package_list
 from . import item
 from . import item_line
 from . import item_tags
