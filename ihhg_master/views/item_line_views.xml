@@ -10,13 +10,13 @@
                     date_stop="item_date_to"
                     default_group_by="channel_id"
                     default_scale="week"
-                    color="name"
+                    color="item_id"
                     scales="day,week,month,year"
                     precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
                     thumbnails="{'name': 'image_128'}">
                 <field name="channel_id"/>
                 <field name="package_id"/>
-                <field name="name"/>
+                <field name="item_id"/>
                 <templates>
                     <div t-name="gantt-popover" class="container-fluid">
                         <div class="row no-gutters">
@@ -32,7 +32,7 @@
                                     </li>
                                     <li>
                                         <strong>Item:</strong>
-                                        <t t-esc="name"/>
+                                        <t t-esc="item_id"/>
                                     </li>
                                     <li>
                                       <strong>Item Line Start:</strong>
@@ -57,12 +57,12 @@
           <field name="priority" eval="15"/>
           <field name="arch" type="xml">
               <search string="Search Item Line">
-                  <field name="name"/>
+                  <field name="item_id"/>
                   <field name="package_id"/>
                   <field name="item_date_from"/>
                   <field name="item_date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="Item Name" name="name" domain="[]" context="{'group_by': 'name'}"/>
+                      <filter string="Item Name" name="item_id" domain="[]" context="{'group_by': 'item_id'}"/>
                       <filter string="Package" name="package_id" domain="[]" context="{'group_by': 'package_id'}"/>
                   </group>
              </search>
