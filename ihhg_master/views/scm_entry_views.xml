@@ -152,6 +152,49 @@
           </field>
       </record>
 
+      <record id="view_scm_entry_gantt" model="ir.ui.view">
+        <field name="name">scm.entry.gantt</field>
+        <field name="model">scm.entry</field>
+        <field name="arch" type="xml">
+            <gantt
+                    date_start="date_from"
+                    date_stop="date_to"
+                    default_group_by="name"
+                    default_scale="week"
+                    color="user_id"
+                    scales="day,week,month,year"
+                    precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
+                    thumbnails="{'name': 'image_128'}">
+                <field name="name"/>
+                <field name="channel_ids"/>
+                <field name="package_ids"/>
+                <field name="item_line_ids"/>
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li>
+                                      <strong>SCM:</strong>
+                                      <t t-esc="name"/>
+                                    </li>
+                                    <li>
+                                      <strong>Campaign Start:</strong>
+                                      <t t-esc="date_from.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                    <li>
+                                      <strong>Campaign Stop:</strong>
+                                      <t t-esc="date_to.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+      </record>
+
       <record id="view_scm_entry_filter" model="ir.ui.view">
           <field name="name">scm.entry.list.select</field>
           <field name="model">scm.entry</field>
@@ -164,10 +207,11 @@
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
+                      <filter string="SCM" name="name" domain="[]" context="{'group_by': 'name'}"/>
                       <filter string="Channel" name="channel_ids" domain="[]" context="{'group_by': 'channel_ids'}"/>
                       <filter string="Package" name="package_ids" domain="[]" context="{'group_by': 'package_ids'}"/>
                       <filter string="Item" name="item_line_ids" domain="[]" context="{'group_by': 'item_line_ids'}"/>
+                      <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
                       <filter string="Project Manager" name="user_project_id" domain="[]" context="{'group_by': 'user_project_id'}"/>
                       <filter string="Owner" name="user_id" domain="[]" context="{'group_by': 'user_id'}"/>
                   </group>
@@ -179,7 +223,7 @@
           <field name="name">SCM Entry</field>
           <field name="type">ir.actions.act_window</field>
           <field name="res_model">scm.entry</field>
-          <field name="view_mode">kanban,tree,form</field>
+          <field name="view_mode">kanban,tree,form,gantt</field>
           <field name="search_view_id"/>
           <field name="context">{}</field>
           <field name="help" type="html">
@@ -212,6 +256,12 @@
           <field name="act_window_id" ref="action_scm_entry_open"/>
       </record>
 
+      <record id="scm_entry_action_view_gantt" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">gantt</field>
+        <field name="view_id" ref="ihhg_master.view_scm_entry_gantt"/>
+        <field name="act_window_id" ref="action_scm_entry_open"/>
+      </record>
 
       <!-- SCM menus -->
 
@@ -221,37 +271,37 @@
         groups="group_scm_manager"
         web_icon="ihhg_master,static/description/icon.png" />
 
-      <menuitem id="menu_project_scm_scm_entry"
+      <menuitem id="menu_scm_scm_entry"
         action="ihhg_master.action_scm_entry_open"
         name="SCM Entry"
         sequence="1"
         parent="menu_scm" />
 
-      <menuitem id="menu_project_scm_channel"
-        action="ihhg_master.action_channel_open"
-        name="Channel"
+      <menuitem id="menu_scm_visibility_calendar"
+        action="ihhg_master.action_item_line_gantt_open"
+        name="Visibility Calendar"
         sequence="2"
         parent="menu_scm" />
 
-      <menuitem id="menu_project_scm_represented_store"
-        action="ihhg_master.action_represented_stores_open"
-        name="Represented Stores"
+      <menuitem id="menu_scm_channel"
+        action="ihhg_master.action_channel_open"
+        name="Channel"
         sequence="3"
         parent="menu_scm" />
 
-      <menuitem id="menu_project_scm_selection_criteria"
+      <menuitem id="menu_scm_selection_criteria"
         action="ihhg_master.action_selection_criteria_open"
         name="Selection Criteria"
         sequence="4"
         parent="menu_scm" />
 
-      <menuitem id="menu_project_scm_store_regulations"
+      <menuitem id="menu_scm_store_regulations"
         action="ihhg_master.action_store_regulations_open"
         name="Store Regulations"
         sequence="5"
         parent="menu_scm" />
 
-      <menuitem id="menu_project_scm_store_regulation_entry"
+      <menuitem id="menu_scm_store_regulation_entry"
         action="ihhg_master.action_store_regulation_entry_open"
         name="Store Regulation Entry"
         sequence="6"
@@ -259,52 +309,64 @@
 
       <!-- SCM menus - Configuration -->
 
-      <menuitem id="menu_configuration"
+      <menuitem id="menu_scm_configuration"
         name="Configuration"
         sequence="7"
         parent="menu_scm" />
 
-      <menuitem id="menu_configuration_package"
+      <menuitem id="menu_scm_configuration_package"
         action="ihhg_master.action_package_open"
         name="Package"
         sequence="1"
-        parent="menu_configuration" />
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_item"
+      <menuitem id="menu_scm_configuration_package_list"
+        action="ihhg_master.action_package_list_open"
+        name="Package List"
+        sequence="2"
+        parent="menu_scm_configuration" />
+
+      <menuitem id="menu_scm_configuration_item"
         action="ihhg_master.action_item_open"
         name="Item"
-        sequence="2"
-        parent="menu_configuration" />
+        sequence="3"
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_item_tags"
+      <menuitem id="menu_scm_configuration_item_tags"
         action="ihhg_master.action_item_tags_open"
         name="Item Tags"
-        sequence="3"
-        parent="menu_configuration" />
+        sequence="4"
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_category"
+      <menuitem id="menu_scm_configuration_category"
         action="ihhg_master.action_category_open"
         name="Category"
-        sequence="4"
-        parent="menu_configuration" />
+        sequence="5"
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_campaign_type"
+      <menuitem id="menu_scm_configuration_campaign_type"
         action="ihhg_master.action_campaign_type_open"
         name="Campaign Type"
-        sequence="5"
-        parent="menu_configuration" />
+        sequence="6"
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_posm_master"
+      <menuitem id="menu_scm_configuration_posm_master"
         action="product.product_template_action"
         name="POSM Master"
-        sequence="6"
-        parent="menu_configuration" />
+        sequence="7"
+        parent="menu_scm_configuration" />
 
-      <menuitem id="menu_configuration_scm_address"
+      <menuitem id="menu_scm_configuration_scm_address"
         action="account.res_partner_action_customer"
         name="Address"
-        sequence="7"
-        parent="menu_configuration" />
+        sequence="8"
+        parent="menu_scm_configuration" />
+
+      <menuitem id="menu_scm_configuration_represented_store"
+        action="ihhg_master.action_represented_stores_open"
+        name="Represented Stores"
+        sequence="9"
+        parent="menu_scm_configuration" />
 
   </data>
 </odoo>

@@ -15,6 +15,7 @@ Functionalities:
 - SCM Entry model and view
     * Filtering for Channel, Package and Item selection
     * Channel, Package and Item count
+    * Visibility Calendar
 
 - Selection Criteria model and view
 - Store Regulation Entry model and view
@@ -22,6 +23,7 @@ Functionalities:
 - Represented Stores model and view
 - Package model and view
     * Item count
+- Package List model and view
 - Item model and view
     * Item line model and view for SCM item selection
 - Item Tags model and view
@@ -43,8 +45,10 @@ Functionalities:
         'views/channel_views.xml',
         'views/represented_stores_views.xml',
         'views/item_views.xml',
+        'views/item_line_views.xml',
         'views/category_views.xml',
         'views/package_views.xml',
+        'views/package_list_views.xml',
         'views/campaign_type_views.xml',
         'views/item_tags_views.xml',
         'views/scm_entry_views.xml',
