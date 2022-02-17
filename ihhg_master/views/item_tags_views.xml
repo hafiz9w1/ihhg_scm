@@ -27,7 +27,7 @@
           <field name="model">item.tags</field>
           <field name="priority">2</field>
           <field name="arch" type="xml">
-              <tree string="Name">
+              <tree string="Brand Name">
                   <field name="name"/>
               </tree>
           </field>
@@ -37,7 +37,7 @@
           <field name="name">item.tags.form</field>
           <field name="model">item.tags</field>
           <field name="arch" type="xml">
-              <form string="Name" class="o_sale_order">
+              <form string="Brand Name" class="o_sale_order">
               <sheet>
                   <group>
                       <group>

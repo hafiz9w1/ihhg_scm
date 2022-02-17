@@ -19,5 +19,5 @@ class ItemLine (models.Model):
     ], string='Shipping / Allocating')
     product_uom_id = fields.Many2one('uom.uom', string='UoM')
     quantity = fields.Float(string='Quantity', default=0.0)
-    item_tags_ids = fields.Many2many('item.tags', string='Item Tags')
+    item_tags_ids = fields.Many2many('item.tags', string='Brand Name')
     sequence = fields.Integer(string='Sequence', default=10)
