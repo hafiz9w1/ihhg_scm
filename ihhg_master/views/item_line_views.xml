@@ -10,13 +10,22 @@
                     date_stop="item_date_to"
                     default_group_by="channel_id"
                     default_scale="week"
-                    color="item_id"
+                    color="id"
                     scales="day,week,month,year"
                     precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
-                    thumbnails="{'name': 'image_128'}">
+                    thumbnails="{'item_tags_ids': 'avatar_128'}"
+                    edit="false"
+                    create="false"
+                    decoration-success="state=='draft'"
+                    decoration-info="state=='lock'"
+                    decoration-danger="state=='cancel'"
+                    string="Channel"
+                    consolidation="package_id">
                 <field name="channel_id"/>
                 <field name="package_id"/>
                 <field name="item_id"/>
+                <field name="state"/>
+                <field name="item_tags_ids"/>
                 <templates>
                     <div t-name="gantt-popover" class="container-fluid">
                         <div class="row no-gutters">
@@ -31,16 +40,15 @@
                                         <t t-esc="package_id"/>
                                     </li>
                                     <li>
-                                        <strong>Item:</strong>
-                                        <t t-esc="item_id"/>
-                                    </li>
-                                    <li>
                                       <strong>Item Line Start:</strong>
-                                      <t t-esc="item_date_from.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                      <t t-esc="item_date_from.format('YYYY-MM-DD')"/>
                                     </li>
                                     <li>
                                       <strong>Item Line Stop:</strong>
-                                      <t t-esc="item_date_to.format('YYYY-MM-DD hh:mm:ss A')"/>
+                                      <t t-esc="item_date_to.format('YYYY-MM-DD')"/>
+                                    </li>
+                                    <li>
+                                        <strong>Brand Name — </strong> <t t-esc="item_tags_ids"/>
                                     </li>
                                 </ul>
                             </div>

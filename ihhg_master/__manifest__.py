@@ -16,6 +16,9 @@ Functionalities:
     * Filtering for Channel, Package and Item selection
     * Channel, Package and Item count
     * Visibility Calendar
+    * SCM States
+    * SCM Lock
+    * Access Rights
 
 - Selection Criteria model and view
 - Store Regulation Entry model and view
