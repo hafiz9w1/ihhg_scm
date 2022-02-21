@@ -12,6 +12,7 @@
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
+                  <field name="state"/>
                   <templates>
                       <t t-name="kanban-box">
                           <div t-attf-class="oe_kanban_card oe_kanban_global_click">
@@ -30,6 +31,9 @@
                                   <div class="o_kanban_record_headings mt4">
                                       Stop: <div class="o_kanban_record_title"><field name="date_to"/></div>
                                   </div>
+                              </div>
+                              <div class="oe_kanban_bottom_right">
+                                <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'cancel': 'default'}}"/>
                               </div>
                           </div>
                       </t>
@@ -55,6 +59,7 @@
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
+                  <field name="state" decoration-info="state == 'draft' or state == 'done'" decoration-success="state == 'cancel'" widget="badge" optional="show"/>
               </tree>
           </field>
       </record>
@@ -64,6 +69,18 @@
           <field name="model">scm.entry</field>
           <field name="arch" type="xml">
               <form string="SCM Entry" class="o_sale_order">
+                <header>
+                  <button name="action_scm_cancel" type="object" string="Cancel" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'lock']), ('id', '=', False)]}" data-hotkey="z" groups="ihhg_master.group_scm_manager" />
+
+                  <button name="action_scm_draft" type="object" string="Set to Draft" states="cancel" groups="ihhg_master.group_scm_manager"/>
+
+                  <button name="action_scm_lock" type="object" string="Lock" states="draft" groups="ihhg_master.group_scm_manager"
+                  help="If the SCM is locked, you can not modify it anymore except unlocked by authorized personnel." />
+
+                  <button name="action_scm_unlock" type="object" string="Unlock" states="lock" groups="ihhg_master.group_scm_manager"/>
+
+                  <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                       <h1>
@@ -97,6 +114,8 @@
                                 <field name="sequence" invisible="1"/>
                                   <group>
                                     <field name="item_id"/>
+                                    <field name="scm_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
                                     <field name="package_id"/>
                                     <field name="item_date_from"/>
                                     <field name="item_date_to"/>
@@ -114,8 +133,10 @@
                                   <create name="add_item_control" string="Add an Item"/>
                                 </control>
 
-                                <field name="sequence" widget="handle" />
+                                <field name="sequence" widget="handle" invisible="1"/>
                                 <field name="item_id"/>
+                                <field name="scm_id" invisible="1"/>
+                                <field name="state" invisible="1"/>
                                 <field name="package_id"/>
                                 <field name="item_date_from"/>
                                 <field name="item_date_to"/>
@@ -268,7 +289,7 @@
       <menuitem id="menu_scm"
         name="SCM"
         sequence="4"
-        groups="group_scm_manager"
+        groups="group_scm_user"
         web_icon="ihhg_master,static/description/icon.png" />
 
       <menuitem id="menu_scm_scm_entry"
@@ -281,30 +302,35 @@
         action="ihhg_master.action_item_line_gantt_open"
         name="Visibility Calendar"
         sequence="2"
+        groups="group_scm_user"
         parent="menu_scm" />
 
       <menuitem id="menu_scm_channel"
         action="ihhg_master.action_channel_open"
         name="Channel"
         sequence="3"
+        groups="group_scm_manager"
         parent="menu_scm" />
 
       <menuitem id="menu_scm_selection_criteria"
         action="ihhg_master.action_selection_criteria_open"
         name="Selection Criteria"
         sequence="4"
+        groups="group_scm_manager"
         parent="menu_scm" />
 
       <menuitem id="menu_scm_store_regulations"
         action="ihhg_master.action_store_regulations_open"
         name="Store Regulations"
         sequence="5"
+        groups="group_scm_manager"
         parent="menu_scm" />
 
       <menuitem id="menu_scm_store_regulation_entry"
         action="ihhg_master.action_store_regulation_entry_open"
         name="Store Regulation Entry"
         sequence="6"
+        groups="group_scm_manager"
         parent="menu_scm" />
 
       <!-- SCM menus - Configuration -->
@@ -312,6 +338,7 @@
       <menuitem id="menu_scm_configuration"
         name="Configuration"
         sequence="7"
+        groups="group_scm_manager"
         parent="menu_scm" />
 
       <menuitem id="menu_scm_configuration_package"
@@ -334,7 +361,7 @@
 
       <menuitem id="menu_scm_configuration_item_tags"
         action="ihhg_master.action_item_tags_open"
-        name="Item Tags"
+        name="Brand Name"
         sequence="4"
         parent="menu_scm_configuration" />
 
