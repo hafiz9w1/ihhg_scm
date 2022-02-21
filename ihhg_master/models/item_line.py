@@ -11,8 +11,8 @@ class ItemLine (models.Model):
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True, copy=False)
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
-    item_date_from = fields.Datetime(string='Date From', default=datetime.now())
-    item_date_to = fields.Datetime(string='Date To', default=datetime.now())
+    item_date_from = fields.Datetime(string='Date From', default=lambda r: datetime.now())
+    item_date_to = fields.Datetime(string='Date To', default=lambda r: datetime.now())
     product_id = fields.Many2one('product.product', string='POSM Item ID')
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
