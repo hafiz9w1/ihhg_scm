@@ -11,8 +11,8 @@ class ItemLine (models.Model):
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True, copy=False)
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
-    item_date_from = fields.Datetime(string='Date From', default=lambda r: datetime.now())
-    item_date_to = fields.Datetime(string='Date To', default=lambda r: datetime.now())
+    item_date_from = fields.Date(string='Date From', default=lambda r: fields.Date.context_today(r))
+    item_date_to = fields.Date(string='Date To', default=lambda r: fields.Date.context_today(r))
     product_id = fields.Many2one('product.product', string='POSM Item ID')
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
@@ -24,3 +24,12 @@ class ItemLine (models.Model):
     item_tags_ids = fields.Many2many('item.tags', string='Brand Name')
     sequence = fields.Integer(string='Sequence', readonly=True, default=10)
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
+
+    # Function to append Brand Name to item name in Visibility calendar
+    def name_get(self):
+        res = []
+        for item in self:
+            name_array = [item.item_id.name] + item.item_tags_ids.mapped('name')
+            name = ' - '.join(name_array)
+            res.append((item.id, name))
+        return res
