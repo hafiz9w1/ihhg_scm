@@ -10,7 +10,7 @@ class SCMEntry(models.Model):
     project_id = fields.Many2one('project.project', string='Related Project', tracking=True, states={'lock': [('readonly', True)]})
     project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)]})
     user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)]})
-    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True)
+    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)]})
     channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)]})
     package_ids = fields.Many2many('ihh.package', string='Package', domain="[('channel_id', 'in', channel_ids)]", states={'lock': [('readonly', True)]})
     item_line_ids = fields.One2many('ihh.item.line', 'scm_id', string='Item', domain="[('package_id', 'in', package_ids)]", states={'lock': [('readonly', True)]}, copy=True, auto_join=True)
@@ -20,8 +20,8 @@ class SCMEntry(models.Model):
     category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)]})
     originating_regulation_id = fields.Many2one('store.regulation.entry', string='Originating Regulation', tracking=True)
     campaign_type_id = fields.Many2one('campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)]})
-    date_from = fields.Datetime(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)]})
-    date_to = fields.Datetime(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)]})
+    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)]})
+    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)]})
     note = fields.Text(string='Extra note...')
     state = fields.Selection([
         ('draft', 'Draft'),

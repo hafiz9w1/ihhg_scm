@@ -10,7 +10,7 @@
                     date_stop="item_date_to"
                     default_group_by="channel_id"
                     default_scale="week"
-                    color="id"
+                    color="scm_id"
                     scales="day,week,month,year"
                     precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
                     thumbnails="{'item_tags_ids': 'avatar_128'}"
@@ -46,9 +46,6 @@
                                     <li>
                                       <strong>Item Line Stop:</strong>
                                       <t t-esc="item_date_to.format('YYYY-MM-DD')"/>
-                                    </li>
-                                    <li>
-                                        <strong>Brand Name — </strong> <t t-esc="item_tags_ids"/>
                                     </li>
                                 </ul>
                             </div>
