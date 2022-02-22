@@ -11,8 +11,8 @@ class ItemLine (models.Model):
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True, copy=False)
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
-    item_date_from = fields.Date(string='Date From', default=lambda r: datetime.now())
-    item_date_to = fields.Date(string='Date To', default=lambda r: datetime.now())
+    item_date_from = fields.Date(string='Date From', default=lambda r: datetime.today())
+    item_date_to = fields.Date(string='Date To', default=lambda r: datetime.today())
     product_id = fields.Many2one('product.product', string='POSM Item ID')
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
@@ -29,9 +29,7 @@ class ItemLine (models.Model):
     def name_get(self):
         res = []
         for item in self:
-            name = item.item_id.name
-            if item.item_tags_ids:
-                for line in item.item_tags_ids:
-                    name = '%s - %s' % (name, (line.name))
-                res.append((item.id, name))
+            name_array = [item.item_id.name] + item.item_tags_ids.mapped('name')
+            name = ' - '.join(name_array)
+            res.append((item.id, name))
         return res
