@@ -8,7 +8,6 @@
               <kanban class="o_kanban_mobile">
                   <field name="name"/>
                   <field name="channel_ids"/>
-                  <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -53,9 +52,7 @@
                   <field name="project_scm_id"/>
                   <field name="user_id"/>
                   <field name="user_project_id"/>
-                  <field name="channel_ids"/>
-                  <field name="package_ids"/>
-                  <field name="item_line_ids"/>
+                  <field name="channel_ids" widget="many2many_tags" optional="show"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
@@ -103,47 +100,30 @@
                       </group>
                     <notebook>
                       <page name="channel_subselection" string="Channel Subselection">
-                          <field name="channel_ids"/>
+                          <field name="channel_ids" context="{'tree_view_ref': 'ihhg_master.view_channel_tree', 'scm_id': id}"/>
                       </page>
+                      <!-- TODO use a smart button to open them in a new full view -->
                       <page name="package_selection" string="Package Selection">
-                        <field name="package_ids"/>
+                        <field name="package_line_ids" context="{'tree_view_ref': 'ihhg_master.view_package_line_tree_scm_entry', 'scm_id': id}"/>
                       </page>
+                      <!-- TODO add a smart button to open them in a new full view also -->
                       <page name="item_planning" string="Item Planning">
-                          <field name="item_line_ids" widget="section_and_note_one2many">
-                            <form>
-                                <field name="sequence" invisible="1"/>
-                                  <group>
-                                    <field name="item_id"/>
-                                    <field name="scm_id" invisible="1"/>
-                                    <field name="state" invisible="1"/>
-                                    <field name="package_id"/>
-                                    <field name="item_date_from"/>
-                                    <field name="item_date_to"/>
-                                    <field name="product_id"/>
-                                    <field name="dimension"/>
-                                    <field name="shipping_allocating"/>
-                                    <field name="product_uom_id"/>
-                                    <field name="quantity"/>
-                                    <field name="item_tags_ids"/>
-                                    <field name="sequence" invisible="1"/>
-                                  </group>
-                            </form>
+                          <field name="item_line_ids" context="{'scm_id': id}">
                             <tree string="SCM Item Lines" editable="bottom" >
                                 <control>
-                                  <create name="add_item_control" string="Add an Item"/>
+                                    <create name="add_item_control" string="Add an Item"/>
                                 </control>
-
-                                <field name="sequence" widget="handle" invisible="1"/>
-                                <field name="item_id"/>
                                 <field name="scm_id" invisible="1"/>
-                                <field name="state" invisible="1"/>
+                                <field name="allowed_channel_ids" invisible="1" />
+                                <field name="sequence" widget="handle"/>
+                                <field name="item_id" domain="[('channel_id', 'in', allowed_channel_ids)]"/>
+                                <field name="product_id" optional="hide"/>
                                 <field name="package_id"/>
+                                <field name="channel_id" invisible="1" />
                                 <field name="item_date_from"/>
                                 <field name="item_date_to"/>
-                                <field name="product_id"/>
                                 <field name="dimension" optional="show"/>
                                 <field name="shipping_allocating" optional="show"/>
-                                <field name="product_uom_id"/>
                                 <field name="quantity"/>
                                 <field name="item_tags_ids" widget="many2many_tags" optional="show"/>
                             </tree>
@@ -153,7 +133,7 @@
                                 <field name="note" nolabel="1" placeholder="Extra Item Notes..."/>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2">
-                                <field name="package_ids_total" colspan="2"/>
+                                <field name="package_line_ids_total" colspan="2"/>
                                 <field name="item_line_ids_total" colspan="2"/>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2">
@@ -188,7 +168,6 @@
                     thumbnails="{'name': 'image_128'}">
                 <field name="name"/>
                 <field name="channel_ids"/>
-                <field name="package_ids"/>
                 <field name="item_line_ids"/>
                 <templates>
                     <div t-name="gantt-popover" class="container-fluid">
@@ -223,15 +202,11 @@
           <field name="arch" type="xml">
               <search string="Search SCM Entry">
                   <field name="channel_ids"/>
-                  <field name="originating_regulation_id"/>
                   <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="SCM" name="name" domain="[]" context="{'group_by': 'name'}"/>
-                      <filter string="Channel" name="channel_ids" domain="[]" context="{'group_by': 'channel_ids'}"/>
-                      <filter string="Package" name="package_ids" domain="[]" context="{'group_by': 'package_ids'}"/>
-                      <filter string="Item" name="item_line_ids" domain="[]" context="{'group_by': 'item_line_ids'}"/>
+                      <filter string="Campaign Type" name="campaign_type_id" domain="[]" context="{'group_by': 'campaign_type_id'}"/>
                       <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
                       <filter string="Project Manager" name="user_project_id" domain="[]" context="{'group_by': 'user_project_id'}"/>
                       <filter string="Owner" name="user_id" domain="[]" context="{'group_by': 'user_id'}"/>
@@ -255,145 +230,5 @@
               </p>
           </field>
       </record>
-
-      <record id="scm_entry_action_view_kanban" model="ir.actions.act_window.view">
-          <field name="sequence" eval="1"/>
-          <field name="view_mode">kanban</field>
-          <field name="view_id" ref="ihhg_master.view_scm_entry_kanban"/>
-          <field name="act_window_id" ref="action_scm_entry_open"/>
-      </record>
-
-      <record id="scm_entry_action_view_tree" model="ir.actions.act_window.view">
-          <field name="sequence" eval="2"/>
-          <field name="view_mode">tree</field>
-          <field name="view_id" ref="ihhg_master.view_scm_entry_tree"/>
-          <field name="act_window_id" ref="action_scm_entry_open"/>
-      </record>
-
-      <record id="scm_entry_action_view_form" model="ir.actions.act_window.view">
-          <field name="sequence" eval="3"/>
-          <field name="view_mode">form</field>
-          <field name="view_id" ref="ihhg_master.view_scm_entry_form"/>
-          <field name="act_window_id" ref="action_scm_entry_open"/>
-      </record>
-
-      <record id="scm_entry_action_view_gantt" model="ir.actions.act_window.view">
-        <field name="sequence" eval="4"/>
-        <field name="view_mode">gantt</field>
-        <field name="view_id" ref="ihhg_master.view_scm_entry_gantt"/>
-        <field name="act_window_id" ref="action_scm_entry_open"/>
-      </record>
-
-      <!-- SCM menus -->
-
-      <menuitem id="menu_scm"
-        name="SCM"
-        sequence="4"
-        groups="group_scm_user"
-        web_icon="ihhg_master,static/description/icon.png" />
-
-      <menuitem id="menu_scm_scm_entry"
-        action="ihhg_master.action_scm_entry_open"
-        name="SCM Entry"
-        sequence="1"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_visibility_calendar"
-        action="ihhg_master.action_item_line_gantt_open"
-        name="Visibility Calendar"
-        sequence="2"
-        groups="group_scm_user"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_channel"
-        action="ihhg_master.action_channel_open"
-        name="Channel"
-        sequence="3"
-        groups="group_scm_manager"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_selection_criteria"
-        action="ihhg_master.action_selection_criteria_open"
-        name="Selection Criteria"
-        sequence="4"
-        groups="group_scm_manager"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_store_regulations"
-        action="ihhg_master.action_store_regulations_open"
-        name="Store Regulations"
-        sequence="5"
-        groups="group_scm_manager"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_store_regulation_entry"
-        action="ihhg_master.action_store_regulation_entry_open"
-        name="Store Regulation Entry"
-        sequence="6"
-        groups="group_scm_manager"
-        parent="menu_scm" />
-
-      <!-- SCM menus - Configuration -->
-
-      <menuitem id="menu_scm_configuration"
-        name="Configuration"
-        sequence="7"
-        groups="group_scm_manager"
-        parent="menu_scm" />
-
-      <menuitem id="menu_scm_configuration_package"
-        action="ihhg_master.action_package_open"
-        name="Package"
-        sequence="1"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_package_list"
-        action="ihhg_master.action_package_list_open"
-        name="Package List"
-        sequence="2"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_item"
-        action="ihhg_master.action_item_open"
-        name="Item"
-        sequence="3"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_item_tags"
-        action="ihhg_master.action_item_tags_open"
-        name="Brand Name"
-        sequence="4"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_category"
-        action="ihhg_master.action_category_open"
-        name="Category"
-        sequence="5"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_campaign_type"
-        action="ihhg_master.action_campaign_type_open"
-        name="Campaign Type"
-        sequence="6"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_posm_master"
-        action="product.product_template_action"
-        name="POSM Master"
-        sequence="7"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_scm_address"
-        action="account.res_partner_action_customer"
-        name="Address"
-        sequence="8"
-        parent="menu_scm_configuration" />
-
-      <menuitem id="menu_scm_configuration_represented_store"
-        action="ihhg_master.action_represented_stores_open"
-        name="Represented Stores"
-        sequence="9"
-        parent="menu_scm_configuration" />
-
   </data>
 </odoo>

@@ -12,14 +12,13 @@ class SCMEntry(models.Model):
     user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)]})
     user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)]})
     channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)]})
-    package_ids = fields.Many2many('ihh.package', string='Package', domain="[('channel_id', 'in', channel_ids)]", states={'lock': [('readonly', True)]})
-    item_line_ids = fields.One2many('ihh.item.line', 'scm_id', string='Item', domain="[('package_id', 'in', package_ids)]", states={'lock': [('readonly', True)]}, copy=True, auto_join=True)
-    channel_ids_total = fields.Integer(compute='_compute_channel_ids_total', string='Total Channel')
-    package_ids_total = fields.Integer(compute='_compute_package_ids_total', string='Total Package')
-    item_line_ids_total = fields.Integer(compute='_compute_item_line_ids_total', string='Total Item')
+    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)]}, copy=True)
+    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)]}, copy=True)
+    channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
+    package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
+    item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
     category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)]})
-    originating_regulation_id = fields.Many2one('store.regulation.entry', string='Originating Regulation', tracking=True)
-    campaign_type_id = fields.Many2one('campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)]})
+    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)]})
     date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)]})
     date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)]})
     note = fields.Text(string='Extra note...')
@@ -30,22 +29,12 @@ class SCMEntry(models.Model):
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
 
     # Count total number of Channel per SCM
-    @api.depends('channel_ids')
-    def _compute_channel_ids_total(self):
-        for channel in self:
-            channel.channel_ids_total = len(channel.channel_ids)
-
-    # Count total number of Package per SCM
-    @api.depends('package_ids')
-    def _compute_package_ids_total(self):
-        for package in self:
-            package.package_ids_total = len(package.package_ids)
-
-    # Count total number of items per SCM
-    @api.depends('item_line_ids')
-    def _compute_item_line_ids_total(self):
-        for item in self:
-            item.item_line_ids_total = len(item.item_line_ids)
+    @api.depends('channel_ids', 'package_line_ids', 'item_line_ids')
+    def _compute_total(self):
+        for rec in self:
+            rec.channel_ids_total = len(rec.channel_ids)
+            rec.package_line_ids_total = len(rec.package_line_ids)
+            rec.item_line_ids_total = len(rec.item_line_ids)
 
     # Change SCM state to cancelled
     def action_scm_cancel(self):

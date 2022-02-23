@@ -1,13 +1,13 @@
 from odoo import models, fields
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+class ProductProduct(models.Model):
+    _inherit = "product.product"
 
-    package_id = fields.Many2one('ihh.package', string='Package')
-    channel_id = fields.Many2one('ihh.channel', string='Channel', related="package_id.channel_id", store=True)
     package_quantity = fields.Float()
-
+    posm_item_id = fields.Char(string='POSM Item ID')
+    scm_id = fields.Many2one(comodel_name="scm.entry", readonly=True)
+    project_id = fields.Many2one(comodel_name="project.project", related="scm_id.project_id")
     chain = fields.Char(string='Chain Code')
     material = fields.Char(string='Material')
     final_dimensions = fields.Float(string='Final Dimensions(mm)')

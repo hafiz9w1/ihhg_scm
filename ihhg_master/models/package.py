@@ -6,11 +6,12 @@ class Package (models.Model):
     _description = 'Package'
 
     name = fields.Char(string='Package')
-    item_total = fields.Integer(compute='_compute_item_total', string='Total Item (per Package)')
     channel_id = fields.Many2one('ihh.channel', string='Channel')
+    item_ids = fields.One2many(comodel_name="product.template", inverse_name="package_id")
+    item_total = fields.Integer(compute='_compute_item_total', string='Total Item (per Package)')
+    delivery_address_ids = fields.One2many(comodel_name="res.partner", inverse_name="package_id")
 
-    # Count total number of items per package
-    @api.depends('name')
+    @api.depends('item_ids')
     def _compute_item_total(self):
         for package in self:
-            package.item_total = self.env['ihh.item'].search_count([('package_id.name', '=', package.name)])
+            package.item_total = len(package.item_ids)

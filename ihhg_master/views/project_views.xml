@@ -16,9 +16,6 @@
                       <group>
                         <field name="scm_entry_id" string="SCM"/>
                       </group>
-                      <group>
-                        <field name="selection_criteria_id" string="Selection Criteria"/>
-                      </group>
                     </group>
                   </page>
               </xpath>

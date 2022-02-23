@@ -5,7 +5,6 @@ from odoo import models, fields, api
 class Project(models.Model):
     _inherit = 'project.project'
 
-    selection_criteria_id = fields.Many2many('selection.criteria', string='Selection Criteria')
     scm_entry_id = fields.Many2one('scm.entry', string='SCM')
 
     # Add field in project to capture deadline (Delivery Date) for project
