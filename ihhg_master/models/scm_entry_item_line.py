@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from odoo import models, fields, api
 
 
@@ -7,11 +8,11 @@ class ItemLine (models.Model):
     _description = 'Item_line'
 
     name = fields.Char(string='Name', compute="_compute_name")
-    sequence = fields.Integer(string='Sequence', readonly=True, default=10)
     item_id = fields.Many2one('product.template', string='Item')
+    sequence = fields.Integer(string='Sequence', readonly=True, default=10)
     product_id = fields.Many2one('product.product', string='POSM Item ID', readonly=True)
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True)
-    allowed_channel_ids = fields.Many2many('ihh.channel', related="scm_id.channel_ids")
+    allowed_channel_ids = fields.Many2many('ihh.channel', string='Allowed Channel', related="scm_id.channel_ids")
     scm_package_line_id = fields.Many2one('scm.entry.package.line')
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
@@ -23,14 +24,14 @@ class ItemLine (models.Model):
         ('allocating', 'Allocating')
     ], string='Shipping / Allocating')
     product_uom_id = fields.Many2one('uom.uom', string='UoM')
-    quantity = fields.Float(string='Quantity', compute="_compute_quantity")
+    quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
 
-    @api.depends('scm_package_line_id.quantity', 'product_id.package_quantity')
+    @api.depends('scm_package_line_id.quantity', 'item_id.package_quantity')
     def _compute_quantity(self):
         for rec in self:
-            rec.quantity = rec.scm_package_line_id.quantity * rec.product_id.package_quantity
+            rec.quantity = rec.scm_package_line_id.quantity * rec.item_id.package_quantity
 
     # TODO: implement more complexe logic if needed
     @api.depends('item_id.name')
@@ -46,3 +47,20 @@ class ItemLine (models.Model):
             name = ' - '.join(name_array)
             res.append((item.id, name))
         return res
+
+    # When creating item_id, automatically create a package_id if it doesn't exist
+    @api.model
+    def create(self, vals):
+        res = super(ItemLine, self).create(vals)
+
+        packages_line = self.env['scm.entry.package.line'].search([('package_id', 'in', res.package_id.ids)]).package_id
+
+        if res.item_id:
+            if res.package_id not in packages_line:
+                package = self.env['scm.entry.package.line'].create({
+                    'package_id': res.package_id.id,
+                    'scm_id': res.scm_id.id,
+                    'scm_entry_item_line_id': res.item_id.ids,
+                })
+                res.scm_package_line_id = package
+            return res

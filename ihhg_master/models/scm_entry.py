@@ -28,7 +28,7 @@ class SCMEntry(models.Model):
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
 
-    # Count total number of Channel per SCM
+    # Count total number of Channel, Package and Item per SCM
     @api.depends('channel_ids', 'package_line_ids', 'item_line_ids')
     def _compute_total(self):
         for rec in self:

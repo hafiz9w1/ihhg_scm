@@ -20,15 +20,12 @@ Functionalities:
     * SCM Lock
     * Access Rights
 
-- Selection Criteria model and view
-- Store Regulation Entry model and view
-- Store Regulations model and view
-- Represented Stores model and view
 - Package model and view
     * Item count
-- Package List model and view
-- Item model and view
+- SCM Package Line model and view
+- SCM Item Line model and view
     * Item line model and view for SCM item selection
+    * Package line creation automation from item line creation
 - Item Tags model and view
 - Category model and view
 - Campaign type model and view

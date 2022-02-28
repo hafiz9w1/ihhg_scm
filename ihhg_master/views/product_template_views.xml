@@ -22,6 +22,8 @@
                 <page name="extra_information" string="Extra Information">
                   <group>
                     <group>
+                      <field name="package_id" string="Package"/>
+                      <field name="package_quantity" string="Quantity"/>
                       <field name="material" string="Material"/>
                       <field name="final_dimensions" string="Final Dimensions(mm)"/>
                       <field name="open_dimensions" string="Open Dimensions(mm)"/>

@@ -7,7 +7,7 @@
       <field name="priority">99</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="name" />
+          <field name="package_id" />
         </tree>
       </field>
     </record>

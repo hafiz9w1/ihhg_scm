@@ -4,9 +4,9 @@ from odoo import models, fields
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    package_id = fields.Many2one('ihh.package', string='Package')
+    package_id = fields.Many2one('ihh.package', string='Package', readonly=True)
     channel_id = fields.Many2one('ihh.channel', string='Channel', related="package_id.channel_id", store=True)
-    package_quantity = fields.Float()
+    package_quantity = fields.Integer()
 
     chain = fields.Char(string='Chain Code')
     material = fields.Char(string='Material')
