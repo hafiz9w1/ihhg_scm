@@ -53,7 +53,7 @@ class ItemLine (models.Model):
     def create(self, vals):
         res = super(ItemLine, self).create(vals)
 
-        packages_line = self.env['scm.entry.package.line'].search([('package_id', 'in', res.package_id.ids)]).package_id
+        packages_line = self.env['scm.entry.package.line'].search([('package_id', 'in', res.package_id.ids), ('scm_id', 'in', res.scm_id.ids)]).package_id
 
         if res.item_id:
             if res.package_id not in packages_line:
