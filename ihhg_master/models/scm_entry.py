@@ -27,6 +27,7 @@ class SCMEntry(models.Model):
         ('lock', 'Locked'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
+    active = fields.Boolean('Active', default=True)
 
     # Count total number of Channel, Package and Item per SCM
     @api.depends('channel_ids', 'package_line_ids', 'item_line_ids')

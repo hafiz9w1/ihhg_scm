@@ -7,3 +7,4 @@ class ItemTags(models.Model):
     _description = "Item Tags"
 
     name = fields.Char(string='Name')
+    active = fields.Boolean('Active', default=True)
