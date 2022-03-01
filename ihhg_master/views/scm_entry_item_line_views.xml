@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+      <record id="view_item_line_gantt" model="ir.ui.view">
+        <field name="name">scm.entry.item.line.gantt</field>
+        <field name="model">scm.entry.item.line</field>
+        <field name="arch" type="xml">
+            <gantt
+                date_start="item_date_from"
+                date_stop="item_date_to"
+                default_group_by="channel_id"
+                default_scale="week"
+                color="scm_id"
+                scales="day,week,month,year"
+                precision="{'day': 'hour:full', 'week': 'day:full', 'month': 'day:full', 'year': 'day:full'}"
+                thumbnails="{'item_tags_ids': 'avatar_128'}"
+                edit="false"
+                create="false"
+                decoration-success="state=='draft'"
+                decoration-info="state=='lock'"
+                decoration-danger="state=='cancel'"
+                string="Channel"
+                consolidation="package_id">
+                <field name="channel_id"/>
+                <field name="package_id"/>
+                <field name="item_id"/>
+                <field name="state"/>
+                <field name="item_tags_ids"/>
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li>
+                                      <strong>Channel:</strong>
+                                      <t t-esc="channel_id"/>
+                                    </li>
+                                    <li>
+                                        <strong>Package:</strong>
+                                        <t t-esc="package_id"/>
+                                    </li>
+                                    <li>
+                                      <strong>Item Line Start:</strong>
+                                      <t t-esc="item_date_from.format('YYYY-MM-DD')"/>
+                                    </li>
+                                    <li>
+                                      <strong>Item Line Stop:</strong>
+                                      <t t-esc="item_date_to.format('YYYY-MM-DD')"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+      </record>
+
+      <record id="view_item_line_from" model="ir.ui.view">
+        <field name="name">view_item_line_from</field>
+        <field name="model">scm.entry.item.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="scm_id" invisible="1"/>
+                        <field name="item_id"/>
+                        <field name="product_id"/>
+                        <field name="package_id"/>
+                        <field name="item_tags_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="item_date_from"/>
+                        <field name="item_date_to"/>
+                        <field name="product_id"/>
+                        <field name="dimension"/>
+                        <field name="shipping_allocating"/>
+                        <field name="product_uom_id"/>
+                        <field name="quantity"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_item_line_tree_edit_bottom" model="ir.ui.view">
+        <field name="name">view_item_line_tree</field>
+        <field name="model">scm.entry.item.line</field>
+        <field name="arch" type="xml">
+            <tree string="SCM Item Lines" editable="bottom" >
+                <!-- <control>
+                    <create name="add_item_control" string="Add an Item"/>
+                </control> -->
+                <field name="scm_id" invisible="1"/>
+                <field name="sequence" widget="handle"/>
+                <field name="item_id"/>
+                <field name="product_id" optional="hide"/>
+                <field name="package_id"/>
+                <field name="item_date_from"/>
+                <field name="item_date_to"/>
+                <field name="product_id"/>
+                <field name="dimension" optional="show"/>
+                <field name="shipping_allocating" optional="show"/>
+                <field name="quantity"/>
+                <field name="item_tags_ids" widget="many2many_tags" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_item_line_filter" model="ir.ui.view">
+        <field name="name">scm.entry.item.line.list.select</field>
+        <field name="model">scm.entry.item.line</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <search string="Search Item Line">
+                <field name="item_id"/>
+                <field name="package_id"/>
+                <field name="item_date_from"/>
+                <field name="item_date_to"/>
+                <group expand="0" string="Group By">
+                    <filter string="SCM" name="group_scm_id" domain="[]" context="{'group_by': 'scm_id'}"/>
+                    <filter string="channel" name="group_channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>
+                    <filter string="Package" name="group_package_id" domain="[]" context="{'group_by': 'package_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_item_line_gantt_open" model="ir.actions.act_window">
+        <field name="name">Visibility Calendar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">scm.entry.item.line</field>
+        <field name="view_mode">gantt</field>
+        <field name="search_view_id"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                To create a new record
+            </p><p>
+                <br/> Click on "Create"
+            </p>
+        </field>
+    </record>
+
+  </data>
+</odoo>

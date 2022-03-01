@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-        <record model="ir.ui.view" id="view_package_kanban">
-          <field name="name">package.kanban</field>
-          <field name="model">ihh.package</field>
-          <field name="arch" type="xml">
-              <kanban class="o_kanban_mobile">
-                  <field name="name"/>
-                  <field name="channel_id"/>
-                  <templates>
-                      <t t-name="kanban-box">
-                          <div t-attf-class="oe_kanban_card oe_kanban_global_click">
-                              <div class="o_kanban_record_top mb16">
-                                  <div class="o_kanban_record_headings mt4">
-                                      <strong>Package: </strong><div class="o_kanban_record_title"><field name="name"/></div>
-                                  </div>
-                              </div>
-                              <div class="o_kanban_record_top mb16">
-                                  <div class="o_kanban_record_headings mt4">
-                                      <strong>Channel: </strong><div class="o_kanban_record_title"><field name="channel_id"/></div>
-                                  </div>
-                              </div>
-                          </div>
-                      </t>
-                  </templates>
-              </kanban>
-          </field>
-      </record>
-
       <record id="view_package_tree" model="ir.ui.view">
           <field name="name">package.tree</field>
           <field name="model">ihh.package</field>
@@ -37,8 +10,21 @@
                   <field name="name"/>
                   <field name="item_total"/>
                   <field name="channel_id"/>
+                  <field name="delivery_address_ids" widget="many2many_tags" optional="show"/>
               </tree>
           </field>
+      </record>
+
+      <record id="view_package_tree_for_channel" model="ir.ui.view">
+        <field name="name">package.tree</field>
+        <field name="model">ihh.package</field>
+        <field name="arch" type="xml">
+            <tree string="Package" editable="bottom">
+                <field name="name"/>
+                <field name="item_total"/>
+                <field name="delivery_address_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
       </record>
 
       <record id="view_package_form" model="ir.ui.view">
@@ -53,6 +39,12 @@
                           <field name="item_total"/>
                           <field name="channel_id"/>
                       </group>
+                      <group>
+                        <field name="delivery_address_ids" context="{'tree_view_ref': 'ihhg_master.delivery_address_tree_view', 'default_package_id': id}"/>
+                      </group>
+                  </group>
+                  <group>
+                    <field name="item_ids" context="{'tree_view_ref': 'ihhg_master.product_tree_view', 'default_package_id': id}"/>
                   </group>
               </sheet>
               </form>
@@ -66,7 +58,6 @@
           <field name="arch" type="xml">
               <search string="Search Package">
                   <field name="name"/>
-                  <field name="item_total"/>
                   <field name="channel_id"/>
              </search>
           </field>
@@ -76,7 +67,7 @@
           <field name="name">Package</field>
           <field name="type">ir.actions.act_window</field>
           <field name="res_model">ihh.package</field>
-          <field name="view_mode">kanban,tree,form</field>
+          <field name="view_mode">tree,form</field>
           <field name="search_view_id"/>
           <field name="context">{}</field>
           <field name="help" type="html">
@@ -86,27 +77,6 @@
                   <br/> Click on "Create"
               </p>
           </field>
-      </record>
-
-      <record id="package_action_view_kanban" model="ir.actions.act_window.view">
-          <field name="sequence" eval="1"/>
-          <field name="view_mode">kanban</field>
-          <field name="view_id" ref="ihhg_master.view_package_kanban"/>
-          <field name="act_window_id" ref="action_package_open"/>
-      </record>
-
-      <record id="package_action_view_tree" model="ir.actions.act_window.view">
-          <field name="sequence" eval="2"/>
-          <field name="view_mode">tree</field>
-          <field name="view_id" ref="ihhg_master.view_package_tree"/>
-          <field name="act_window_id" ref="action_package_open"/>
-      </record>
-
-      <record id="package_action_view_form" model="ir.actions.act_window.view">
-          <field name="sequence" eval="3"/>
-          <field name="view_mode">form</field>
-          <field name="view_id" ref="ihhg_master.view_package_form"/>
-          <field name="act_window_id" ref="action_package_open"/>
       </record>
   </data>
 </odoo>

@@ -1,0 +1,76 @@
+<odoo>
+
+    <!-- SCM menus -->
+    <menuitem id="menu_scm"
+        name="SCM"
+        sequence="4"
+        groups="group_scm_user"
+        web_icon="ihhg_master,static/description/icon.png" />
+
+    <menuitem id="menu_scm_scm_entry"
+        action="ihhg_master.action_scm_entry_open"
+        name="SCM Entry"
+        sequence="1"
+        parent="menu_scm" />
+
+    <menuitem id="menu_scm_visibility_calendar"
+        action="ihhg_master.action_item_line_gantt_open"
+        name="Visibility Calendar"
+        sequence="2"
+        groups="group_scm_user"
+        parent="menu_scm" />
+
+
+
+    <!-- SCM menus - Configuration -->
+
+    <menuitem id="menu_scm_configuration"
+        name="Configuration"
+        sequence="7"
+        groups="group_scm_manager"
+        parent="menu_scm" />
+
+    <menuitem id="menu_scm_channel"
+        action="ihhg_master.action_channel_open"
+        name="Channel"
+        sequence="1"
+        groups="group_scm_manager"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_package"
+        action="ihhg_master.action_package_open"
+        name="Package"
+        sequence="5"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_item_tags"
+        action="ihhg_master.action_item_tags_open"
+        name="Brand Name"
+        sequence="8"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_category"
+        action="ihhg_master.action_category_open"
+        name="Category"
+        sequence="10"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_campaign_type"
+        action="ihhg_master.action_campaign_type_open"
+        name="Campaign Type"
+        sequence="12"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_posm_master"
+        action="product.product_template_action"
+        name="POSM Master"
+        sequence="13"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_scm_address"
+        action="account.res_partner_action_customer"
+        name="Address"
+        sequence="14"
+        parent="menu_scm_configuration" />
+
+</odoo>

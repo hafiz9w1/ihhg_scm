@@ -14,8 +14,8 @@
         <record id="group_scm_manager" model="res.groups">
             <field name="name">Administrator</field>
             <field name="category_id" ref="module_category_scm"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="users" eval="[(4, ref('base.group_system'))]"/>
         </record>
     </data>
 </odoo>

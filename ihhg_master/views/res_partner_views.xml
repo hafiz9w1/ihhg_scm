@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-        <record id="res_partner_view_form_inherit" model="ir.ui.view">
-            <field name="name">partner.form</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-              <xpath expr="//page[@name='contact_addresses']" position="before">
-                  <page name="extra_address_page" string="Extra Addresses" autofocus="autofocus">
-                    <sheet>
-                      <group>
-                        <group>
-                          <field name="is_dc"/>
-                          <field name="is_represents"/>
-                          <field name="is_reserve"/>
-                          <field name="cpid"/>
-                          <field name="date_from"/>
-                          <field name="date_to"/>
-                          <field name="delivery_type"/>
-                          <field name="channel_id"/>
-                          <field name="selection_criteria_id"/>
-                        </group>
-                        <group>
-                          <field name="post_number"/>
-                          <field name="prefecture"/>
-                          <field name="territory_code"/>
-                          <field name="scm_shipping_address"/>
-                          <field name="targets_represented"/>
-                          <field name="user_id"/>
-                          <field name="store_regulations_id"/>
-                        </group>
-                      </group>
-                    </sheet>
-                  </page>
-              </xpath>
-            </field>
-        </record>
+    <record id="delivery_address_tree_view" model="ir.ui.view">
+      <field name="name">delivery_address_tree_view</field>
+      <field name="model">res.partner</field>
+      <field name="priority">99</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="package_id" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="res_partner_view_form_inherit" model="ir.ui.view">
+        <field name="name">partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//page[@name='contact_addresses']" position="before">
+              <page name="extra_address_page" string="Extra Addresses" autofocus="autofocus">
+                <group>
+                  <field name="package_id" />
+                </group>
+
+                  <!-- <sheet>
+                  <group>
+                    <group>
+                      <field name="is_dc"/>
+                      <field name="is_represents"/>
+                      <field name="is_reserve"/>
+                      <field name="cpid"/>
+                      <field name="date_from"/>
+                      <field name="date_to"/>
+                      <field name="delivery_type"/>
+                      <field name="channel_id"/>
+                      <field name="selection_criteria_id"/>
+                    </group>
+                    <group>
+                      <field name="post_number"/>
+                      <field name="prefecture"/>
+                      <field name="territory_code"/>
+                      <field name="scm_shipping_address"/>
+                      <field name="targets_represented"/>
+                      <field name="user_id"/>
+                      <field name="store_regulations_id"/>
+                    </group>
+                  </group>
+                </sheet> -->
+              </page>
+          </xpath>
+        </field>
+    </record>
   </data>
 </odoo>

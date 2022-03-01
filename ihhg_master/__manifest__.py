@@ -1,6 +1,6 @@
 {
     'name': "iHH Group Custom Addon",
-    'version': "15.0.1.0.0",
+    'version': "15.0.1.0.1",
     'category': 'management',
     'summary': """ Custom module""",
 
@@ -20,15 +20,12 @@ Functionalities:
     * SCM Lock
     * Access Rights
 
-- Selection Criteria model and view
-- Store Regulation Entry model and view
-- Store Regulations model and view
-- Represented Stores model and view
 - Package model and view
     * Item count
-- Package List model and view
-- Item model and view
+- SCM Package Line model and view
+- SCM Item Line model and view
     * Item line model and view for SCM item selection
+    * Package line creation automation from item line creation
 - Item Tags model and view
 - Category model and view
 - Campaign type model and view
@@ -38,30 +35,29 @@ Functionalities:
     'author': "Hafiz Abbas",
     'email': "hafiz@portcities.net",
     'website': "http://portcities.net",
-    'depends': ['project', 'sale'],
+    'depends': [
+        'product',
+        'project',
+    ],
 
     'data': [
         'security/scm_security.xml',
         'security/ir.model.access.csv',
         'report/project_report.xml',
         'report/project_report_template.xml',
-        'views/channel_views.xml',
-        'views/represented_stores_views.xml',
-        'views/item_views.xml',
-        'views/item_line_views.xml',
-        'views/category_views.xml',
+        'views/product_template_views.xml',
+        'views/product_product_views.xml',
         'views/package_views.xml',
-        'views/package_list_views.xml',
+        'views/channel_views.xml',
+        'views/scm_entry_item_line_views.xml',
+        'views/scm_entry_package_line_views.xml',
+        'views/category_views.xml',
         'views/campaign_type_views.xml',
         'views/item_tags_views.xml',
         'views/scm_entry_views.xml',
-        'views/selection_criteria_views.xml',
-        'views/store_regulation_entry_views.xml',
-        'views/store_regulations_views.xml',
-        'views/product_template_views.xml',
         'views/project_views.xml',
         'views/res_partner_views.xml',
-
+        'views/menu_items.xml',
     ],
     'installable': True,
     'auto_install': False,
