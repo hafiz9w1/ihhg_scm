@@ -4,7 +4,7 @@ from odoo import models, fields
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    package_id = fields.Many2one('ihh.package', string='Package', readonly=True)
+    package_id = fields.Many2one('ihh.package', string='Package')
     channel_id = fields.Many2one('ihh.channel', string='Channel', related="package_id.channel_id", store=True)
     package_quantity = fields.Integer()
 
