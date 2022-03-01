@@ -10,6 +10,7 @@ class Package (models.Model):
     item_ids = fields.One2many(comodel_name="product.template", inverse_name="package_id")
     item_total = fields.Integer(compute='_compute_item_total', string='Total Item (per Package)')
     delivery_address_ids = fields.One2many(comodel_name="res.partner", inverse_name="package_id")
+    active = fields.Boolean('Active', default=True)
 
     @api.depends('item_ids')
     def _compute_item_total(self):

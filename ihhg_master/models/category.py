@@ -6,3 +6,4 @@ class Category (models.Model):
     _description = 'Category'
 
     name = fields.Char(string='Category')
+    active = fields.Boolean('Active', default=True)

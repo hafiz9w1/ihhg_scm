@@ -5,10 +5,21 @@ from odoo import models, fields, api
 class Project(models.Model):
     _inherit = 'project.project'
 
+    @api.model
+    def _get_default_team(self):
+        return self.env['crm.team']._get_default_team_id()
+
     scm_entry_id = fields.Many2one('scm.entry', string='SCM')
 
     # Add field in project to capture deadline (Delivery Date) for project
     project_date_deadline = fields.Datetime(string='Delivery Date', tracking=True)
+
+    # Project Team
+    team_id = fields.Many2one(
+        'crm.team', 'Project Team',
+        ondelete="set null", tracking=True,
+        change_default=True, default=_get_default_team
+    )
 
 
 class Task(models.Model):

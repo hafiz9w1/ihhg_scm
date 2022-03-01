@@ -23,6 +23,7 @@
                         <field name="name"/>
                         <field name="owner"/>
                         <field name="package_ids" context="{'tree_view_ref': 'ihhg_master.view_package_tree_for_channel', 'default_channel_id': id}"/>
+                        <field name="active" invisible="1"/>
                     </group>
               </sheet>
               </form>

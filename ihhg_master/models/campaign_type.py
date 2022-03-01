@@ -7,3 +7,4 @@ class CampaignType(models.Model):
     _description = "Campaign Type"
 
     name = fields.Char(string='Name')
+    active = fields.Boolean('Active', default=True)
