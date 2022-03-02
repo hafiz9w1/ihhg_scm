@@ -27,10 +27,6 @@
                                 <strong>SCM:</strong>
                                 <p class="m-0" t-field="doc.scm_entry_id"/>
                             </div>
-                            <div class="col-auto col-3 mw-100 mb-2">
-                                <strong>Selection Criteria:</strong>
-                                <p class="m-0" t-field="doc.selection_criteria_id"/>
-                            </div>
                         </div>
                     </div>
                     <table class="table table-sm o_main_table">
@@ -42,7 +38,6 @@
                                 <th name="th_responsible" class="text-right">Responsible</th>
                                 <th name="th_offset" class="text-right">Offset</th>
                                 <th name="th_deadline" class="text-right">Deadline</th>
-                                <th name="th_progress" class="text-right">Progress</th>
                             </tr>
                         </thead>
                         <tbody class="sale_tbody">
@@ -59,9 +54,6 @@
                                         </td>
                                         <td name="td_deadline" class="text-right">
                                             <span t-field="line.date_deadline"/>
-                                        </td>
-                                        <td name="td_progress" class="text-right">
-                                            <span t-field="line.progress"/>
                                         </td>
                                     </t>
                                 </tr>
