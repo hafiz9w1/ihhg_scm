@@ -16,8 +16,8 @@ class ItemLine (models.Model):
     scm_package_line_id = fields.Many2one('scm.entry.package.line')
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
-    item_date_from = fields.Date(string='Date From', default=lambda r: fields.Date.context_today(r))
-    item_date_to = fields.Date(string='Date To', default=lambda r: fields.Date.context_today(r))
+    item_date_from = fields.Date(string='Date From', inverse='_inverse_item_date_from', compute='_compute_item_date_from', store=True)
+    item_date_to = fields.Date(string='Date To', inverse='_inverse_item_date_to', compute='_compute_item_date_to', store=True)
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
         ('shipping', 'Shipping'),
@@ -57,10 +57,41 @@ class ItemLine (models.Model):
 
         if res.item_id:
             if res.package_id not in packages_line:
+
                 package = self.env['scm.entry.package.line'].create({
                     'package_id': res.package_id.id,
                     'scm_id': res.scm_id.id,
                     'scm_entry_item_line_id': res.item_id.ids,
                 })
                 res.scm_package_line_id = package
+
             return res
+
+    # Delete package line when Item line is removed
+    def unlink(self):
+        scm_package_line_to_delete = self.env['scm.entry.package.line'].search([('id', 'in', self.scm_package_line_id.ids)])
+
+        for rec in self:
+            if rec.scm_package_line_id:
+
+                res = super(ItemLine, self).unlink()
+                scm_package_line_to_delete.unlink()
+        return res
+
+    # Select SCM date_from for Item item_date_from
+    @api.depends('scm_id.date_from')
+    def _compute_item_date_from(self):
+        for rec in self:
+            rec.item_date_from = rec.scm_id.date_from
+
+    def _inverse_item_date_from(self):
+        pass
+
+    # Select SCM date_to for Item item_date_to
+    @api.depends('scm_id.date_to')
+    def _compute_item_date_to(self):
+        for rec in self:
+            rec.item_date_to = rec.scm_id.date_to
+
+    def _inverse_item_date_to(self):
+        pass
