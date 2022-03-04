@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class SCMEntry(models.Model):
@@ -13,7 +13,9 @@ class SCMEntry(models.Model):
     user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)]})
     channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)]})
     item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)]}, copy=True)
+    allocated_item_ids = fields.Many2many(comodel_name="product.template", compute="_compute_allocated_item_ids")
     package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)]}, copy=True)
+    allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
     channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
     package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
     item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
@@ -37,6 +39,16 @@ class SCMEntry(models.Model):
             rec.package_line_ids_total = len(rec.package_line_ids)
             rec.item_line_ids_total = len(rec.item_line_ids)
 
+    @api.depends('item_line_ids.item_id')
+    def _compute_allocated_item_ids(self):
+        for rec in self:
+            rec.allocated_item_ids = rec.item_line_ids.item_id.ids
+
+    @api.depends('package_line_ids.package_id')
+    def _compute_allocated_package_ids(self):
+        for rec in self:
+            rec.allocated_package_ids = rec.package_line_ids.package_id.ids
+
     # Change SCM state to cancelled
     def action_scm_cancel(self):
         self.state = 'cancel'
@@ -52,3 +64,21 @@ class SCMEntry(models.Model):
     # Unlock SCM
     def action_scm_unlock(self):
         self.state = 'draft'
+
+    def action_add_packages(self):
+        self.ensure_one()
+        add_package = self.env['scm.entry.add.package'].create({
+            "scm_id": self.id
+        })
+
+        context = dict(self.env.context)
+
+        return {
+            'name': _('Add package'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'scm.entry.add.package',
+            'res_id': add_package.id,
+            'target': 'new',
+            'context': context
+        }
