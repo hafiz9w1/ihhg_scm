@@ -58,6 +58,7 @@ Functionalities:
         'views/project_views.xml',
         'views/res_partner_views.xml',
         'views/menu_items.xml',
+        'wizard/scm_entry_add_package_views.xml',
     ],
     'installable': True,
     'auto_install': False,

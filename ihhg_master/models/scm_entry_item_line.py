@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from odoo import models, fields, api
 
 
@@ -8,16 +6,19 @@ class ItemLine (models.Model):
     _description = 'Item_line'
 
     name = fields.Char(string='Name', compute="_compute_name")
-    item_id = fields.Many2one('product.template', string='Item')
+    item_id = fields.Many2one('product.template', string='Item', required=True)
     sequence = fields.Integer(string='Sequence', readonly=True, default=10)
     product_id = fields.Many2one('product.product', string='POSM Item ID', readonly=True)
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True)
     allowed_channel_ids = fields.Many2many('ihh.channel', string='Allowed Channel', related="scm_id.channel_ids")
+    allocated_item_ids = fields.Many2many('product.template', string='Already used item', related="scm_id.allocated_item_ids")
     scm_package_line_id = fields.Many2one('scm.entry.package.line')
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')
-    item_date_from = fields.Date(string='Date From', inverse='_inverse_item_date_from', compute='_compute_item_date_from', store=True)
-    item_date_to = fields.Date(string='Date To', inverse='_inverse_item_date_to', compute='_compute_item_date_to', store=True)
+    item_date_from = fields.Date(
+        string='Date From', compute='_compute_item_date_from', store=True, readonly=False, required=True)
+    item_date_to = fields.Date(
+        string='Date To', compute='_compute_item_date_to', store=True, readonly=False, required=True)
     dimension = fields.Char(string='Dimension')
     shipping_allocating = fields.Selection([
         ('shipping', 'Shipping'),
@@ -28,16 +29,28 @@ class ItemLine (models.Model):
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
 
-    @api.depends('scm_package_line_id.quantity', 'item_id.package_quantity')
+    @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):
         for rec in self:
-            rec.quantity = rec.scm_package_line_id.quantity * rec.item_id.package_quantity
+            rec.quantity = rec.scm_package_line_id.total_quantity * rec.item_id.package_quantity
 
     # TODO: implement more complexe logic if needed
     @api.depends('item_id.name')
     def _compute_name(self):
         for rec in self:
             rec.name = rec.item_id.name
+
+    # Select SCM date_from for Item item_date_from
+    @api.depends('scm_id.date_from')
+    def _compute_item_date_from(self):
+        for rec in self:
+            rec.item_date_from = rec.scm_id.date_from
+
+    # Select SCM date_to for Item item_date_to
+    @api.depends('scm_id.date_to')
+    def _compute_item_date_to(self):
+        for rec in self:
+            rec.item_date_to = rec.scm_id.date_to
 
     # Function to append Brand Name to item name in Visibility calendar
     def name_get(self):
@@ -53,45 +66,60 @@ class ItemLine (models.Model):
     def create(self, vals):
         res = super(ItemLine, self).create(vals)
 
-        packages_line = self.env['scm.entry.package.line'].search([('package_id', 'in', res.package_id.ids), ('scm_id', 'in', res.scm_id.ids)]).package_id
+        res.create_package_if_not_exist()
 
-        if res.item_id:
-            if res.package_id not in packages_line:
+        return res
 
-                package = self.env['scm.entry.package.line'].create({
-                    'package_id': res.package_id.id,
-                    'scm_id': res.scm_id.id,
-                    'scm_entry_item_line_id': res.item_id.ids,
-                })
-                res.scm_package_line_id = package
+    def write(self, vals):
+        res = super(ItemLine, self).write(vals)
 
-            return res
+        self.create_package_if_not_exist()
+        self.delete_package_if_not_exist()
+
+        return res
 
     # Delete package line when Item line is removed
     def unlink(self):
-        scm_package_line_to_delete = self.env['scm.entry.package.line'].search([('id', 'in', self.scm_package_line_id.ids)])
-
-        for rec in self:
-            if rec.scm_package_line_id:
-
-                res = super(ItemLine, self).unlink()
-                scm_package_line_to_delete.unlink()
+        scm_ids = self.scm_id.ids
+        res = super(ItemLine, self).unlink()
+        self.delete_package_unlink_if_not_exist(scm_ids)
         return res
 
-    # Select SCM date_from for Item item_date_from
-    @api.depends('scm_id.date_from')
-    def _compute_item_date_from(self):
-        for rec in self:
-            rec.item_date_from = rec.scm_id.date_from
+    def create_package_if_not_exist(self):
+        is_created = self.env.context.get('package_update')
+        if is_created:
+            return
+        self = self.with_context({'package_update': True})
+        for record in self:
+            packages_line = record.scm_id.package_line_ids
 
-    def _inverse_item_date_from(self):
-        pass
+            if record.package_id not in packages_line.package_id:
+                package = self.env['scm.entry.package.line'].create({
+                    'package_id': record.package_id.id,
+                    'scm_id': record.scm_id.id,
+                })
+                record.scm_package_line_id = package.id
+            else:
+                p_line = packages_line.filtered(lambda r: r.package_id == record.package_id)[0]
+                record.scm_package_line_id = p_line.id
 
-    # Select SCM date_to for Item item_date_to
-    @api.depends('scm_id.date_to')
-    def _compute_item_date_to(self):
-        for rec in self:
-            rec.item_date_to = rec.scm_id.date_to
+    def delete_package_if_not_exist(self):
+        entry_line = self.env['scm.entry.item.line']
+        for record in self:
+            entry_line._delete_package_if_not_exist(record.scm_id.id)
 
-    def _inverse_item_date_to(self):
-        pass
+    @api.model
+    def delete_package_unlink_if_not_exist(self, scm_ids):
+        entry_line = self.env['scm.entry.item.line']
+        for scm_id in scm_ids:
+            entry_line._delete_package_if_not_exist(scm_id)
+
+    @api.model
+    def _delete_package_if_not_exist(self, scm_id):
+        scm = self.env['scm.entry'].browse(scm_id)
+        packages_lines = scm.package_line_ids
+        package_item_lines = scm.item_line_ids.mapped('package_id')
+
+        for p in packages_lines:
+            if p.package_id not in package_item_lines:
+                p.unlink()
