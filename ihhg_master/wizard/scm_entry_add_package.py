@@ -17,7 +17,6 @@ class ScmEntryAddPackage(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
-        item_line_to_create = []
         for p in self.package_ids:
             if p not in self.scm_id.allocated_package_ids:
                 package_line = self.env['scm.entry.package.line'].create({
@@ -27,6 +26,7 @@ class ScmEntryAddPackage(models.TransientModel):
             else:
                 package_line = self.scm_id.package_line_ids.filtered(lambda r: r.package_id == p)
 
+            item_line_to_create = []
             for item in p.item_ids:
                 if item not in self.scm_id.allocated_item_ids:
                     item_line_to_create.append({
@@ -36,4 +36,4 @@ class ScmEntryAddPackage(models.TransientModel):
                         'item_date_from': self.scm_id.date_from,
                         'item_date_to': self.scm_id.date_to
                     })
-        self.env['scm.entry.item.line'].create(item_line_to_create)
+            self.env['scm.entry.item.line'].create(item_line_to_create)
