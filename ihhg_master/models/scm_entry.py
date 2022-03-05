@@ -105,12 +105,6 @@ class SCMEntry(models.Model):
                 raise UserError(_('Duplication is not allowed for SCM in DONE state'))
         return super(SCMEntry, self).copy()
 
-    def unlink_action(self):
-        """ Remove the contextual actions created for the server actions. """
-        self.check_access_rights('write', raise_exception=True)
-        self.filtered('binding_model_id').write({'binding_model_id': False})
-        return True
-
     def action_add_packages(self):
         self.ensure_one()
         add_package = self.env['scm.entry.add.package'].create({
