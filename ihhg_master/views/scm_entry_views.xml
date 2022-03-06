@@ -76,7 +76,13 @@
 
                   <button name="action_scm_unlock" type="object" string="Unlock" states="lock" groups="ihhg_master.group_scm_manager"/>
 
-                  <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                  <button name="action_scm_confirm_items" type="object" string="Confirm Items" states="lock" groups="ihhg_master.group_scm_manager"/>
+
+                  <button name="action_scm_reset" type="object" string="Reset" states="phase2" groups="ihhg_master.group_scm_manager"/>
+
+                  <button name="action_scm_finish" type="object" string="Finish" states="phase2" groups="ihhg_master.group_scm_manager"/>
+
+                  <field name="state" widget="statusbar" statusbar_visible="draft,lock,cancel,phase2,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

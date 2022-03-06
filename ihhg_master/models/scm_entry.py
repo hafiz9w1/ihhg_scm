@@ -1,33 +1,35 @@
 from odoo import models, fields, api, _
-
+from odoo.exceptions import UserError
 
 class SCMEntry(models.Model):
     _name = "scm.entry"
     _description = "SCM Entry"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)]})
-    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, states={'lock': [('readonly', True)]})
-    project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)]})
-    user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)]})
-    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)]})
-    channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)]})
-    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)]}, copy=True)
+    name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
     allocated_item_ids = fields.Many2many(comodel_name="product.template", compute="_compute_allocated_item_ids")
-    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)]}, copy=True)
+    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
     allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
     channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
     package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
     item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
-    category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)]})
-    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)]})
-    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)]})
-    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)]})
+    category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     note = fields.Text(string='Extra note...')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('lock', 'Locked'),
         ('cancel', 'Cancelled'),
+        ('phase2', 'Phase2'),
+        ('done', 'Done'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
     active = fields.Boolean('Active', default=True)
 
@@ -64,6 +66,44 @@ class SCMEntry(models.Model):
     # Unlock SCM
     def action_scm_unlock(self):
         self.state = 'draft'
+
+    # Button for creating product.product from items and setting state to phase2
+    def action_scm_confirm_items(self):
+        for rec in self:
+            for line in rec.item_line_ids:
+                self.env['product.product'].create({
+                    'name': '(' + rec.name + ') - ' + line.item_id.name,
+                    'posm_item_id': line.item_id,
+                    'scm_id': rec.id,
+                })
+        self.state = 'phase2'
+
+    # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
+    def action_scm_reset(self):
+        item_product_product = self.env['product.product'].search([('scm_id', 'in', self.ids)])
+        for rec in self:
+            if rec.item_line_ids.scm_id:
+                item_product_product.unlink()
+
+        self.state = 'lock'
+
+    # Change state to done
+    def action_scm_finish(self):
+        self.state = 'done'
+
+    # Prevent SCM deletion in DONE state.
+    def unlink(self):
+        for rec in self:
+            if rec.state in ('done'):
+                raise UserError(_('Deleting is not allowed for SCM in DONE state'))
+        return super(SCMEntry, self).unlink()
+
+    # Prevent SCM duplication in DONE state.
+    def copy(self):
+        for rec in self:
+            if rec.state in ('done'):
+                raise UserError(_('Duplication is not allowed for SCM in DONE state'))
+        return super(SCMEntry, self).copy()
 
     def action_add_packages(self):
         self.ensure_one()
