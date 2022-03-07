@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+
 class SCMEntry(models.Model):
     _name = "scm.entry"
     _description = "SCM Entry"
@@ -71,19 +72,19 @@ class SCMEntry(models.Model):
     def action_scm_confirm_items(self):
         for rec in self:
             for line in rec.item_line_ids:
-                self.env['product.product'].create({
+                product = self.env['product.product'].create({
                     'name': '(' + rec.name + ') - ' + line.item_id.name,
-                    'posm_item_id': line.item_id,
                     'scm_id': rec.id,
+                })
+                line.write({
+                    "product_id": product.id
                 })
         self.state = 'phase2'
 
     # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
     def action_scm_reset(self):
         item_product_product = self.env['product.product'].search([('scm_id', 'in', self.ids)])
-        for rec in self:
-            if rec.item_line_ids.scm_id:
-                item_product_product.unlink()
+        item_product_product.unlink()
 
         self.state = 'lock'
 

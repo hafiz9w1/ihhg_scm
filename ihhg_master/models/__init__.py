@@ -1,7 +1,6 @@
 from . import channel
 from . import product_template
 from . import product_product
-from . import project
 from . import res_partner
 from . import scm_entry
 from . import package
