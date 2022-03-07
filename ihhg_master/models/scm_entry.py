@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+
 class SCMEntry(models.Model):
     _name = "scm.entry"
     _description = "SCM Entry"

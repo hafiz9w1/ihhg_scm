@@ -11,3 +11,5 @@ from . import scm_entry_item_line
 from . import item_tags
 from . import category
 from . import campaign_type
+from . import approval_category
+from . import approval_request
