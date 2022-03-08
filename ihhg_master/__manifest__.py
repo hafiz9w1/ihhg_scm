@@ -55,7 +55,6 @@ Functionalities:
         'views/campaign_type_views.xml',
         'views/item_tags_views.xml',
         'views/scm_entry_views.xml',
-        'views/project_views.xml',
         'views/res_partner_views.xml',
         'views/menu_items.xml',
         'wizard/scm_entry_add_package_views.xml',
