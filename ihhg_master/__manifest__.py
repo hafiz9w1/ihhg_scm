@@ -38,6 +38,7 @@ Functionalities:
     'depends': [
         'product',
         'project',
+        'account',
     ],
 
     'data': [
