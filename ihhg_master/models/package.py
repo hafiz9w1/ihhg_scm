@@ -5,7 +5,8 @@ class Package (models.Model):
     _name = 'ihh.package'
     _description = 'Package'
 
-    name = fields.Char(string='Package')
+    name = fields.Char(string='Packing ID')
+    long_name = fields.Char(string="Package name")
     channel_id = fields.Many2one('ihh.channel', string='Channel')
     item_ids = fields.One2many(comodel_name="product.template", inverse_name="package_id")
     item_total = fields.Integer(compute='_compute_item_total', string='Total Item (per Package)')
