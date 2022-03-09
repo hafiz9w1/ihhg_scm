@@ -38,7 +38,6 @@ Functionalities:
     'depends': [
         'product',
         'project',
-        'approvals',
         'account',
     ],
 
@@ -58,8 +57,6 @@ Functionalities:
         'views/scm_entry_views.xml',
         'views/res_partner_views.xml',
         'views/menu_items.xml',
-        'views/approval_category_views.xml',
-        'views/approval_request_views.xml',
         'wizard/scm_entry_add_package_views.xml',
     ],
     'installable': True,
