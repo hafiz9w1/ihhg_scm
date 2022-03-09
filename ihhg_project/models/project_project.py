@@ -83,9 +83,19 @@ class Project(models.Model):
         self.tasks.change_deadline_from_scm(delta)
         self.write(vals)
 
-    def action_create_project_from_template(self):
+    def _create_project_from_template(self, name=None):
         self.ensure_one()
-        new_project = self.copy({'is_template': False})
+        default = {
+            'is_template': False
+        }
+        if name:
+            default['name'] = name
+        new_project = self.copy(default)
+
+        return new_project
+
+    def action_create_project_from_template(self):
+        new_project = self._create_project_from_template()
         context = dict(self.env.context)
         return {
             'type': 'ir.actions.act_window',

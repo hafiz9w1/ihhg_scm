@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+ihhg_project.access_ihh_scm_add_project_user,access_ihh_scm_add_project_user,ihhg_project.model_scm_entry_add_project,ihhg_master.group_scm_user,1,1,1,1

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="scm_entry_form_inherit" model="ir.ui.view">
+        <field name="name">scm_entry_form_inherit</field>
+        <field name="model">scm.entry</field>
+        <field name="inherit_id" ref="ihhg_master.view_scm_entry_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="after">
+                <button name="action_add_project" type="object" string="Modify Project" class="oe_highlight" states="draft"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

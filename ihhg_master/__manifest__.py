@@ -44,8 +44,6 @@ Functionalities:
     'data': [
         'security/scm_security.xml',
         'security/ir.model.access.csv',
-        'report/project_report.xml',
-        'report/project_report_template.xml',
         'views/product_template_views.xml',
         'views/product_product_views.xml',
         'views/package_item_views.xml',

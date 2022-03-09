@@ -93,6 +93,10 @@
                     <group>
                         <group>
                             <field name="project_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
                             <field name="project_scm_id"/>
                             <field name="user_id"/>
                             <field name="user_project_id"/>

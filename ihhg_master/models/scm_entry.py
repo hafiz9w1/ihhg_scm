@@ -8,7 +8,7 @@ class SCMEntry(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True)
     project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})

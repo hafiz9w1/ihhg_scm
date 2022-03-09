@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+        <record id="approval_category_view_form_inherit" model="ir.ui.view">
+            <field name="name">approval.category.view.form</field>
+            <field name="model">approval.category</field>
+            <field name="inherit_id" ref="approvals.approval_category_view_form"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='has_location']" position="after">
+                <field name="has_scm" string="SCM" widget="radio" options="{'horizontal': true}"/>
+              </xpath>
+            </field>
+        </record>
+  </data>
+</odoo>
