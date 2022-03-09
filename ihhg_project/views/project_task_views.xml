@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_task_form_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <!-- Add project_date_deadline, notebook(scm_entry_id, selection_criteria_id) in project form view  -->
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='display_project_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('parent_id', '=', False)], 'readonly': [('parent_id', '!=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//page[@name='sub_tasks_page']//field[@name='child_ids']" position="attributes">
+                <attribute name="context">{'default_display_project_id': display_project_id, 'default_project_id': project_id if not parent_id or not display_project_id else display_project_id, 'default_user_ids': user_ids, 'default_parent_id': id, 'default_partner_id': partner_id}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_kanban_inherit" model="ir.ui.view">
+        <field name="name">view_task_kanban_inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <!-- Add project_date_deadline in create project form view  -->
+            <xpath expr="//s//field[@name='name']" position="replace">
+                <field name="name"/>
+            </xpath>
+            <xpath expr="//s//field[@name='name']/../following-sibling::t/field[@name='name']" position="replace">
+                <field name="name"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

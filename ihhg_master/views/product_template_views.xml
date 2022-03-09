@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
-      <record id="product_tree_view" model="ir.ui.view">
-        <field name="name">product_tree_view</field>
+    <record id="product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form</field>
         <field name="model">product.template</field>
-        <field name="priority">99</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="priority">5</field>
         <field name="arch" type="xml">
-          <tree>
-            <field name="name" />
-          </tree>
-        </field>
-      </record>
-
-      <record id="product_template_only_form_inherit" model="ir.ui.view">
-          <field name="name">product.template.product.form</field>
-          <field name="model">product.template</field>
-          <field name="inherit_id" ref="product.product_template_only_form_view"/>
-          <field name="arch" type="xml">
             <!-- Add extra fields in product template form view  -->
             <xpath expr="//page[@name='general_information']" position="after">
                 <page name="extra_information" string="Extra Information">
-                  <group>
-                    <group>
-                      <field name="package_id" string="Package"/>
-                      <field name="package_quantity" string="Quantity"/>
-                      <field name="material" string="Material"/>
-                      <field name="final_dimensions" string="Final Dimensions(mm)"/>
-                      <field name="open_dimensions" string="Open Dimensions(mm)"/>
+                    <group name="template_info">
+                        <group>
+                            <field name= "posm_item_id" />
+                        </group>
+                        <group>
+                            <field name="show_in_vc" />
+                            <field name="dispose_after" />
+                        </group>
                     </group>
-                    <group>
-                      <field name="printing_method" string="Printing Method"/>
-                      <field name="surface_coating" string="Surface Coating"/>
-                      <field name="finishing" string="Finishing"/>
-                      <field name="printing_company" string="Printing Company"/>
-                      <field name="disposal_cycle" string="Disposal_Cycle"/>
+                    <group name="specific_info">
+                        <group>
+                            <field name="extra_instruction"/>
+                            <field name="material"/>
+                            <field name="printing_medium"/>
+                            <field name="packed_size"/>
+                            <field name="display_size"/>
+                        </group>
+                        <group>
+                            <field name="printing_method"/>
+                            <field name="printing_color"/>
+                            <field name="surface_coating"/>
+                            <field name="finishing"/>
+                            <field name="packing_instruction"/>
+                        </group>
                     </group>
-                  </group>
+                    <group name="note">
+                        <field name="ihh_notes" />
+                    </group>
                 </page>
             </xpath>
-          </field>
-      </record>
-  </data>
+        </field>
+    </record>
+    <record id="product_template_only_form_view" model="ir.ui.view">
+        <field name="name">product.template.only.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="priority">5</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='variants']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

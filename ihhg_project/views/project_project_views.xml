@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_form_inherit" model="ir.ui.view">
+        <field name="name">project.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <!-- Add project_date_deadline, notebook(scm_entry_id, selection_criteria_id) in project form view  -->
+            <xpath expr="//header" position="inside">\
+                <field name="is_template" invisible="1"/>
+                <button name="action_create_project_from_template" string="Create Project" type="object" class="oe_highlight" groups="project.group_project_manager" attrs="{'invisible': [('is_template', '=', False)]}"/>
+                <button name="action_create_template_from_project" string="Create Template" type="object" class="oe_highlight" groups="project.group_project_manager" attrs="{'invisible': [('is_template', '=', True)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="project_date_deadline"/>
+            </xpath>
+            <xpath expr="//page[@name='settings']" position="after">
+                <page name="scm_page" string="SCM and Selection">
+                    <group>
+                        <group>
+                        <field name="scm_entry_id" string="SCM"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Team">
+                    <field name="member_ids" widget="many2many">
+                        <kanban quick_create="false" create="true" delete="true">
+                            <field name="id"/>
+                            <field name="name"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="oe_kanban_global_click" style="max-width: 200px">
+                                        <div class="o_kanban_record_top">
+                                            <img t-att-src="kanban_image('res.users', 'image_1920', record.id.raw_value)" height="40" width="40" class="oe_avatar oe_kanban_avatar_smallbox mb0" alt="Avatar"/>
+                                            <div class="o_kanban_record_headings ml8">
+                                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                            </div>
+                                            <a t-if="! read_only_mode" type="delete" class="text-danger">
+                                                <i class="fa fa-times" title="Delete"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_form_simplified_inherit" model="ir.ui.view">
+        <field name="name">project.create.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <!-- Add project_date_deadline in create project form view  -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="project_date_deadline" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project.open_view_project_all_config" model="ir.actions.act_window">
+        <field name="domain">[('is_template', '=', False)]</field>
+    </record>
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+        <field name="domain">[('is_template', '=', False)]</field>
+    </record>
+
+    <record id="open_view_project_template_all_config" model="ir.actions.act_window">
+        <field name="name">Projects Template</field>
+        <field name="res_model">project.project</field>
+        <field name="domain">[('is_template', '=', True)]</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('project.view_project')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('project.view_project_kanban')})]"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="context">{'default_is_template': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               No projects found. Let's create one!
+            </p><p>
+                Projects regroup tasks on the same topic, and each has its dashboard.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="open_view_project_template_all_config" id="menu_projects_template_config" name="Projects Template" parent="project.menu_project_config" sequence="6"/>
+
+</odoo>

@@ -1,31 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
-      <!-- <record id="product_template_only_form_inherit" model="ir.ui.view">
-          <field name="name">product.template.product.form</field>
-          <field name="model">product.product</field>
-          <field name="inherit_id" ref="product.product_template_only_form_view"/>
-          <field name="arch" type="xml">
-            Add extra fields in product template form view
-            <xpath expr="//page[@name='general_information']" position="after">
-                <page name="extra_information" string="Extra Information">
-                  <group>
-                    <group>
-                      <field name="material" string="Material"/>
-                      <field name="final_dimensions" string="Final Dimensions(mm)"/>
-                      <field name="open_dimensions" string="Open Dimensions(mm)"/>
-                    </group>
-                    <group>
-                      <field name="printing_method" string="Printing Method"/>
-                      <field name="surface_coating" string="Surface Coating"/>
-                      <field name="finishing" string="Finishing"/>
-                      <field name="printing_company" string="Printing Company"/>
-                      <field name="disposal_cycle" string="Disposal_Cycle"/>
-                    </group>
-                  </group>
-                </page>
+    <record id="product_normal_form_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='posm_item_id']" position="after">
+                <field name="scm_id" />
+                <field name="project_id" />
             </xpath>
-          </field>
-      </record> -->
-  </data>
+        </field>
+    </record>
+
+    <record id="product_normal_action" model="ir.actions.act_window">
+        <field name="name">Product Variants</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="product.product_search_form_view"/>
+        <field name="domain">[('scm_id', "!=", False)]</field>
+        <field name="view_id" eval="False"/> <!-- Force empty -->
+        <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Create a new product variant
+        </p><p>
+            You must define a product for everything you sell or purchase,
+            whether it's a storable product, a consumable or a service.
+        </p>
+        </field>
+
+    </record>
+    <record id="product_product_tree_view_inherit" model="ir.ui.view">
+        <field name="name">product_product_tree_view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_template_variant_value_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="display_name"/>
+                <field name="scm_id"/>
+                <field name="project_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_variant_easy_edit_view" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group name="template_info">
+                    <group>
+                        <field name= "posm_item_id" />
+                    </group>
+                    <group>
+                        <field name="show_in_vc" />
+                        <field name="dispose_after" />
+                    </group>
+                </group>
+                <group name="specific_info">
+                    <group>
+                        <field name="extra_instruction"/>
+                        <field name="material"/>
+                        <field name="printing_medium"/>
+                        <field name="packed_size"/>
+                        <field name="display_size"/>
+                    </group>
+                    <group>
+                        <field name="printing_method"/>
+                        <field name="printing_color"/>
+                        <field name="surface_coating"/>
+                        <field name="finishing"/>
+                        <field name="packing_instruction"/>
+                    </group>
+                </group>
+                <group name="note">
+                    <field name="ihh_notes" />
+                </group>
+            </xpath>
+        </field>
+    </record>
 </odoo>

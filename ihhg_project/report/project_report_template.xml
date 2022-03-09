@@ -36,21 +36,21 @@
                                 <th name="th_task" class="text-left">Task</th>
                                 <th name="th_main_task" class="text-left">Main Task</th>
                                 <th name="th_responsible" class="text-right">Responsible</th>
-                                <th name="th_offset" class="text-right">Offset</th>
                                 <th name="th_deadline" class="text-right">Deadline</th>
                             </tr>
                         </thead>
                         <tbody class="sale_tbody">
-                            <t t-foreach="doc.task_ids" t-as="line">
+                            <t t-foreach="doc.tasks" t-as="line">
                                 <tr>
                                     <t>
-                                        <td name="td_name"><span t-field="line.name"/></td>
-                                        <td name="td_name"><span t-field="line.parent_id.name"/></td>
+                                        <td name="td_name">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td name="td_name">
+                                            <span t-field="line.parent_id.name"/>
+                                        </td>
                                         <td name="td_responsible" class="text-right">
                                             <span t-field="line.user_ids"/>
-                                        </td>
-                                        <td name="td_offset" class="text-right">
-                                            <span t-field="line.project_offset"/>
                                         </td>
                                         <td name="td_deadline" class="text-right">
                                             <span t-field="line.date_deadline"/>

@@ -4,16 +4,18 @@ from odoo import models, fields
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    package_id = fields.Many2one('ihh.package', string='Package')
-    channel_id = fields.Many2one('ihh.channel', string='Channel', related="package_id.channel_id", store=True)
-    package_quantity = fields.Integer()
+    posm_item_id = fields.Char(string='POSM Item ID')
+    show_in_vc = fields.Boolean(string="Show in VC")
+    dispose_after = fields.Integer(string="Dispose After (days)")
 
-    chain = fields.Char(string='Chain Code')
+    extra_instruction = fields.Char(string='Extra Instruction')
     material = fields.Char(string='Material')
-    final_dimensions = fields.Float(string='Final Dimensions(mm)')
-    open_dimensions = fields.Float(string='Open Dimensions(mm)')
+    printing_medium = fields.Char(string='Printing Medium')
+    packed_size = fields.Char(string='Packed size (mm)')
+    display_size = fields.Char(string='Dispay size (mm)')
     printing_method = fields.Char(string='Printing Method')
+    printing_color = fields.Char(string='Printing Colors')
     surface_coating = fields.Char(string='Surface Coating')
     finishing = fields.Char(string='Finishing')
-    printing_company = fields.Char(string='Printing Company')
-    disposal_cycle = fields.Date(string='Disposal Cycle')
+    packing_instruction = fields.Char(string='Packing Instruction')
+    ihh_notes = fields.Text(string='Notes')

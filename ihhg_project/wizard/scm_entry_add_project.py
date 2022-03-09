@@ -10,17 +10,18 @@ class ScmEntryAddProject(models.TransientModel):
     project_selection = fields.Selection([
         ('select_existing_project', 'Select Existing Project'),
         ('create_project_from_template', 'Create Project From Template'),
-    ], string='Project Selection', default='select_existing_project')
-    project_exist_id = fields.Many2one('project.project', string='Select Existing Project', domain=[('scm_entry_id', '=', False)])
+    ], string='Project Selection', default='select_existing_project', required=True)
+    project_exist_id = fields.Many2one('project.project', string='Select Existing Project', domain=[('scm_entry_id', '=', False), ('is_template', '!=', True)])
     project_template_id = fields.Many2one('project.project', string='Create Project From Template', domain=[('is_template', '=', True)])
     project_name_new = fields.Char(string='Enter Project Name')
 
     def action_confirm(self):
         self.ensure_one()
-        for rec in self:
-            if rec.project_exist_id:
-                rec.scm_id.project_id = rec.project_exist_id
-                rec.project_exist_id.scm_entry_id = rec.scm_id
-            else:
-                if rec.project_template_id:
-                    rec.scm_id.project_id = self.env['project.project'].copy_project_as_template([('id', '=', rec.project_template_id.id, 'name', '=', rec.project_template_id.name)])
+        if self.project_selection == "select_existing_project":
+            project = self.project_exist_id
+        else:
+            project = self.project_template_id._create_project_from_template(name=self.project_name_new)
+
+        self.scm_id.write({
+            "project_id": project.id
+        })
