@@ -10,6 +10,7 @@
               <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="project_date_deadline"/>
                 <field name="team_id"/>
+                <field name="is_template"/>
               </xpath>
               <xpath expr="//page[@name='settings']" position="after">
                   <page name="scm_page" string="SCM and Selection">

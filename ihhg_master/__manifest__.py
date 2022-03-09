@@ -62,6 +62,7 @@ Functionalities:
         'views/approval_category_views.xml',
         'views/approval_request_views.xml',
         'wizard/scm_entry_add_package_views.xml',
+        'wizard/scm_entry_add_project_views.xml',
     ],
     'installable': True,
     'auto_install': False,

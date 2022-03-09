@@ -8,7 +8,7 @@ class SCMEntry(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True)
     project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
@@ -120,6 +120,26 @@ class SCMEntry(models.Model):
             'view_mode': 'form',
             'res_model': 'scm.entry.add.package',
             'res_id': add_package.id,
+            'target': 'new',
+            'context': context
+        }
+
+    # Add project to SCM
+    def action_add_project(self):
+        self.ensure_one()
+        add_project = self.env['scm.entry.add.project'].create({
+            "scm_id": self.id
+        })
+
+        context = dict(self.env.context)
+
+        return {
+            'name': _('Select Project'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_id': self.env.ref('ihhg_master.view_scm_entry_add_project').id,
+            'res_model': 'scm.entry.add.project',
+            'res_id': add_project.id,
             'target': 'new',
             'context': context
         }

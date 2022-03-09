@@ -93,6 +93,11 @@
                     <group>
                         <group>
                             <field name="project_id"/>
+                            <button name="action_add_project" type="object" string="Add Project" class="oe_highlight" states="draft"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
                             <field name="project_scm_id"/>
                             <field name="user_id"/>
                             <field name="user_project_id"/>

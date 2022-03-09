@@ -30,3 +30,4 @@ ihhg_master.access_campaign_type_user,access_campaign_type,ihhg_master.model_ihh
 ihhg_master.access_item_tags_manager,access_item_tags,ihhg_master.model_ihh_item_tag,ihhg_master.group_scm_manager,1,1,1,1
 ihhg_master.access_item_tags_user,access_item_tags,ihhg_master.model_ihh_item_tag,ihhg_master.group_scm_user,1,0,0,0
 ihhg_master.access_ihh_scm_add_package_user,access_ihh_scm_add_package_user,ihhg_master.model_scm_entry_add_package,ihhg_master.group_scm_user,1,1,1,1
+ihhg_master.access_ihh_scm_add_project_user,access_ihh_scm_add_project_user,ihhg_master.model_scm_entry_add_project,ihhg_master.group_scm_user,1,1,1,1
