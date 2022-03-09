@@ -7,7 +7,8 @@
             <field name="inherit_id" ref="approvals.approval_request_view_form"/>
             <field name="arch" type="xml">
               <xpath expr="//field[@name='category_id']" position="after">
-                <field name="scm_entry_id" />
+                <field name="scm_entry_id" attrs="{'invisible':[('has_scm','==','no')], 'required': [('has_scm','==','required')]}"/>
+                <field name="has_scm"/>
               </xpath>
             </field>
         </record>
