@@ -17,5 +17,5 @@ class SCMEntry(models.Model):
     @api.constrains('project_id')
     def _check_scm_unicity_project(self):
         for rec in self:
-            if rec.project_id.scm_entry_id:
-                raise ValidationError(_("Project %s his already associated to an SCM: %s", rec.project_id.name, rec.project_id.scm))
+            if rec.project_id.scm_entry_id and rec.project_id.scm_entry_id != rec:
+                raise ValidationError(_("Project %s his already associated to an SCM: %s", rec.project_id.name, rec.project_id.scm_entry_id.name))

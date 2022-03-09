@@ -6,12 +6,12 @@ class ItemLine (models.Model):
     _description = 'Item_line'
 
     name = fields.Char(string='Name', compute="_compute_name")
-    item_id = fields.Many2one('product.template', string='Item', required=True)
+    item_id = fields.Many2one('ihh.package.item', string='Item', required=True)
     sequence = fields.Integer(string='Sequence', readonly=True, default=10)
     product_id = fields.Many2one('product.product', string='POSM Item ID', readonly=True)
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True)
     allowed_channel_ids = fields.Many2many('ihh.channel', string='Allowed Channel', related="scm_id.channel_ids")
-    allocated_item_ids = fields.Many2many('product.template', string='Already used item', related="scm_id.allocated_item_ids")
+    allocated_item_ids = fields.Many2many('ihh.package.item', string='Already used item', related="scm_id.allocated_item_ids")
     scm_package_line_id = fields.Many2one('scm.entry.package.line')
     package_id = fields.Many2one(string='Package', readonly=True, store=True, related='item_id.package_id')
     channel_id = fields.Many2one(string='Channel', readonly=True, store=True, related='item_id.package_id.channel_id')

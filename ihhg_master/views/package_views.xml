@@ -55,7 +55,7 @@
                       </group>
                   </group>
                   <group>
-                    <field name="item_ids" context="{'tree_view_ref': 'ihhg_master.product_tree_view', 'default_package_id': id}"/>
+                    <field name="item_ids" context="{'tree_view_ref': 'ihhg_master.view_package_item_tree_for_package', 'default_package_id': id}"/>
                   </group>
               </sheet>
               </form>

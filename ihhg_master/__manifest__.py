@@ -48,6 +48,7 @@ Functionalities:
         'report/project_report_template.xml',
         'views/product_template_views.xml',
         'views/product_product_views.xml',
+        'views/package_item_views.xml',
         'views/package_views.xml',
         'views/channel_views.xml',
         'views/scm_entry_item_line_views.xml',
