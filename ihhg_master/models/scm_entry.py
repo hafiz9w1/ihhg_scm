@@ -106,19 +106,19 @@ class SCMEntry(models.Model):
     def action_scm_finish(self):
         self.state = 'done'
 
-    # Prevent SCM deletion in DONE state.
-    def unlink(self):
-        for rec in self:
-            if rec.state in ('done'):
-                raise UserError(_('Deleting is not allowed for SCM in DONE state'))
-        return super(SCMEntry, self).unlink()
+    # # Prevent SCM deletion in DONE state.
+    # def unlink(self):
+    #     for rec in self:
+    #         if rec.state in ('done'):
+    #             raise UserError(_('Deleting is not allowed for SCM in DONE state'))
+    #     return super(SCMEntry, self).unlink()
 
-    # Prevent SCM duplication in DONE state.
-    def copy(self):
-        for rec in self:
-            if rec.state in ('done'):
-                raise UserError(_('Duplication is not allowed for SCM in DONE state'))
-        return super(SCMEntry, self).copy()
+    # # Prevent SCM duplication in DONE state.
+    # def copy(self):
+    #     for rec in self:
+    #         if rec.state in ('done'):
+    #             raise UserError(_('Duplication is not allowed for SCM in DONE state'))
+    #     return super(SCMEntry, self).copy()
 
     def action_add_packages(self):
         self.ensure_one()
