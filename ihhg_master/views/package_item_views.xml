@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_package_item_tree" model="ir.ui.view">
+            <field name="name">package.item.tree</field>
+            <field name="model">ihh.package.item</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Items">
+                    <field name="channel_id"/>
+                    <field name="package_id"/>
+                    <field name="package_name"/>
+                    <field name="name"/>
+                    <field name="package_quantity"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_package_item_tree_for_package" model="ir.ui.view">
+            <field name="name">package.item.tree.package</field>
+            <field name="model">ihh.package.item</field>
+            <field name="arch" type="xml">
+                <tree string="Items" editable="bottom">
+                    <field name="product_template_id"/>
+                    <field name="package_quantity"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_package_item_form" model="ir.ui.view">
+            <field name="name">package.item.form</field>
+            <field name="model">ihh.package.item</field>
+            <field name="arch" type="xml">
+                <form string="Package" class="o_sale_order">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_template_id"/>
+                            <field name="package_id"/>
+                            <field name="channel_id"/>
+                        </group>
+                        <group>
+                            <field name="package_quantity"/>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+      <record id="view_package_item_filter" model="ir.ui.view">
+          <field name="name">package.item.list.select</field>
+          <field name="model">ihh.package.item</field>
+          <field name="priority" eval="15"/>
+          <field name="arch" type="xml">
+              <search string="Search Package">
+                  <field name="product_template_id"/>
+                  <field name="package_id"/>
+                  <field name="channel_id"/>
+             </search>
+          </field>
+      </record>
+
+      <record id="action_package_item_open" model="ir.actions.act_window">
+          <field name="name">Items</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">ihh.package.item</field>
+          <field name="view_mode">tree,form</field>
+          <field name="search_view_id"/>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                  To create a new record
+              </p><p>
+                  <br/> Click on "Create"
+              </p>
+          </field>
+      </record>
+  </data>
+</odoo>

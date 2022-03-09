@@ -14,7 +14,7 @@ class SCMEntry(models.Model):
     user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
     item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
-    allocated_item_ids = fields.Many2many(comodel_name="product.template", compute="_compute_allocated_item_ids")
+    allocated_item_ids = fields.Many2many(comodel_name="ihh.package.item", compute="_compute_allocated_item_ids")
     package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
     allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
     channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
@@ -72,19 +72,33 @@ class SCMEntry(models.Model):
     def action_scm_confirm_items(self):
         for rec in self:
             for line in rec.item_line_ids:
-                self.env['product.product'].create({
-                    'name': '(' + rec.name + ') - ' + line.item_id.name,
-                    'posm_item_id': line.item_id,
+                product = self.env['product.product'].create({
+                    'posm_item_id': line.name,
+                    'product_tmpl_id': line.item_id.product_template_id.id,
+                    'combination_indices': f"{str(rec.id)}-{str(line.package_id.id)}",
                     'scm_id': rec.id,
+                    # copy value from template
+                    'extra_instruction': line.item_id.product_template_id.extra_instruction,
+                    'material': line.item_id.product_template_id.material,
+                    'printing_medium': line.item_id.product_template_id.printing_medium,
+                    'packed_size': line.item_id.product_template_id.packed_size,
+                    'display_size': line.item_id.product_template_id.display_size,
+                    'printing_method': line.item_id.product_template_id.printing_method,
+                    'printing_color': line.item_id.product_template_id.printing_color,
+                    'surface_coating': line.item_id.product_template_id.surface_coating,
+                    'finishing': line.item_id.product_template_id.finishing,
+                    'packing_instruction': line.item_id.product_template_id.packing_instruction,
+                    'ihh_notes': line.item_id.product_template_id.ihh_notes,
+                })
+                line.write({
+                    "product_id": product.id
                 })
         self.state = 'phase2'
 
     # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
     def action_scm_reset(self):
         item_product_product = self.env['product.product'].search([('scm_id', 'in', self.ids)])
-        for rec in self:
-            if rec.item_line_ids.scm_id:
-                item_product_product.unlink()
+        item_product_product.unlink()
 
         self.state = 'lock'
 
@@ -92,19 +106,19 @@ class SCMEntry(models.Model):
     def action_scm_finish(self):
         self.state = 'done'
 
-    # Prevent SCM deletion in DONE state.
-    def unlink(self):
-        for rec in self:
-            if rec.state in ('done'):
-                raise UserError(_('Deleting is not allowed for SCM in DONE state'))
-        return super(SCMEntry, self).unlink()
+    # # Prevent SCM deletion in DONE state.
+    # def unlink(self):
+    #     for rec in self:
+    #         if rec.state in ('done'):
+    #             raise UserError(_('Deleting is not allowed for SCM in DONE state'))
+    #     return super(SCMEntry, self).unlink()
 
-    # Prevent SCM duplication in DONE state.
-    def copy(self):
-        for rec in self:
-            if rec.state in ('done'):
-                raise UserError(_('Duplication is not allowed for SCM in DONE state'))
-        return super(SCMEntry, self).copy()
+    # # Prevent SCM duplication in DONE state.
+    # def copy(self):
+    #     for rec in self:
+    #         if rec.state in ('done'):
+    #             raise UserError(_('Duplication is not allowed for SCM in DONE state'))
+    #     return super(SCMEntry, self).copy()
 
     def action_add_packages(self):
         self.ensure_one()
@@ -120,26 +134,6 @@ class SCMEntry(models.Model):
             'view_mode': 'form',
             'res_model': 'scm.entry.add.package',
             'res_id': add_package.id,
-            'target': 'new',
-            'context': context
-        }
-
-    # Add project to SCM
-    def action_add_project(self):
-        self.ensure_one()
-        add_project = self.env['scm.entry.add.project'].create({
-            "scm_id": self.id
-        })
-
-        context = dict(self.env.context)
-
-        return {
-            'name': _('Select Project'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'view_id': self.env.ref('ihhg_master.view_scm_entry_add_project').id,
-            'res_model': 'scm.entry.add.project',
-            'res_id': add_project.id,
             'target': 'new',
             'context': context
         }

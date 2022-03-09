@@ -8,9 +8,9 @@
             <form>
                 <group>
                     <field name="project_selection" widget="radio"/>
-                    <field name="project_exist_id" attrs="{'invisible':[('project_selection', '=', 'create_project_from_template')]}"/>
-                    <field name="project_template_id" attrs="{'invisible':[('project_selection', '=', 'select_existing_project')]}"/>
-                    <field name="project_name_new" attrs="{'invisible':[('project_selection', '=', 'select_existing_project')]}"/>
+                    <field name="project_exist_id" attrs="{'invisible':[('project_selection', '=', 'create_project_from_template')], 'required':[('project_selection', '=', 'select_existing_project')]}"/>
+                    <field name="project_template_id" attrs="{'invisible':[('project_selection', '=', 'select_existing_project')], 'required':[('project_selection', '=', 'create_project_from_template')]}"/>
+                    <field name="project_name_new" attrs="{'invisible':[('project_selection', '=', 'select_existing_project')], 'required':[('project_selection', '=', 'create_project_from_template')]}"/>
                 </group>
                 <footer>
                     <button

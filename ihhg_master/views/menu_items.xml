@@ -43,6 +43,12 @@
         sequence="5"
         parent="menu_scm_configuration" />
 
+    <menuitem id="menu_scm_configuration_package_item"
+        action="ihhg_master.action_package_item_open"
+        name="Item"
+        sequence="6"
+        parent="menu_scm_configuration" />
+
     <menuitem id="menu_scm_configuration_item_tags"
         action="ihhg_master.action_item_tags_open"
         name="Brand Name"
@@ -63,14 +69,20 @@
 
     <menuitem id="menu_scm_configuration_posm_master"
         action="product.product_template_action"
-        name="POSM Master"
+        name="Product Master Data"
         sequence="13"
+        parent="menu_scm_configuration" />
+
+    <menuitem id="menu_scm_configuration_posm_scm"
+        action="product_normal_action"
+        name="Product SCM"
+        sequence="14"
         parent="menu_scm_configuration" />
 
     <menuitem id="menu_scm_configuration_scm_address"
         action="account.res_partner_action_customer"
         name="Address"
-        sequence="14"
+        sequence="15"
         parent="menu_scm_configuration" />
 
 </odoo>
