@@ -8,6 +8,7 @@
           <field name="arch" type="xml">
               <tree string="Brand Name">
                   <field name="name"/>
+                  <field name="code"/>
               </tree>
           </field>
       </record>
@@ -20,6 +21,7 @@
               <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="code"/>
                         <field name="active" invisible="1"/>
                     </group>
               </sheet>
@@ -34,6 +36,7 @@
           <field name="arch" type="xml">
               <search string="Search name">
                   <field name="name"/>
+                  <field name="code"/>
              </search>
           </field>
       </record>

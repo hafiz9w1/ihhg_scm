@@ -12,6 +12,11 @@ class Package (models.Model):
     item_total = fields.Integer(compute='_compute_item_total', string='Total Item (per Package)')
     delivery_address_ids = fields.One2many(comodel_name="res.partner", inverse_name="package_id")
     secondary_address_ids = fields.One2many(comodel_name="ihh.package.secondary.address", inverse_name="package_id")
+    naming_convention = fields.Selection([
+        ('lw', 'LW'),
+        ('dy', 'DY'),
+        ('scmart', 'SCMART'),
+    ], string='Naming Convention')
     active = fields.Boolean('Active', default=True)
 
     @api.depends('item_ids')

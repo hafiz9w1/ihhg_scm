@@ -12,6 +12,7 @@
                   <field name="item_total"/>
                   <field name="channel_id"/>
                   <field name="delivery_address_ids" widget="many2many_tags" optional="show"/>
+                  <field name="naming_convention"/>
               </tree>
           </field>
       </record>
@@ -25,6 +26,7 @@
                 <field name="long_name"/>
                 <field name="item_total"/>
                 <field name="delivery_address_ids" widget="many2many_tags"/>
+                <field name="naming_convention"/>
             </tree>
         </field>
       </record>
@@ -41,6 +43,7 @@
                           <field name="long_name"/>
                           <field name="item_total"/>
                           <field name="channel_id"/>
+                          <field name="naming_convention"/>
                           <field name="active" invisible="1"/>
                       </group>
                       <group>
@@ -71,6 +74,7 @@
                   <field name="name"/>
                   <field name="long_name"/>
                   <field name="channel_id"/>
+                  <field name="naming_convention"/>
              </search>
           </field>
       </record>

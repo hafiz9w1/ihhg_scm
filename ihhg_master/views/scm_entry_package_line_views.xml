@@ -13,6 +13,9 @@
                   <field name="quantity"/>
                   <field name="backup_quantity" optional="hide"/>
                   <field name="total_quantity"/>
+                  <field name="brand_id"/>
+                  <field name="scm_package_name"/>
+                  <field name="scm_package_id"/>
               </tree>
           </field>
       </record>
@@ -32,6 +35,9 @@
                             <field name="quantity"/>
                             <field name="backup_quantity"/>
                             <field name="total_quantity"/>
+                            <field name="brand_id"/>
+                            <field name="scm_package_name"/>
+                            <field name="scm_package_id"/>
                         </group>
                     </group>
                     <group>
