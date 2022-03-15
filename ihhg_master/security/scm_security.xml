@@ -17,5 +17,72 @@
             <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
             <field name="users" eval="[(4, ref('base.group_system'))]"/>
         </record>
+
+        <record id="group_scm_project_manager" model="res.groups">
+            <field name="name">Project Manager</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_marketing" model="res.groups">
+            <field name="name">Marketing</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_ka" model="res.groups">
+            <field name="name">KA</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_cp_team" model="res.groups">
+            <field name="name">CP team</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_vmd" model="res.groups">
+            <field name="name">VMD</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_logistics" model="res.groups">
+            <field name="name">Logistics</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_hhg" model="res.groups">
+            <field name="name">HHG</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_creative_agency" model="res.groups">
+            <field name="name">Creative Agency</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_adaption_agency" model="res.groups">
+            <field name="name">Adaption Agency</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_campaign_owner" model="res.groups">
+            <field name="name">Campaign Owner</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
+        <record id="group_scm_budget_owner" model="res.groups">
+            <field name="name">Budget Owner</field>
+            <field name="implied_ids" eval="[(4, ref('ihhg_master.group_scm_user'))]"/>
+            <field name="category_id" ref="module_category_scm"/>
+        </record>
+
     </data>
 </odoo>

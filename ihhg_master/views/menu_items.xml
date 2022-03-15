@@ -27,14 +27,13 @@
     <menuitem id="menu_scm_configuration"
         name="Configuration"
         sequence="7"
-        groups="group_scm_manager"
+        groups="group_scm_user"
         parent="menu_scm" />
 
     <menuitem id="menu_scm_channel"
         action="ihhg_master.action_channel_open"
         name="Channel"
         sequence="1"
-        groups="group_scm_manager"
         parent="menu_scm_configuration" />
 
     <menuitem id="menu_scm_configuration_package"
