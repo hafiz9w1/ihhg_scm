@@ -18,6 +18,7 @@
           <field name="arch" type="xml">
               <form string="Name" class="o_sale_order">
               <sheet>
+                <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
                   <group>
                       <group>
                           <field name="name"/>

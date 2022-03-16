@@ -16,7 +16,8 @@ class Package (models.Model):
         ('lw', 'LW'),
         ('dy', 'DY'),
         ('scmart', 'SCMART'),
-    ], string='Naming Convention')
+    ], string='Naming Convention', default='lw')
+    quantity = fields.Integer()
     active = fields.Boolean('Active', default=True)
 
     @api.depends('item_ids')
