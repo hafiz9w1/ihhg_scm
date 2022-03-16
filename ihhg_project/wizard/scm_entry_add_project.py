@@ -1,4 +1,3 @@
-from unicodedata import name
 from odoo import models, fields, _
 
 
@@ -22,6 +21,7 @@ class ScmEntryAddProject(models.TransientModel):
         else:
             project = self.project_template_id._create_project_from_template(name=self.project_name_new)
 
+        project.change_deadline_from_scm(self.scm_id.date_from)
         self.scm_id.write({
             "project_id": project.id
         })

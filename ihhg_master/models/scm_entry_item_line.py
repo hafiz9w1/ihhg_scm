@@ -29,6 +29,8 @@ class ItemLine (models.Model):
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
 
+    show_in_vc = fields.Boolean(related="item_id.product_template_id.show_in_vc", store=True)
+
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):
         for rec in self:

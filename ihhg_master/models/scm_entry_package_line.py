@@ -31,18 +31,25 @@ class SelectionCriterium(models.Model):
             rec.total_quantity = rec.quantity + sum(backup_quantity)
             rec.backup_quantity = sum(backup_quantity)
 
-    @api.depends('scm_id.date_from', 'brand_id.name', 'package_id.name')
+    @api.depends('scm_id.date_from', 'brand_id.name', 'package_id.name', 'package_id.naming_convention')
     def _compute_scm_package_name(self):
         for rec in self:
-            rec.scm_package_name = datetime.now().strftime("%y") + rec.scm_id.date_from.strftime("%m") + '_' + str(rec.brand_id.name) + '_' + str(rec.package_id.long_name)
+            name = rec.package_id.name
+            brand = rec.brand_id.name
+            package_name = rec.package_id.name
+            month = rec.scm_id.date_from.strftime('%m')
+            year = rec.scm_id.date_from.strftime('%y')
+            day = rec.scm_id.date_from.strftime('%d')
+            if rec.package_id.naming_convention == 'LW':
+                name = f"【{brand}_{package_name}】{month}{year}_プロモーション②"
+            if rec.package_id.naming_convention == 'DY':
+                name = f"PM_{brand}_{month}{day}_{package_name}"
+            if rec.package_id.naming_convention == 'SCMART':
+                name = f"{int(month)}月{int(day)}日展開開始_{package_name}"
+
+            rec.scm_package_name = name
 
     @api.depends('scm_id.date_from', 'scm_id.category_id.name', 'package_id.name')
     def _compute_scm_package_id(self):
         for rec in self:
-            rec.scm_package_id = datetime.now().strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)
-
-    # Preset quantity from package_id.quantity
-    @api.depends('package_id.quantity')
-    def _compute_quantity(self):
-        for rec in self:
-            rec.quantity = rec.package_id.quantity
+            rec.scm_package_id = (rec.scm_id.date_from.strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
