@@ -39,4 +39,4 @@ class SelectionCriterium(models.Model):
     @api.depends('scm_id.date_from', 'scm_id.category_id.name', 'package_id.name')
     def _compute_scm_package_id(self):
         for rec in self:
-            rec.scm_package_id = datetime.now().strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name) + str(rec.package_id.name)
+            rec.scm_package_id = (datetime.now().strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name) + str(rec.package_id.name)).replace(' ', '')
