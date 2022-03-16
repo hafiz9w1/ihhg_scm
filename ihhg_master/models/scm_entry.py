@@ -7,29 +7,30 @@ class SCMEntry(models.Model):
     _description = "SCM Entry"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True)
-    project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
+    project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    user_budget_id = fields.Many2one('res.users', string='Budget Owner', default=lambda self: self.env.user.has_group('ihhg_master.group_scm_cp_team'), tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
     allocated_item_ids = fields.Many2many(comodel_name="ihh.package.item", compute="_compute_allocated_item_ids")
-    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
+    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
     allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
     channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
     package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
     item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
-    category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
-    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)]})
+    category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     note = fields.Text(string='Extra note...')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('lock', 'Locked'),
         ('cancel', 'Cancelled'),
-        ('phase2', 'Phase2'),
+        ('phase2', 'Item Confirmed'),
         ('done', 'Done'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
     active = fields.Boolean('Active', default=True)

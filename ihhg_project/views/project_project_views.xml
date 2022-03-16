@@ -14,6 +14,10 @@
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="project_date_deadline"/>
             </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </xpath>
             <xpath expr="//page[@name='settings']" position="after">
                 <page name="scm_page" string="SCM and Selection">
                     <group>

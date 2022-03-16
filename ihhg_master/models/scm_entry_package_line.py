@@ -10,7 +10,7 @@ class SelectionCriterium(models.Model):
     scm_id = fields.Many2one(comodel_name="scm.entry")
     package_id = fields.Many2one('ihh.package', string='Package')
     delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_id', '=', package_id)]")
-    quantity = fields.Integer()
+    quantity = fields.Integer(compute='_compute_quantity', store=True, readonly=False)
     total_quantity = fields.Integer(compute="_compute_total_quantity")
     backup_quantity = fields.Integer(compute="_compute_total_quantity")
     scm_entry_item_line_id = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
@@ -52,4 +52,4 @@ class SelectionCriterium(models.Model):
     @api.depends('scm_id.date_from', 'scm_id.category_id.name', 'package_id.name')
     def _compute_scm_package_id(self):
         for rec in self:
-            rec.scm_package_id = (rec.scm_id.date_from.strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name) + str(rec.package_id.name)).replace(' ', '')
+            rec.scm_package_id = (rec.scm_id.date_from.strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')

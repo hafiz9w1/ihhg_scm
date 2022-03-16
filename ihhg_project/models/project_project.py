@@ -7,6 +7,8 @@ class Project(models.Model):
 
     is_template = fields.Boolean(default=False, copy=False)
     scm_entry_id = fields.Many2one('scm.entry', string='SCM', compute="_compute_scm_entry_id")
+    date_from = fields.Date(string='SCM Campaign Start', related="scm_entry_id.date_from")
+    date_to = fields.Date(string='SCM Campaign Stop', related="scm_entry_id.date_to")
     privacy_visibility = fields.Selection(default="followers")
     project_date_deadline = fields.Date(string='Delivery Date', tracking=True, required=True)
 

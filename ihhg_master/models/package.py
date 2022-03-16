@@ -16,7 +16,7 @@ class Package (models.Model):
         ('LW', 'LW'),
         ('DY', 'DY'),
         ('SCMART', 'SCMART'),
-    ], default="DY", string='Naming Convention')
+    ], default="LW", string='Naming Convention')
     active = fields.Boolean('Active', default=True)
 
     @api.depends('item_ids')
