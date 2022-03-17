@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="scm_mass_production_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure">
+                            <h2 class="mt16">
+                                <p>Mass Production Report:</p>
+                            </h2>
+                        </div>
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>SCM:</strong>
+                                <p class="m-0" t-field="doc.name"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Project:</strong>
+                                <p class="m-0" t-field="doc.project_id"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Campaign Start:</strong>
+                                <p class="m-0" t-field="doc.date_from" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                                <strong>Campaign End:</strong>
+                                <p class="m-0" t-field="doc.date_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm o_main_table">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_date" class="text-left">Date</th>
+                                <th name="th_posm_tem_category" class="text-left">POSM Item Category</th>
+                                <th name="th_package_name" class="text-right">Package Name</th>
+                                <th name="th_packing_id" class="text-right">Packing ID</th>
+                                <th name="th_posm_item_id" class="text-right">POSM Item ID</th>
+                                <th name="th_posm_item_name" class="text-right">POSM Item Name</th>
+                                <th name="th_brand_name" class="text-right">Brand Name</th>
+                                <th name="th_material" class="text-right">Material</th>
+                                <th name="th_weight" class="text-right">Weight</th>
+                                <th name="th_final_dimension" class="text-right">Final Dimension</th>
+                                <th name="th_open_dimension" class="text-right">Open Dimension</th>
+                                <th name="th_printing_method" class="text-right">Printing Method</th>
+                                <th name="th_color" class="text-right">Color</th>
+                                <th name="th_surface_coating" class="text-right">Surface Coating</th>
+                                <th name="th_finishing" class="text-right">Finishing</th>
+                                <th name="th_packing_instruction" class="text-right">Packing Instruction</th>
+                                <th name="th_description" class="text-right">Description</th>
+                                <th name="th_quantity" class="text-right">Quantity</th>
+                                <th name="th_uom_id" class="text-right">Units of Measure</th>
+                                <th name="th_item_total" class="text-right">Items per package (TBC)</th>
+                                <th name="th_shipment_number" class="text-right">Shipment Number</th>
+                                <th name="th_shipment_name" class="text-right">Shipment Name</th>
+                                <th name="th_delivery_address_ids" class="text-right">Delivery Address</th>
+                                <th name="th_delivery_date" class="text-right">Delivery Date</th>
+                                <th name="th_shipping_date" class="text-right">Shipping Date</th>
+                                <th name="th_date_from" class="text-right">Campaign Start</th>
+                                <th name="th_date_to" class="text-right">Campaign End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="doc.item_line_ids_mass_production" t-as="line">
+                                <tr>
+                                    <t>
+                                        <td name="td_date">
+                                            <span t-field="line.item_date_from"/>
+                                        </td>
+                                        <td name="td_posm_tem_category">
+                                            <span t-field="line.categ_id"/>
+                                        </td>
+                                        <td name="td_package_name" class="text-right">
+                                            <span t-field="line.package_name"/>
+                                        </td>
+                                        <td name="td_packing_id" class="text-right">
+                                            <span t-field="line.package_id"/>
+                                        </td>
+                                        <td name="td_item_id" class="text-right">
+                                            <span t-field="line.item_id"/>
+                                        </td>
+                                        <td name="td_name" class="text-right">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td name="td_item_tags_ids" class="text-right">
+                                            <span t-field="line.item_tags_ids"/>
+                                        </td>
+                                        <td name="td_material" class="text-right">
+                                            <span t-field="line.material"/>
+                                        </td>
+                                        <td name="td_weight" class="text-right">
+                                            <span t-field="line.weight"/>
+                                        </td>
+                                        <td name="td_final_dimension" class="text-right">
+                                            <span t-field="line.final_dimension"/>
+                                        </td>
+                                        <td name="td_open_dimension" class="text-right">
+                                            <span t-field="line.open_dimension"/>
+                                        </td>
+                                        <td name="td_printing_method" class="text-right">
+                                            <span t-field="line.printing_method"/>
+                                        </td>
+                                        <td name="td_color" class="text-right">
+                                            <span t-field="line.color"/>
+                                        </td>
+                                        <td name="td_surface_coating" class="text-right">
+                                            <span t-field="line.surface_coating"/>
+                                        </td>
+                                        <td name="td_finishing" class="text-right">
+                                            <span t-field="line.finishing"/>
+                                        </td>
+                                        <td name="td_packing_instruction" class="text-right">
+                                            <span t-field="line.packing_instruction"/>
+                                        </td>
+                                        <td name="td_description" class="text-right">
+                                            <span t-field="line.description"/>
+                                        </td>
+                                        <td name="td_quantity" class="text-right">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td name="td_uom_id" class="text-right">
+                                            <span t-field="line.uom_id"/>
+                                        </td>
+                                        <td name="td_item_total" class="text-right">
+                                            <span t-field="line.item_total"/>
+                                        </td>
+                                        <td name="td_shipment_number" class="text-right">
+                                            <span t-field="line.shipment_number"/>
+                                        </td>
+                                        <td name="td_shipment_name" class="text-right">
+                                            <span t-field="line.shipment_name"/>
+                                        </td>
+                                        <td name="td_delivery_address_ids" class="text-right">
+                                            <span t-field="line.delivery_address_ids"/>
+                                        </td>
+                                        <td name="td_delivery_date" class="text-right">
+                                            <span t-field="line.delivery_date"/>
+                                        </td>
+                                        <td name="td_shipping_date" class="text-right">
+                                            <span t-field="line.shipping_date"/>
+                                        </td>
+                                        <td name="td_date_from" class="text-right">
+                                            <span t-field="line.date_from"/>
+                                        </td>
+                                        <td name="td_date_to" class="text-right">
+                                            <span t-field="line.date_to"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="scm_adaption_work_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure">
+                            <h2 class="mt16">
+                                <p>Adaption Work Report:</p>
+                            </h2>
+                        </div>
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>SCM:</strong>
+                                <p class="m-0" t-field="doc.name"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Project:</strong>
+                                <p class="m-0" t-field="doc.project_id"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Campaign Start:</strong>
+                                <p class="m-0" t-field="doc.date_from" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                                <strong>Campaign End:</strong>
+                                <p class="m-0" t-field="doc.date_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm o_main_table">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_date" class="text-left">Finally Modified Date</th>
+                                <th name="th_project_name" class="text-left">Project Name</th>
+                                <th name="th_channel" class="text-right">Channel</th>
+                                <th name="th_posm_item_id" class="text-right">POSM Item ID</th>
+                                <th name="th_posm_item_name" class="text-right">POSM Item Name</th>
+                                <th name="th_brand_name" class="text-right">Brand Name</th>
+                                <th name="th_material" class="text-right">Material</th>
+                                <th name="th_weight" class="text-right">Weight</th>
+                                <th name="th_final_dimension" class="text-right">Final Dimension</th>
+                                <th name="th_open_dimension" class="text-right">Open Dimension</th>
+                                <th name="th_printing_method" class="text-right">Printing Method</th>
+                                <th name="th_color" class="text-right">Color</th>
+                                <th name="th_surface_coating" class="text-right">Surface Coating</th>
+                                <th name="th_finishing" class="text-right">Finishing</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="doc.item_line_ids_adaption_work" t-as="line">
+                                <tr>
+                                    <t>
+                                        <td name="td_item_date_from">
+                                            <span t-field="line.item_date_from"/>
+                                        </td>
+                                        <td name="td_project_id">
+                                            <span t-field="line.project_id"/>
+                                        </td>
+                                        <td name="td_channel_id" class="text-right">
+                                            <span t-field="line.channel_id"/>
+                                        </td>
+                                        <td name="td_item_id" class="text-right">
+                                            <span t-field="line.item_id"/>
+                                        </td>
+                                        <td name="td_name" class="text-right">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td name="td_item_tags_ids" class="text-right">
+                                            <span t-field="line.item_tags_ids"/>
+                                        </td>
+                                        <td name="td_material" class="text-right">
+                                            <span t-field="line.material"/>
+                                        </td>
+                                        <td name="td_weight" class="text-right">
+                                            <span t-field="line.weight"/>
+                                        </td>
+                                        <td name="td_final_dimension" class="text-right">
+                                            <span t-field="line.final_dimension"/>
+                                        </td>
+                                        <td name="td_open_dimension" class="text-right">
+                                            <span t-field="line.open_dimension"/>
+                                        </td>
+                                        <td name="td_printing_method" class="text-right">
+                                            <span t-field="line.printing_method"/>
+                                        </td>
+                                        <td name="td_color" class="text-right">
+                                            <span t-field="line.color"/>
+                                        </td>
+                                        <td name="td_surface_coating" class="text-right">
+                                            <span t-field="line.surface_coating"/>
+                                        </td>
+                                        <td name="td_finishing" class="text-right">
+                                            <span t-field="line.finishing"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="scm_delivery_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure">
+                            <h2 class="mt16">
+                                <p>Delivery Report:</p>
+                            </h2>
+                        </div>
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>SCM:</strong>
+                                <p class="m-0" t-field="doc.name"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Project:</strong>
+                                <p class="m-0" t-field="doc.project_id"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Campaign Start:</strong>
+                                <p class="m-0" t-field="doc.date_from" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                                <strong>Campaign End:</strong>
+                                <p class="m-0" t-field="doc.date_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm o_main_table">
+                        <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_date" class="text-left">Finally Modified Date</th>
+                                <th name="th_project_name" class="text-left">Project Name</th>
+                                <th name="th_channel" class="text-right">Channel</th>
+                                <th name="th_package_name" class="text-right">Packing Name</th>
+                                <th name="th_packing_id" class="text-right">Packing ID</th>
+                                <th name="th_quantity" class="text-right">Quantity</th>
+                                <th name="th_uom_id" class="text-right">Units of Measure</th>
+                                <th name="th_delivery_address_ids" class="text-right">Delivery Address</th>
+                                <th name="th_delivery_date" class="text-right">Delivery Date</th>
+                                <th name="th_shipping_date" class="text-right">Shipping Date</th>
+                                <th name="th_date_from" class="text-right">Campaign Start</th>
+                                <th name="th_date_to" class="text-right">Campaign End</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="doc.item_line_ids_delivery" t-as="line">
+                                <tr>
+                                    <t>
+                                        <td name="td_item_date_from">
+                                            <span t-field="line.item_date_from"/>
+                                        </td>
+                                        <td name="td_project_id">
+                                            <span t-field="line.project_id"/>
+                                        </td>
+                                        <td name="td_channel_id" class="text-right">
+                                            <span t-field="line.channel_id"/>
+                                        </td>
+                                        <td name="td_package_name" class="text-right">
+                                            <span t-field="line.package_name"/>
+                                        </td>
+                                        <td name="td_packing_id" class="text-right">
+                                            <span t-field="line.package_id"/>
+                                        </td>
+                                        <td name="td_quantity" class="text-right">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td name="td_uom_id" class="text-right">
+                                            <span t-field="line.uom_id"/>
+                                        </td>
+                                        <td name="td_delivery_address_ids" class="text-right">
+                                            <span t-field="line.delivery_address_ids"/>
+                                        </td>
+                                        <td name="td_delivery_date" class="text-right">
+                                            <span t-field="line.delivery_date"/>
+                                        </td>
+                                        <td name="td_shipping_date" class="text-right">
+                                            <span t-field="line.shipping_date"/>
+                                        </td>
+                                        <td name="td_date_from" class="text-right">
+                                            <span t-field="line.date_from"/>
+                                        </td>
+                                        <td name="td_date_to" class="text-right">
+                                            <span t-field="line.date_to"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

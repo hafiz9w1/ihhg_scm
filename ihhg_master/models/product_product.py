@@ -13,14 +13,18 @@ class ProductProduct(models.Model):
     # Use to store the value for prdocut
     extra_instruction = fields.Char(string='Extra Instruction')
     material = fields.Char(string='Material')
+    weight = fields.Char(string='Weight')
     printing_medium = fields.Char(string='Printing Medium')
     packed_size = fields.Char(string='Packed size (mm)')
     display_size = fields.Char(string='Dispay size (mm)')
     printing_method = fields.Char(string='Printing Method')
-    printing_color = fields.Char(string='Final Dimensions(mm)')
+    final_dimension = fields.Char(string='Final Dimensions(mm)')
+    open_dimension = fields.Char(string='Open Dimensions(mm)')
     surface_coating = fields.Char(string='Surface Coating')
+    color = fields.Char(string='Color')
     finishing = fields.Char(string='Finishing')
     packing_instruction = fields.Char(string='Packing Instruction')
+    description = fields.Char(string='Description')
     ihh_notes = fields.Text(string='Notes')
 
     def name_get(self):

@@ -165,6 +165,91 @@
                             <div class="oe_clear"/>
                         </group>
                       </page>
+
+                      <page name="mass_production" string="Mass Production (POSM Item)" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+
+                        <button name="action_mass_production_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+
+                        <field name="item_line_ids_mass_production" context="{'scm_id': id}">
+                          <tree string="SCM Item Mass Production" >
+                              <field name="item_date_from" string="Date"/>
+                              <field name="categ_id" string="POSM Item Category"/>
+                              <field name="package_name" string="Package Name"/>
+                              <field name="package_id" string="Packing ID"/>
+                              <field name="item_id" string="POSM Item ID"/>
+                              <field name="name" string="POSM Item Name"/>
+                              <field name="item_tags_ids" string="Brand Name"/>
+
+                              <field name="material" optional="hide"/>
+                              <field name="weight" optional="hide"/>
+                              <field name="final_dimension" optional="hide"/>
+                              <field name="open_dimension" optional="hide"/>
+                              <field name="printing_method" optional="hide"/>
+                              <field name="color" optional="hide"/>
+                              <field name="surface_coating" optional="hide"/>
+                              <field name="finishing" optional="hide"/>
+                              <field name="packing_instruction" optional="hide"/>
+                              <field name="description" optional="hide"/>
+                              <field name="quantity" optional="hide"/>
+                              <field name="uom_id" optional="hide"/>
+                              <field name="item_total" optional="hide"/>
+                              <field name="shipment_number" optional="hide"/>
+                              <field name="shipment_name" optional="hide"/>
+                              <field name="delivery_address_ids" optional="hide"/>
+                              <field name="delivery_date" optional="hide"/>
+                              <field name="shipping_date" optional="hide"/>
+                              <field name="date_from" optional="hide"/>
+                              <field name="date_to" optional="hide"/>
+                          </tree>
+                        </field>
+                       </page>
+
+                      <page name="adaption_work" string="Adaption Work" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+
+                        <button name="action_adaption_work_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+
+                        <field name="item_line_ids_adaption_work" context="{'scm_id': id}">
+                          <tree string="SCM Item Adaption Work" >
+                              <field name="item_date_from" string="Finally Modified Date"/>
+                              <field name="project_id" string="Project Name"/>
+                              <field name="channel_id" string="Channel" />
+                              <field name="item_id" string="POSM Item ID"/>
+                              <field name="name" string="POSM Item Name"/>
+                              <field name="item_tags_ids" string="Brand Name"/>
+                              <field name="material" string="Material" optional="hide"/>
+                              <field name="weight" string="Weight" optional="hide"/>
+                              <field name="final_dimension" string="Final Dimension" optional="hide"/>
+                              <field name="open_dimension" string="Open Dimension" optional="hide"/>
+                              <field name="printing_method" string="Printing Method" optional="hide"/>
+                              <field name="color" string="Color" optional="hide"/>
+                              <field name="surface_coating" string="Surface Coating" optional="hide"/>
+                              <field name="finishing" string="Finishing" optional="hide"/>
+                          </tree>
+                        </field>
+                      </page>
+
+                      <page name="delivery" string="Delivery" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+
+                        <button name="action_delivery_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+
+                        <field name="item_line_ids_delivery" context="{'scm_id': id}">
+                            <tree string="SCM Item Delivery" >
+                                <field name="item_date_from" string="Finally Modified Date"/>
+                                <field name="project_id" string="Project Name"/>
+                                <field name="channel_id" string="Channel" />
+                                <field name="package_name" string="Packing Name"/>
+                                <field name="package_id" string="Packing ID"/>
+                                <field name="quantity" optional="hide"/>
+                                <field name="uom_id" optional="hide"/>
+                                <field name="delivery_address_ids" optional="hide"/>
+                                <field name="delivery_date" optional="hide"/>
+                                <field name="shipping_date" optional="hide"/>
+                                <field name="date_from" optional="hide"/>
+                                <field name="date_to" optional="hide"/>
+                            </tree>
+                        </field>
+                      </page>
+
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">

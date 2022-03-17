@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from datetime import timedelta
 
 
 class ItemLine (models.Model):
@@ -24,10 +25,32 @@ class ItemLine (models.Model):
         ('shipping', 'Shipping'),
         ('allocating', 'Allocating')
     ], string='Shipping / Allocating')
-    product_uom_id = fields.Many2one('uom.uom', string='UoM')
     quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
+
+    categ_id = fields.Many2one(string='POSM Item Category', related='product_id.categ_id')
+    package_name = fields.Char(string='Package Name', related='item_id.package_name')
+    material = fields.Char(string='Material', related='product_id.material')
+    weight = fields.Char(string='Weight', related='product_id.weight')
+    final_dimension = fields.Char(string='Final Dimension', related='product_id.final_dimension')
+    open_dimension = fields.Char(string='Open Dimension', related='product_id.open_dimension')
+    printing_method = fields.Char(string='Printing Method', related='product_id.printing_method')
+    color = fields.Char(string='Color', related='product_id.color')
+    surface_coating = fields.Char(string='Surface Coating', related='product_id.surface_coating')
+    finishing = fields.Char(string='Finishing', related='product_id.finishing')
+    packing_instruction = fields.Char(string='Packing Instruction', related='product_id.packing_instruction')
+    description = fields.Char(string='Description', related='product_id.description')
+    uom_id = fields.Many2one(string='Units of Measure', related='product_id.uom_id')
+    item_total = fields.Integer(string='Items per package (TBC)', related='item_id.package_id.item_total')
+    shipment_number = fields.Many2one(string='Shipment Number', related='item_id.package_id')
+    shipment_name = fields.Char(string='Shipment Name', related='item_id.package_name')
+    delivery_address_ids = fields.One2many(string='Delivery Address', related='item_id.package_id.delivery_address_ids')
+    delivery_date = fields.Date(string='Delivery Date', compute='_compute_delivery_date')
+    shipping_date = fields.Date(string='Shipping Date', compute='_compute_shipping_date')
+    date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
+    date_to = fields.Date(string='Campaign End', related='scm_id.date_to')
+    project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
 
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):
@@ -123,3 +146,15 @@ class ItemLine (models.Model):
         for p in packages_lines:
             if p.package_id not in package_item_lines:
                 p.unlink()
+
+    # Delivery date function (15 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_delivery_date(self):
+        for rec in self:
+            rec.delivery_date = rec.scm_id.date_from - timedelta(days=15)
+
+    # Delivery date function (3 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_shipping_date(self):
+        for rec in self:
+            rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)
