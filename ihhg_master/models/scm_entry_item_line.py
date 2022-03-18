@@ -81,6 +81,7 @@ class ItemLine (models.Model):
         res = []
         for item in self:
             name_array = [item.item_id.name] + item.item_tags_ids.mapped('name')
+            name_array = [n for n in name_array if n]
             name = ' - '.join(name_array)
             res.append((item.id, name))
         return res
