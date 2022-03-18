@@ -51,6 +51,7 @@ class ItemLine (models.Model):
     date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
     date_to = fields.Date(string='Campaign End', related='scm_id.date_to')
     project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
+    show_in_vc = fields.Boolean(related="item_id.product_template_id.show_in_vc", store=True)
 
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):

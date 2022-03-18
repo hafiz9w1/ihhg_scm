@@ -19,12 +19,7 @@ class Project(models.Model):
         column2='user_id',
         string='Project Members',
         help="""Project's members are users who can have an access to the tasks related to this project.""",
-        inverse="_inverse_member_ids"
     )
-
-    def _inverse_member_ids(self):
-        for rec in self:
-            rec.message_subscribe(partner_ids=rec.member_ids.partner_id.ids)
 
     def _compute_scm_entry_id(self):
         for rec in self:
@@ -123,3 +118,19 @@ class Project(models.Model):
             'target': 'current',
             'context': context
         }
+
+    def write(self, vals):
+        res = True
+        for rec in self:
+            previous_member = rec.member_ids
+            res = super(Project, rec).write(vals)
+            after_member = rec.member_ids
+
+            to_delete_members = previous_member - after_member
+            if to_delete_members:
+                rec.message_unsubscribe(partner_ids=to_delete_members.partner_id.ids)
+            to_subscribe_members = after_member - previous_member
+            if to_subscribe_members:
+                rec.message_subscribe(partner_ids=to_subscribe_members.partner_id.ids)
+
+        return res
