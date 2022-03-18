@@ -1,7 +1,8 @@
-import base64
+import json
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-
+from odoo.addons.web.controllers.main import ExcelExport
+from urllib.parse import urlencode
 
 class SCMEntry(models.Model):
     _name = "scm.entry"
@@ -145,8 +146,51 @@ class SCMEntry(models.Model):
 
     # Download Mass Production
     def action_mass_production_download(self):
-        return self.env.ref('ihhg_master.action_mass_production')\
-            .with_context(landscape=True).report_action(self)
+        data = {
+            "data": json.dumps({
+                "model": 'scm.entry.item.line',
+                "fields": [
+                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "categ_id", "label": _("POSM Item Category")},
+                    {"name": "package_name", "label": _("Package Name")},
+                    {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "item_id", "label": _("POSM Item ID")},
+                    {"name": "name", "label": _("POSM Item Name")},
+                    {"name": "item_tags_names", "label": _("Brand Name")},
+                    {"name": "material", "label": _("Material")},
+                    {"name": "weight", "label": _("Weight")},
+                    {"name": "final_dimension", "label": _("Final Dimenions")},
+                    {"name": "item_date_from", "label": _("Date")},
+
+                    # <field name="final_dimension" optional="hide"/>
+                    # <field name="open_dimension" optional="hide"/>
+                    # <field name="printing_method" optional="hide"/>
+                    # <field name="color" optional="hide"/>
+                    # <field name="surface_coating" optional="hide"/>
+                    # <field name="finishing" optional="hide"/>
+                    # <field name="packing_instruction" optional="hide"/>
+                    # <field name="description" optional="hide"/>
+                    # <field name="quantity" optional="hide"/>
+                    # <field name="uom_id" optional="hide"/>
+                    # <field name="item_total" optional="hide"/>
+                    # <field name="shipment_number" optional="hide"/>
+                    # <field name="shipment_name" optional="hide"/>
+                    # <field name="delivery_address_ids" optional="hide"/>
+                    # <field name="delivery_date" optional="hide"/>
+                    # <field name="shipping_date" optional="hide"/>
+                    # <field name="date_from" optional="hide"/>
+                    # <field name="date_to" optional="hide"/>
+                ],
+                "ids": self.item_line_ids_mass_production.ids,
+                "domain": [],
+                "import_compat": False
+            })
+        }
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/export/xlsx?{urlencode(data)}',
+            'target': 'self',
+        }
 
     # Download Adaption Work
     def action_adaption_work_download(self):

@@ -178,7 +178,7 @@
                               <field name="package_id" string="Packing ID"/>
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
-                              <field name="item_tags_ids" string="Brand Name"/>
+                              <field name="item_tags_names" string="Brand Name"/>
 
                               <field name="material" optional="hide"/>
                               <field name="weight" optional="hide"/>
