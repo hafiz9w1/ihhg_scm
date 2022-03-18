@@ -27,6 +27,7 @@ class ItemLine (models.Model):
     ], string='Shipping / Allocating')
     quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
+    item_tags_names = fields.Char(compute="_compute_item_tags_names")
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
 
     categ_id = fields.Many2one(string='POSM Item Category', related='product_id.categ_id')
@@ -158,3 +159,10 @@ class ItemLine (models.Model):
     def _compute_shipping_date(self):
         for rec in self:
             rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)
+
+    @api.depends('item_tags_ids.name')
+    def _compute_item_tags_names(self):
+        for rec in self:
+            names = rec.item_tags_ids.mapped('name')
+            names = [n for n in names if n]
+            rec.item_tags_names = ",".join(names)
