@@ -84,6 +84,18 @@ class ItemLine (models.Model):
             names = [n for n in names if n]
             rec.item_tags_names = ",".join(names)
 
+    # Delivery date function (15 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_delivery_date(self):
+        for rec in self:
+            rec.delivery_date = rec.scm_id.date_from - timedelta(days=15)
+
+    # Delivery date function (3 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_shipping_date(self):
+        for rec in self:
+            rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)
+
     # Function to append Brand Name to item name in Visibility calendar
     def name_get(self):
         res = []
@@ -156,22 +168,3 @@ class ItemLine (models.Model):
         for p in packages_lines:
             if p.package_id not in package_item_lines:
                 p.unlink()
-
-    # Delivery date function (15 days before SCM date_from)
-    @api.depends('scm_id.date_from')
-    def _compute_delivery_date(self):
-        for rec in self:
-            rec.delivery_date = rec.scm_id.date_from - timedelta(days=15)
-
-    # Delivery date function (3 days before SCM date_from)
-    @api.depends('scm_id.date_from')
-    def _compute_shipping_date(self):
-        for rec in self:
-            rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)
-
-    @api.depends('item_tags_ids.name')
-    def _compute_item_tags_names(self):
-        for rec in self:
-            names = rec.item_tags_ids.mapped('name')
-            names = [n for n in names if n]
-            rec.item_tags_names = ",".join(names)
