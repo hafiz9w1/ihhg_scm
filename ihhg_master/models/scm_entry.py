@@ -1,6 +1,5 @@
 import json
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 from urllib.parse import urlencode
 
 

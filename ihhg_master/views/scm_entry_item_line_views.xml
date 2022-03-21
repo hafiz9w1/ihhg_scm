@@ -116,6 +116,8 @@
                 <field name="package_id"/>
                 <field name="item_date_from"/>
                 <field name="item_date_to"/>
+                <filter name="show_in_vc" string="Show In VC" domain="[('show_in_vc','=', True)]"/>
+                <filter string="SCM" name="group_scm_id" domain="[]" context="{'group_by': 'scm_id'}"/>
                 <group expand="0" string="Group By">
                     <filter string="SCM" name="group_scm_id" domain="[]" context="{'group_by': 'scm_id'}"/>
                     <filter string="channel" name="group_channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>

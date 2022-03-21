@@ -52,6 +52,7 @@ class ItemLine (models.Model):
     date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
     date_to = fields.Date(string='Campaign End', related='scm_id.date_to')
     project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
+    show_in_vc = fields.Boolean(related="item_id.product_template_id.show_in_vc", store=True)
 
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):
@@ -76,11 +77,19 @@ class ItemLine (models.Model):
         for rec in self:
             rec.item_date_to = rec.scm_id.date_to
 
+    @api.depends('item_tags_ids.name')
+    def _compute_item_tags_names(self):
+        for rec in self:
+            names = rec.item_tags_ids.mapped('name')
+            names = [n for n in names if n]
+            rec.item_tags_names = ",".join(names)
+
     # Function to append Brand Name to item name in Visibility calendar
     def name_get(self):
         res = []
         for item in self:
             name_array = [item.item_id.name] + item.item_tags_ids.mapped('name')
+            name_array = [n for n in name_array if n]
             name = ' - '.join(name_array)
             res.append((item.id, name))
         return res

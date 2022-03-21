@@ -166,9 +166,9 @@
                         </group>
                       </page>
 
-                      <page name="mass_production" string="Mass Production (POSM Item)" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+                      <page name="mass_production" string="Mass Production (POSM Item)" states="phase2,done" groups="ihhg_master.group_scm_manager">
 
-                        <button name="action_mass_production_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+                        <button name="action_mass_production_download" type="object" string="Download" class="oe_highlight"/>
 
                         <field name="item_line_ids_mass_production" context="{'scm_id': id}">
                           <tree string="SCM Item Mass Production" >
@@ -178,7 +178,7 @@
                               <field name="package_id" string="Packing ID"/>
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
-                              <field name="item_tags_ids" string="Brand Name"/>
+                              <field name="item_tags_names" string="Brand Name"/>
 
                               <field name="material" optional="hide"/>
                               <field name="weight" optional="hide"/>
@@ -204,9 +204,9 @@
                         </field>
                        </page>
 
-                      <page name="adaption_work" string="Adaption Work" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+                      <page name="adaption_work" string="Adaption Work" states="phase2,done" groups="ihhg_master.group_scm_manager">
 
-                        <button name="action_adaption_work_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+                        <button name="action_adaption_work_download" type="object" string="Download" class="oe_highlight"/>
 
                         <field name="item_line_ids_adaption_work" context="{'scm_id': id}">
                           <tree string="SCM Item Adaption Work" >
@@ -228,9 +228,9 @@
                         </field>
                       </page>
 
-                      <page name="delivery" string="Delivery" attrs="{'invisible': [('state', '!=', 'phase2')]}" groups="ihhg_master.group_scm_manager">
+                      <page name="delivery" string="Delivery" states="phase2,done" groups="ihhg_master.group_scm_manager">
 
-                        <button name="action_delivery_download" type="object" string="Download" class="oe_highlight" states="phase2"/>
+                        <button name="action_delivery_download" type="object" string="Download" class="oe_highlight"/>
 
                         <field name="item_line_ids_delivery" context="{'scm_id': id}">
                             <tree string="SCM Item Delivery" >
