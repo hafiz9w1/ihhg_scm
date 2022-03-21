@@ -39,14 +39,11 @@ Functionalities:
         'product',
         'project',
         'account',
-        'stock',
     ],
 
     'data': [
         'security/scm_security.xml',
         'security/ir.model.access.csv',
-        'report/scm_report.xml',
-        'report/scm_report_template.xml',
         'views/product_template_views.xml',
         'views/product_product_views.xml',
         'views/package_item_views.xml',

@@ -27,6 +27,7 @@ class ItemLine (models.Model):
     ], string='Shipping / Allocating')
     quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
+    item_tags_names = fields.Char(compute="_compute_item_tags_names")
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
 
     categ_id = fields.Many2one(string='POSM Item Category', related='product_id.categ_id')
@@ -36,7 +37,7 @@ class ItemLine (models.Model):
     final_dimension = fields.Char(string='Final Dimension', related='product_id.final_dimension')
     open_dimension = fields.Char(string='Open Dimension', related='product_id.open_dimension')
     printing_method = fields.Char(string='Printing Method', related='product_id.printing_method')
-    color = fields.Char(string='Color', related='product_id.color')
+    printing_color = fields.Char(string='Color', related='product_id.printing_color')
     surface_coating = fields.Char(string='Surface Coating', related='product_id.surface_coating')
     finishing = fields.Char(string='Finishing', related='product_id.finishing')
     packing_instruction = fields.Char(string='Packing Instruction', related='product_id.packing_instruction')
@@ -62,7 +63,7 @@ class ItemLine (models.Model):
     @api.depends('item_id.name')
     def _compute_name(self):
         for rec in self:
-            rec.name = rec.item_id.name
+            rec.name = rec.item_id.product_template_id.name
 
     # Select SCM date_from for Item item_date_from
     @api.depends('scm_id.date_from')
@@ -75,6 +76,25 @@ class ItemLine (models.Model):
     def _compute_item_date_to(self):
         for rec in self:
             rec.item_date_to = rec.scm_id.date_to
+
+    @api.depends('item_tags_ids.name')
+    def _compute_item_tags_names(self):
+        for rec in self:
+            names = rec.item_tags_ids.mapped('name')
+            names = [n for n in names if n]
+            rec.item_tags_names = ",".join(names)
+
+    # Delivery date function (15 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_delivery_date(self):
+        for rec in self:
+            rec.delivery_date = rec.scm_id.date_from - timedelta(days=15)
+
+    # Delivery date function (3 days before SCM date_from)
+    @api.depends('scm_id.date_from')
+    def _compute_shipping_date(self):
+        for rec in self:
+            rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)
 
     # Function to append Brand Name to item name in Visibility calendar
     def name_get(self):
@@ -148,15 +168,3 @@ class ItemLine (models.Model):
         for p in packages_lines:
             if p.package_id not in package_item_lines:
                 p.unlink()
-
-    # Delivery date function (15 days before SCM date_from)
-    @api.depends('scm_id.date_from')
-    def _compute_delivery_date(self):
-        for rec in self:
-            rec.delivery_date = rec.scm_id.date_from - timedelta(days=15)
-
-    # Delivery date function (3 days before SCM date_from)
-    @api.depends('scm_id.date_from')
-    def _compute_shipping_date(self):
-        for rec in self:
-            rec.shipping_date = rec.scm_id.date_from - timedelta(days=3)

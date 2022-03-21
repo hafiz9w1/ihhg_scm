@@ -140,6 +140,7 @@
                                 <field name="allocated_item_ids" invisible="1" />
                                 <field name="sequence" widget="handle"/>
                                 <field name="item_id" domain="[('channel_id', 'in', allowed_channel_ids), ('id', 'not in', allocated_item_ids)]"/>
+                                <field name="name" string="POSM Item Name"  optional="show"/>
                                 <field name="product_id" optional="hide"/>
                                 <field name="package_id"/>
                                 <field name="channel_id" invisible="1" />
@@ -178,14 +179,14 @@
                               <field name="package_id" string="Packing ID"/>
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
-                              <field name="item_tags_ids" string="Brand Name"/>
+                              <field name="item_tags_names" string="Brand Name"/>
 
                               <field name="material" optional="hide"/>
                               <field name="weight" optional="hide"/>
                               <field name="final_dimension" optional="hide"/>
                               <field name="open_dimension" optional="hide"/>
                               <field name="printing_method" optional="hide"/>
-                              <field name="color" optional="hide"/>
+                              <field name="printing_color" optional="hide"/>
                               <field name="surface_coating" optional="hide"/>
                               <field name="finishing" optional="hide"/>
                               <field name="packing_instruction" optional="hide"/>
@@ -221,7 +222,7 @@
                               <field name="final_dimension" string="Final Dimension" optional="hide"/>
                               <field name="open_dimension" string="Open Dimension" optional="hide"/>
                               <field name="printing_method" string="Printing Method" optional="hide"/>
-                              <field name="color" string="Color" optional="hide"/>
+                              <field name="printing_color" string="Color" optional="hide"/>
                               <field name="surface_coating" string="Surface Coating" optional="hide"/>
                               <field name="finishing" string="Finishing" optional="hide"/>
                           </tree>

@@ -21,11 +21,12 @@ class ProductProduct(models.Model):
     final_dimension = fields.Char(string='Final Dimensions(mm)')
     open_dimension = fields.Char(string='Open Dimensions(mm)')
     surface_coating = fields.Char(string='Surface Coating')
-    color = fields.Char(string='Color')
+    printing_color = fields.Char(string='Color')
     finishing = fields.Char(string='Finishing')
     packing_instruction = fields.Char(string='Packing Instruction')
     description = fields.Char(string='Description')
     ihh_notes = fields.Text(string='Notes')
+    disposal_date = fields.Date()
 
     def name_get(self):
         names = []

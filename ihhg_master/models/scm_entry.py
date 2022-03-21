@@ -1,6 +1,7 @@
-import base64
+from datetime import timedelta
+import json
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from urllib.parse import urlencode
 
 
 class SCMEntry(models.Model):
@@ -85,15 +86,20 @@ class SCMEntry(models.Model):
                     # copy value from template
                     'extra_instruction': line.item_id.product_template_id.extra_instruction,
                     'material': line.item_id.product_template_id.material,
+                    'weight': line.item_id.product_template_id.weight,
                     'printing_medium': line.item_id.product_template_id.printing_medium,
                     'packed_size': line.item_id.product_template_id.packed_size,
                     'display_size': line.item_id.product_template_id.display_size,
                     'printing_method': line.item_id.product_template_id.printing_method,
-                    'printing_color': line.item_id.product_template_id.printing_color,
+                    'final_dimension': line.item_id.product_template_id.final_dimension,
+                    'open_dimension': line.item_id.product_template_id.open_dimension,
                     'surface_coating': line.item_id.product_template_id.surface_coating,
+                    'printing_color': line.item_id.product_template_id.printing_color,
                     'finishing': line.item_id.product_template_id.finishing,
                     'packing_instruction': line.item_id.product_template_id.packing_instruction,
+                    'description': line.item_id.product_template_id.description,
                     'ihh_notes': line.item_id.product_template_id.ihh_notes,
+                    'disposal_date': rec.date_to + timedelta(days=line.item_id.product_template_id.dispose_after),
                 })
                 line.write({
                     "product_id": product.id
@@ -145,15 +151,107 @@ class SCMEntry(models.Model):
 
     # Download Mass Production
     def action_mass_production_download(self):
-        return self.env.ref('ihhg_master.action_mass_production')\
-            .with_context(landscape=True).report_action(self)
+        data = {
+            "data": json.dumps({
+                "model": 'scm.entry.item.line',
+                "fields": [
+                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "categ_id", "label": _("POSM Item Category")},
+                    {"name": "package_name", "label": _("Package Name")},
+                    {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "item_id", "label": _("POSM Item ID")},
+                    {"name": "name", "label": _("POSM Item Name")},
+                    {"name": "item_tags_names", "label": _("Brand Name")},
+                    {"name": "material", "label": _("Material")},
+                    {"name": "weight", "label": _("Weight")},
+                    {"name": "final_dimension", "label": _("Final Dimenions")},
+                    {"name": "open_dimension", "label": _("Open Dimension")},
+                    {"name": "printing_method", "label": _("Printing Method")},
+                    {"name": "color", "label": _("Color")},
+                    {"name": "surface_coating", "label": _("Surface Coating")},
+                    {"name": "finishing", "label": _("Finishing")},
+                    {"name": "packing_instruction", "label": _("Packing Instruction")},
+                    {"name": "description", "label": _("Description")},
+                    {"name": "quantity", "label": _("Quantity")},
+                    {"name": "uom_id", "label": _("Units of Measure")},
+                    {"name": "item_total", "label": _("Items per package (TBC)")},
+                    {"name": "shipment_number", "label": _("Shipment Number")},
+                    {"name": "shipment_name", "label": _("Shipment Name")},
+                    {"name": "delivery_address_ids", "label": _("Delivery Address")},
+                    {"name": "delivery_date", "label": _("Delivery Date")},
+                    {"name": "shipping_date", "label": _("Shipping Date")},
+                    {"name": "date_from", "label": _("Campaign Start")},
+                    {"name": "date_to", "label": _("Campaign End")},
+                ],
+                "ids": self.item_line_ids_mass_production.ids,
+                "domain": [],
+                "import_compat": False
+            })
+        }
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/export/xlsx?{urlencode(data)}',
+            'target': 'self',
+        }
 
     # Download Adaption Work
     def action_adaption_work_download(self):
-        return self.env.ref('ihhg_master.action_adaption_work')\
-            .with_context(landscape=True).report_action(self)
+        data = {
+            "data": json.dumps({
+                "model": 'scm.entry.item.line',
+                "fields": [
+                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "project_id", "label": _("Project Name")},
+                    {"name": "channel_id", "label": _("Channel")},
+                    {"name": "item_id", "label": _("POSM Item ID")},
+                    {"name": "name", "label": _("POSM Item Name")},
+                    {"name": "item_tags_names", "label": _("Brand Name")},
+                    {"name": "material", "label": _("Material")},
+                    {"name": "weight", "label": _("Weight")},
+                    {"name": "final_dimension", "label": _("Final Dimenions")},
+                    {"name": "open_dimension", "label": _("Open Dimension")},
+                    {"name": "printing_method", "label": _("Printing Method")},
+                    {"name": "color", "label": _("Color")},
+                    {"name": "surface_coating", "label": _("Surface Coating")},
+                    {"name": "finishing", "label": _("Finishing")},
+                ],
+                "ids": self.item_line_ids_adaption_work.ids,
+                "domain": [],
+                "import_compat": False
+            })
+        }
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/export/xlsx?{urlencode(data)}',
+            'target': 'self',
+        }
 
     # Download Delivery
     def action_delivery_download(self):
-        return self.env.ref('ihhg_master.action_delivery')\
-            .with_context(landscape=True).report_action(self)
+        data = {
+            "data": json.dumps({
+                "model": 'scm.entry.item.line',
+                "fields": [
+                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "project_id", "label": _("Project Name")},
+                    {"name": "channel_id", "label": _("Channel")},
+                    {"name": "package_name", "label": _("Package Name")},
+                    {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "quantity", "label": _("Quantity")},
+                    {"name": "uom_id", "label": _("Units of Measure")},
+                    {"name": "delivery_address_ids", "label": _("Delivery Address")},
+                    {"name": "delivery_date", "label": _("Delivery Date")},
+                    {"name": "shipping_date", "label": _("Shipping Date")},
+                    {"name": "date_from", "label": _("Campaign Start")},
+                    {"name": "date_to", "label": _("Campaign End")},
+                ],
+                "ids": self.item_line_ids_delivery.ids,
+                "domain": [],
+                "import_compat": False
+            })
+        }
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/export/xlsx?{urlencode(data)}',
+            'target': 'self',
+        }

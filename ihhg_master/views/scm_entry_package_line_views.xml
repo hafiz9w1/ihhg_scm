@@ -9,6 +9,7 @@
           <field name="arch" type="xml">
               <tree string="Name" create="0" delete="0" editable="bottom">
                   <field name="package_id" readonly="1"/>
+                  <field name="package_name" readonly="1" optional="show"/>
                   <field name="delivery_address_id" options="{'no_create': True}"/>
                   <field name="quantity"/>
                   <field name="backup_quantity" optional="hide"/>

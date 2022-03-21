@@ -22,12 +22,16 @@
                         <group>
                             <field name="extra_instruction"/>
                             <field name="material"/>
+                            <field name="weight"/>
                             <field name="printing_medium"/>
                             <field name="packed_size"/>
                             <field name="display_size"/>
+                            <field name="description"/>
                         </group>
                         <group>
                             <field name="printing_method"/>
+                            <field name="final_dimension"/>
+                            <field name="open_dimension"/>
                             <field name="printing_color"/>
                             <field name="surface_coating"/>
                             <field name="finishing"/>
