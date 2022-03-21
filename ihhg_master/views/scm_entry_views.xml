@@ -196,7 +196,7 @@
                               <field name="item_total" optional="hide"/>
                               <field name="shipment_number" optional="hide"/>
                               <field name="shipment_name" optional="hide"/>
-                              <field name="delivery_address_ids" optional="hide"/>
+                              <field name="final_delivery_address_id" optional="hide"/>
                               <field name="delivery_date" optional="hide"/>
                               <field name="shipping_date" optional="hide"/>
                               <field name="date_from" optional="hide"/>
@@ -216,7 +216,7 @@
                               <field name="channel_id" string="Channel" />
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
-                              <field name="item_tags_ids" string="Brand Name"/>
+                              <field name="item_tags_names" string="Brand Name"/>
                               <field name="material" string="Material" optional="hide"/>
                               <field name="weight" string="Weight" optional="hide"/>
                               <field name="final_dimension" string="Final Dimension" optional="hide"/>
