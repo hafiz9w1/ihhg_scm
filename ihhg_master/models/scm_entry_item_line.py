@@ -37,7 +37,7 @@ class ItemLine (models.Model):
     final_dimension = fields.Char(string='Final Dimension', related='product_id.final_dimension')
     open_dimension = fields.Char(string='Open Dimension', related='product_id.open_dimension')
     printing_method = fields.Char(string='Printing Method', related='product_id.printing_method')
-    color = fields.Char(string='Color', related='product_id.color')
+    printing_color = fields.Char(string='Color', related='product_id.printing_color')
     surface_coating = fields.Char(string='Surface Coating', related='product_id.surface_coating')
     finishing = fields.Char(string='Finishing', related='product_id.finishing')
     packing_instruction = fields.Char(string='Packing Instruction', related='product_id.packing_instruction')
@@ -63,7 +63,7 @@ class ItemLine (models.Model):
     @api.depends('item_id.name')
     def _compute_name(self):
         for rec in self:
-            rec.name = rec.item_id.name
+            rec.name = rec.item_id.product_template_id.name
 
     # Select SCM date_from for Item item_date_from
     @api.depends('scm_id.date_from')

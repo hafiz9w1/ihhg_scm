@@ -9,14 +9,15 @@ class SelectionCriterium(models.Model):
     name = fields.Char(string='Name', compute="_compute_name")
     scm_id = fields.Many2one(comodel_name="scm.entry")
     package_id = fields.Many2one('ihh.package', string='Package')
+    package_name = fields.Char(string='Package Name', related="package_id.long_name")
     delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_id', '=', package_id)]")
     quantity = fields.Integer(compute='_compute_quantity', store=True, readonly=False)
     total_quantity = fields.Integer(compute="_compute_total_quantity")
     backup_quantity = fields.Integer(compute="_compute_total_quantity")
     scm_entry_item_line_id = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
     brand_id = fields.Many2one('ihh.item.tag', string='Brand Name')
-    scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name')
-    scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID')
+    scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
+    scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
 
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
@@ -34,12 +35,12 @@ class SelectionCriterium(models.Model):
     @api.depends('scm_id.date_from', 'brand_id.name', 'package_id.name', 'package_id.naming_convention')
     def _compute_scm_package_name(self):
         for rec in self:
-            name = rec.package_id.name
             brand = rec.brand_id.name
-            package_name = rec.package_id.name
-            month = rec.scm_id.date_from.strftime('%m')
-            year = rec.scm_id.date_from.strftime('%y')
-            day = rec.scm_id.date_from.strftime('%d')
+            package_name = rec.package_id.long_name
+            month = rec.scm_id.date_from.strftime('%m') if rec.scm_id.date_from else ""
+            year = rec.scm_id.date_from.strftime('%y') if rec.scm_id.date_from else ""
+            day = rec.scm_id.date_from.strftime('%d') if rec.scm_id.date_from else ""
+            name = f"{year}{month}_{brand}_{package_name}"
             if rec.package_id.naming_convention == 'LW':
                 name = f"【{brand}_{package_name}】{month}{year}_プロモーション②"
             if rec.package_id.naming_convention == 'DY':
@@ -52,7 +53,10 @@ class SelectionCriterium(models.Model):
     @api.depends('scm_id.date_from', 'scm_id.category_id.name', 'package_id.name')
     def _compute_scm_package_id(self):
         for rec in self:
-            rec.scm_package_id = (rec.scm_id.date_from.strftime("%y") + rec.scm_id.date_from.strftime("%d") + rec.scm_id.date_from.strftime("%m") + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
+            year = rec.scm_id.date_from.strftime("%y") if rec.scm_id.date_from else ""
+            day = rec.scm_id.date_from.strftime("%d") if rec.scm_id.date_from else ""
+            month = rec.scm_id.date_from.strftime("%m") if rec.scm_id.date_from else ""
+            rec.scm_package_id = (year + day + month + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
 
     # Preset quantity from package_id.quantity
     @api.depends('package_id.quantity')

@@ -9,6 +9,9 @@
                 <field name="scm_id" />
                 <field name="project_id" />
             </xpath>
+            <xpath expr="//field[@name='dispose_after']" position="after">
+                <field name="disposal_date" />
+            </xpath>
         </field>
     </record>
 
@@ -65,12 +68,14 @@
                     <group>
                         <field name="show_in_vc" />
                         <field name="dispose_after" />
+                        <field name="disposal_date" />
                     </group>
                 </group>
                 <group name="specific_info">
                     <group>
                         <field name="extra_instruction"/>
                         <field name="material"/>
+                        <field name="weight"/>
                         <field name="printing_medium"/>
                         <field name="packed_size"/>
                         <field name="display_size"/>
@@ -80,8 +85,8 @@
                         <field name="printing_method"/>
                         <field name="final_dimension"/>
                         <field name="open_dimension"/>
+                        <field name="printing_color"/>
                         <field name="surface_coating"/>
-                        <field name="color"/>
                         <field name="finishing"/>
                         <field name="packing_instruction"/>
                     </group>

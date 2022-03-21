@@ -1,3 +1,4 @@
+from datetime import timedelta
 import json
 from odoo import models, fields, api, _
 from urllib.parse import urlencode
@@ -85,15 +86,20 @@ class SCMEntry(models.Model):
                     # copy value from template
                     'extra_instruction': line.item_id.product_template_id.extra_instruction,
                     'material': line.item_id.product_template_id.material,
+                    'weight': line.item_id.product_template_id.weight,
                     'printing_medium': line.item_id.product_template_id.printing_medium,
                     'packed_size': line.item_id.product_template_id.packed_size,
                     'display_size': line.item_id.product_template_id.display_size,
                     'printing_method': line.item_id.product_template_id.printing_method,
-                    'printing_color': line.item_id.product_template_id.printing_color,
+                    'final_dimension': line.item_id.product_template_id.final_dimension,
+                    'open_dimension': line.item_id.product_template_id.open_dimension,
                     'surface_coating': line.item_id.product_template_id.surface_coating,
+                    'printing_color': line.item_id.product_template_id.printing_color,
                     'finishing': line.item_id.product_template_id.finishing,
                     'packing_instruction': line.item_id.product_template_id.packing_instruction,
+                    'description': line.item_id.product_template_id.description,
                     'ihh_notes': line.item_id.product_template_id.ihh_notes,
+                    'disposal_date': rec.date_to + timedelta(days=line.item_id.product_template_id.dispose_after),
                 })
                 line.write({
                     "product_id": product.id

@@ -39,7 +39,6 @@ Functionalities:
         'product',
         'project',
         'account',
-        'stock',
     ],
 
     'data': [
