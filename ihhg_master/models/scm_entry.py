@@ -177,7 +177,7 @@ class SCMEntry(models.Model):
                     {"name": "item_total", "label": _("Items per package (TBC)")},
                     {"name": "shipment_number", "label": _("Shipment Number")},
                     {"name": "shipment_name", "label": _("Shipment Name")},
-                    {"name": "delivery_address_ids", "label": _("Delivery Address")},
+                    {"name": "final_delivery_address_id", "label": _("Delivery Address")},
                     {"name": "delivery_date", "label": _("Delivery Date")},
                     {"name": "shipping_date", "label": _("Shipping Date")},
                     {"name": "date_from", "label": _("Campaign Start")},
