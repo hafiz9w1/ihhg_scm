@@ -19,7 +19,7 @@ class SelectionCriterium(models.Model):
     scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
     scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
 
-    delivery_address = fields.Char(string='Delivery Address - Full', related='delivery_address_id.street')
+    delivery_address = fields.Char(compute="_compute_delivery_address", string='Delivery Address - Full')
     item_date_from = fields.Date(string='Finally Modified Date', related='scm_entry_item_line_id.item_date_from')
     project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
     channel_id = fields.Many2one(string='Channel', related='package_id.channel_id')
@@ -83,3 +83,8 @@ class SelectionCriterium(models.Model):
     def _compute_quantity(self):
         for rec in self:
             rec.quantity = rec.package_id.quantity
+
+    @api.depends('delivery_address_id.street', 'delivery_address_id.street2', 'delivery_address_id.city', 'delivery_address_id.state_id.name', 'delivery_address_id.country_id.name')
+    def _compute_delivery_address(self):
+        for rec in self:
+            rec.delivery_address = f"{rec.delivery_address_id.street},{rec.delivery_address_id.street2},{rec.delivery_address_id.city},{rec.delivery_address_id.state_id.name},{rec.delivery_address_id.country_id.name}."

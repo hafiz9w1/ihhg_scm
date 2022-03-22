@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 class SCMEntry(models.Model):
@@ -22,20 +22,23 @@ class SCMEntry(models.Model):
 
     # Add project to SCM
     def action_add_project(self):
-        self.ensure_one()
-        add_project = self.env['scm.entry.add.project'].create({
-            "scm_id": self.id
-        })
+        for rec in self:
+            if not rec.date_from:
+                raise UserError(_('Please input Campaign Duration'))
+            self.ensure_one()
+            add_project = self.env['scm.entry.add.project'].create({
+                "scm_id": rec.id
+            })
 
-        context = dict(self.env.context)
+            context = dict(self.env.context)
 
-        return {
-            'name': _('Select Project'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'view_id': self.env.ref('ihhg_project.view_scm_entry_add_project').id,
-            'res_model': 'scm.entry.add.project',
-            'res_id': add_project.id,
-            'target': 'new',
-            'context': context
-        }
+            return {
+                'name': _('Select Project'),
+                'type': 'ir.actions.act_window',
+                'view_mode': 'form',
+                'view_id': self.env.ref('ihhg_project.view_scm_entry_add_project').id,
+                'res_model': 'scm.entry.add.project',
+                'res_id': add_project.id,
+                'target': 'new',
+                'context': context
+            }

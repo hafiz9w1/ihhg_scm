@@ -196,9 +196,10 @@
                               <field name="quantity" optional="hide"/>
                               <field name="uom_id" optional="hide"/>
                               <field name="item_total" optional="hide"/>
-                              <field name="shipment_number" optional="hide"/>
-                              <field name="shipment_name" optional="hide"/>
+                              <field name="scm_package_id" optional="hide"/>
+                              <field name="scm_package_name" optional="hide"/>
                               <field name="final_delivery_address_id" optional="hide"/>
+                              <field name="delivery_address" optional="hide"/>
                               <field name="delivery_date" optional="hide"/>
                               <field name="shipping_date" optional="hide"/>
                               <field name="date_from" optional="hide"/>
@@ -228,6 +229,8 @@
                               <field name="printing_color" string="Color" optional="hide"/>
                               <field name="surface_coating" string="Surface Coating" optional="hide"/>
                               <field name="finishing" string="Finishing" optional="hide"/>
+                              <field name="date_from" optional="hide"/>
+                              <field name="date_to" optional="hide"/>
                           </tree>
                         </field>
                       </page>
