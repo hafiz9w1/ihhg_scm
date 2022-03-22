@@ -19,6 +19,26 @@ class SelectionCriterium(models.Model):
     scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
     scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
 
+    delivery_address = fields.Char(string='Delivery Address - Full', related='delivery_address_id.street')
+    item_date_from = fields.Date(string='Finally Modified Date', related='scm_entry_item_line_id.item_date_from')
+    project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
+    channel_id = fields.Many2one(string='Channel', related='package_id.channel_id')
+    uom_id = fields.Many2one(string='Units of Measure', related='scm_entry_item_line_id.product_id.uom_id')
+    delivery_date = fields.Date(string='Delivery Date', related='scm_entry_item_line_id.delivery_date')
+    shipping_date = fields.Date(string='Shipping Date', related='scm_entry_item_line_id.shipping_date')
+    date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
+    date_to = fields.Date(string='Campaign End', related='scm_id.date_to')
+    extra = fields.Text(string='Extra info...', related='scm_entry_item_line_id.extra')
+    description = fields.Text(string='Description')
+    vacant_instruction = fields.Text(string='Vacant Instruction')
+    tbd = fields.Text(string='TBD')
+    seihin_number = fields.Text(string='Seihin Number')
+    seihin_name = fields.Text(string='Seihin Name')
+    packing_size = fields.Text(string='Packing Size')
+    packing_weight = fields.Text(string='Packing weight')
+    manufacturing_company_name = fields.Text(string='Manufacturing Company Name')
+    manufacturer_location = fields.Text(string='Manufacturer location')
+
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
     def _compute_name(self):

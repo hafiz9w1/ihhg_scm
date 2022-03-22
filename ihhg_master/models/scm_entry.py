@@ -19,7 +19,9 @@ class SCMEntry(models.Model):
     item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
     item_line_ids_mass_production = fields.One2many(string='Items Mass Production', related='item_line_ids')
     item_line_ids_adaption_work = fields.One2many(string='Items Adaption Work', related='item_line_ids')
-    item_line_ids_delivery = fields.One2many(string='Items Delivery', related='item_line_ids')
+
+    package_line_ids_delivery = fields.One2many(string='Items Delivery', related='package_line_ids')
+
     allocated_item_ids = fields.Many2many(comodel_name="ihh.package.item", compute="_compute_allocated_item_ids")
     package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
     allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
@@ -230,22 +232,33 @@ class SCMEntry(models.Model):
     def action_delivery_download(self):
         data = {
             "data": json.dumps({
-                "model": 'scm.entry.item.line',
+                "model": 'scm.entry.package.line',
                 "fields": [
-                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "delivery_address_id", "label": _("Delivery Address")},
+                    {"name": "delivery_address", "label": _("Delivery Address - Full")},
+                    {"name": "item_date_from", "label": _("Finally Modified Date")},
                     {"name": "project_id", "label": _("Project Name")},
                     {"name": "channel_id", "label": _("Channel")},
                     {"name": "package_name", "label": _("Package Name")},
                     {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "description", "label": _("Description")},
+                    {"name": "vacant_instruction", "label": _("Vacant Instruction")},
                     {"name": "quantity", "label": _("Quantity")},
                     {"name": "uom_id", "label": _("Units of Measure")},
-                    {"name": "delivery_address_ids", "label": _("Delivery Address")},
+                    {"name": "tbd", "label": _("TBD")},
+                    {"name": "seihin_number", "label": _("Seihin Number")},
+                    {"name": "seihin_name", "label": _("Seihin Name")},
                     {"name": "delivery_date", "label": _("Delivery Date")},
                     {"name": "shipping_date", "label": _("Shipping Date")},
                     {"name": "date_from", "label": _("Campaign Start")},
                     {"name": "date_to", "label": _("Campaign End")},
+                    {"name": "packing_size", "label": _("Packing Size")},
+                    {"name": "packing_weight", "label": _("Packing weight")},
+                    {"name": "manufacturing_company_name", "label": _("Manufacturing Company Name")},
+                    {"name": "manufacturer_location", "label": _("Manufacturer location")},
+                    {"name": "extra", "label": _("Extra Info...")},
                 ],
-                "ids": self.item_line_ids_delivery.ids,
+                "ids": self.package_line_ids_delivery.ids,
                 "domain": [],
                 "import_compat": False
             })
