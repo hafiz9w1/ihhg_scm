@@ -61,7 +61,7 @@ class Project(models.Model):
     def change_deadline_from_scm(self, scm_start_date):
         self.ensure_one()
         self = self.with_context(date_auto_shift=False)
-        theoric_deadline = scm_start_date - timedelta(weeks=2)
+        theoric_deadline = scm_start_date - timedelta(days=3)
         delta = self.project_date_deadline - theoric_deadline
         vals = {
             "project_date_deadline": theoric_deadline,

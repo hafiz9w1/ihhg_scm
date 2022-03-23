@@ -113,6 +113,8 @@
         <field name="arch" type="xml">
             <search string="Search Item Line">
                 <field name="item_id"/>
+                <field name="product_template_id"/>
+                <field name="product_id"/>
                 <field name="package_id"/>
                 <field name="item_date_from"/>
                 <field name="item_date_to"/>
@@ -122,6 +124,8 @@
                     <filter string="SCM" name="group_scm_id" domain="[]" context="{'group_by': 'scm_id'}"/>
                     <filter string="channel" name="group_channel_id" domain="[]" context="{'group_by': 'channel_id'}"/>
                     <filter string="Package" name="group_package_id" domain="[]" context="{'group_by': 'package_id'}"/>
+                    <filter string="POSM Product Name" name="group_product_template_id" domain="[]" context="{'group_by': 'product_template_id'}"/>
+                    <filter string="POSM Item ID" name="group_product_id" domain="[]" context="{'group_by': 'product_id'}"/>
                 </group>
             </search>
         </field>

@@ -9,6 +9,7 @@ class ItemLine (models.Model):
     name = fields.Char(string='Name', compute="_compute_name")
     item_id = fields.Many2one('ihh.package.item', string='Item', required=True)
     sequence = fields.Integer(string='Sequence', readonly=True, default=10)
+    product_template_id = fields.Many2one('product.template', related="item_id.product_template_id", string='POSM Template Item Name', store=True)
     product_id = fields.Many2one('product.product', string='POSM Item ID', readonly=True)
     scm_id = fields.Many2one('scm.entry', string='SCM Reference', readonly=True, ondelete='cascade', index=True)
     allowed_channel_ids = fields.Many2many('ihh.channel', string='Allowed Channel', related="scm_id.channel_ids")
