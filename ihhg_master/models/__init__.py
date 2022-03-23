@@ -12,3 +12,4 @@ from . import item_tags
 from . import category
 from . import campaign_type
 from . import res_config_settings
+from . import scm_entry_delivery_line

@@ -150,6 +150,7 @@
                                 <field name="shipping_allocating" optional="show"/>
                                 <field name="quantity"/>
                                 <field name="item_tags_ids" widget="many2many_tags" optional="show"/>
+                                <field name="extra"/>
                             </tree>
                           </field>
                           <group name="note_group" col="6" class="mt-2 mt-md-0">
@@ -180,6 +181,7 @@
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
                               <field name="item_tags_names" string="Brand Name"/>
+                              <field name="extra"/>
 
                               <field name="material" optional="hide"/>
                               <field name="weight" optional="hide"/>
@@ -194,9 +196,10 @@
                               <field name="quantity" optional="hide"/>
                               <field name="uom_id" optional="hide"/>
                               <field name="item_total" optional="hide"/>
-                              <field name="shipment_number" optional="hide"/>
-                              <field name="shipment_name" optional="hide"/>
+                              <field name="scm_package_id" optional="hide"/>
+                              <field name="scm_package_name" optional="hide"/>
                               <field name="final_delivery_address_id" optional="hide"/>
+                              <field name="delivery_address" optional="hide"/>
                               <field name="delivery_date" optional="hide"/>
                               <field name="shipping_date" optional="hide"/>
                               <field name="date_from" optional="hide"/>
@@ -217,6 +220,7 @@
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
                               <field name="item_tags_names" string="Brand Name"/>
+                              <field name="extra"/>
                               <field name="material" string="Material" optional="hide"/>
                               <field name="weight" string="Weight" optional="hide"/>
                               <field name="final_dimension" string="Final Dimension" optional="hide"/>
@@ -225,6 +229,8 @@
                               <field name="printing_color" string="Color" optional="hide"/>
                               <field name="surface_coating" string="Surface Coating" optional="hide"/>
                               <field name="finishing" string="Finishing" optional="hide"/>
+                              <field name="date_from" optional="hide"/>
+                              <field name="date_to" optional="hide"/>
                           </tree>
                         </field>
                       </page>
@@ -233,20 +239,30 @@
 
                         <button name="action_delivery_download" type="object" string="Download" class="oe_highlight"/>
 
-                        <field name="item_line_ids_delivery" context="{'scm_id': id}">
+                        <field name="package_line_ids_delivery" context="{'scm_id': id}">
                             <tree string="SCM Item Delivery" >
-                                <field name="item_date_from" string="Finally Modified Date"/>
+                                <field name="final_modify_date" string="Finally Modified Date"/>
+                                <field name="delivery_address_id" string="Delivery Address"/>
+                                <field name="delivery_address" string="Delivery Address - Full"/>
                                 <field name="project_id" string="Project Name"/>
                                 <field name="channel_id" string="Channel" />
                                 <field name="package_name" string="Packing Name"/>
                                 <field name="package_id" string="Packing ID"/>
-                                <field name="quantity" optional="hide"/>
+                                <field name="extra" optional="hide"/>
+                                <field name="description" string="Description" optional="hide"/>
+                                <field name="vacant_instruction" string="Vacant Instruction" optional="hide"/>
+                                <field name="quantity" optional="show"/>
                                 <field name="uom_id" optional="hide"/>
-                                <field name="delivery_address_ids" optional="hide"/>
-                                <field name="delivery_date" optional="hide"/>
-                                <field name="shipping_date" optional="hide"/>
+                                <field name="scm_package_id" string="SCM package ID" optional="hide"/>
+                                <field name="scm_package_name" string="SCM Pacakge Name" optional="hide"/>
+                                <field name="delivery_date" optional="display"/>
+                                <field name="shipping_date" optional="display"/>
                                 <field name="date_from" optional="hide"/>
                                 <field name="date_to" optional="hide"/>
+                                <field name="final_dimension" string="TBD" optional="hide"/>
+                                <field name="weight" string="Packing weight" optional="hide"/>
+                                <field name="manufacturing_company_name" string="Manufacturing Company Name" optional="hide"/>
+                                <field name="manufacturer_location" string="Manufacturer location" optional="hide"/>
                             </tree>
                         </field>
                       </page>

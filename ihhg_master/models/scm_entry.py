@@ -10,7 +10,7 @@ class SCMEntry(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True)
+    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True, copy=False)
     project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     user_budget_id = fields.Many2one('res.users', string='Budget Owner', default=lambda self: self.env.user.has_group('ihhg_master.group_scm_cp_team'), tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
@@ -19,9 +19,11 @@ class SCMEntry(models.Model):
     item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
     item_line_ids_mass_production = fields.One2many(string='Items Mass Production', related='item_line_ids')
     item_line_ids_adaption_work = fields.One2many(string='Items Adaption Work', related='item_line_ids')
-    item_line_ids_delivery = fields.One2many(string='Items Delivery', related='item_line_ids')
+
+    package_line_ids_delivery = fields.One2many(comodel_name="scm.entry.delivery.line", inverse_name="scm_id", string='Items Delivery', readonly=True)
+
     allocated_item_ids = fields.Many2many(comodel_name="ihh.package.item", compute="_compute_allocated_item_ids")
-    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
+    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=False)
     allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
     channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
     package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
@@ -104,12 +106,14 @@ class SCMEntry(models.Model):
                 line.write({
                     "product_id": product.id
                 })
+                line.create_delivery_line()
         self.state = 'phase2'
 
     # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
     def action_scm_reset(self):
         item_product_product = self.env['product.product'].search([('scm_id', 'in', self.ids)])
         item_product_product.unlink()
+        self.write({"package_line_ids_delivery": [(5, 0, 0)]})
 
         self.state = 'lock'
 
@@ -175,9 +179,10 @@ class SCMEntry(models.Model):
                     {"name": "quantity", "label": _("Quantity")},
                     {"name": "uom_id", "label": _("Units of Measure")},
                     {"name": "item_total", "label": _("Items per package (TBC)")},
-                    {"name": "shipment_number", "label": _("Shipment Number")},
-                    {"name": "shipment_name", "label": _("Shipment Name")},
+                    {"name": "scm_package_id", "label": _("SCM Package ID")},
+                    {"name": "scm_package_name", "label": _("SCM Package Name")},
                     {"name": "final_delivery_address_id", "label": _("Delivery Address")},
+                    {"name": "delivery_address", "label": _("Delivery Address - Full")},
                     {"name": "delivery_date", "label": _("Delivery Date")},
                     {"name": "shipping_date", "label": _("Shipping Date")},
                     {"name": "date_from", "label": _("Campaign Start")},
@@ -214,6 +219,8 @@ class SCMEntry(models.Model):
                     {"name": "printing_color", "label": _("Color")},
                     {"name": "surface_coating", "label": _("Surface Coating")},
                     {"name": "finishing", "label": _("Finishing")},
+                    {"name": "date_from", "label": _("Campaign Start")},
+                    {"name": "date_to", "label": _("Campaign End")},
                 ],
                 "ids": self.item_line_ids_adaption_work.ids,
                 "domain": [],
@@ -230,22 +237,32 @@ class SCMEntry(models.Model):
     def action_delivery_download(self):
         data = {
             "data": json.dumps({
-                "model": 'scm.entry.item.line',
+                "model": 'scm.entry.delivery.line',
                 "fields": [
-                    {"name": "item_date_from", "label": _("Date")},
+                    {"name": "final_modify_date", "label": _("Finally Modified Date")},
+                    {"name": "delivery_address_id", "label": _("Delivery Address")},
+                    {"name": "delivery_address", "label": _("Delivery Address - Full")},
                     {"name": "project_id", "label": _("Project Name")},
                     {"name": "channel_id", "label": _("Channel")},
                     {"name": "package_name", "label": _("Package Name")},
                     {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "description", "label": _("Description")},
+                    {"name": "vacant_instruction", "label": _("Vacant Instruction")},
                     {"name": "quantity", "label": _("Quantity")},
                     {"name": "uom_id", "label": _("Units of Measure")},
-                    {"name": "delivery_address_ids", "label": _("Delivery Address")},
+                    {"name": "scm_package_id", "label": _("Seihin Number")},
+                    {"name": "scm_package_name", "label": _("Seihin Name")},
                     {"name": "delivery_date", "label": _("Delivery Date")},
                     {"name": "shipping_date", "label": _("Shipping Date")},
                     {"name": "date_from", "label": _("Campaign Start")},
                     {"name": "date_to", "label": _("Campaign End")},
+                    {"name": "final_dimension", "label": _("Packing Size")},
+                    {"name": "weight", "label": _("Packing weight")},
+                    {"name": "manufacturing_company_name", "label": _("Manufacturing Company Name")},
+                    {"name": "manufacturer_location", "label": _("Manufacturer location")},
+                    {"name": "extra", "label": _("Extra Info...")},
                 ],
-                "ids": self.item_line_ids_delivery.ids,
+                "ids": self.package_line_ids_delivery.ids,
                 "domain": [],
                 "import_compat": False
             })

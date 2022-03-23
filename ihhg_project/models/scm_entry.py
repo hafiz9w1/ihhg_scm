@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 class SCMEntry(models.Model):
@@ -23,6 +23,9 @@ class SCMEntry(models.Model):
     # Add project to SCM
     def action_add_project(self):
         self.ensure_one()
+        if not self.date_from:
+            raise UserError(_('Please input Campaign Duration'))
+
         add_project = self.env['scm.entry.add.project'].create({
             "scm_id": self.id
         })

@@ -20,7 +20,7 @@
           <xpath expr="//page[@name='contact_addresses']" position="before">
               <page name="extra_address_page" string="Extra Addresses" autofocus="autofocus">
                 <group>
-                  <field name="package_id" />
+                  <field name="package_ids" />
                 </group>
 
                   <!-- <sheet>

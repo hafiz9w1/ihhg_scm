@@ -10,12 +10,12 @@ class SelectionCriterium(models.Model):
     scm_id = fields.Many2one(comodel_name="scm.entry")
     package_id = fields.Many2one('ihh.package', string='Package')
     package_name = fields.Char(string='Package Name', related="package_id.long_name")
-    delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_id', '=', package_id)]")
+    delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_ids', 'in', package_id)]")
     quantity = fields.Integer(compute='_compute_quantity', store=True, readonly=False)
     total_quantity = fields.Integer(compute="_compute_total_quantity")
     backup_quantity = fields.Integer(compute="_compute_total_quantity")
-    scm_entry_item_line_id = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
-    brand_id = fields.Many2one('ihh.item.tag', string='Brand Name')
+    scm_entry_item_line_ids = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
+    brand_id = fields.Many2one('ihh.item.tag', string='Brand Name', inverse="_inverse_add_brand_to_items")
     scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
     scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
 
@@ -63,3 +63,9 @@ class SelectionCriterium(models.Model):
     def _compute_quantity(self):
         for rec in self:
             rec.quantity = rec.package_id.quantity
+
+    def _inverse_add_brand_to_items(self):
+        for rec in self:
+            rec.scm_entry_item_line_ids.write({
+                "item_tags_ids": (4, rec.brand_id.id, 0)
+            })
