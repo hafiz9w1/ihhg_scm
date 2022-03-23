@@ -26,6 +26,7 @@ class ItemLine (models.Model):
         ('allocating', 'Allocating')
     ], string='Shipping / Allocating')
     quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
+    main_address_quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     item_tags_names = fields.Char(compute="_compute_item_tags_names")
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
@@ -46,9 +47,8 @@ class ItemLine (models.Model):
     item_total = fields.Integer(string='Items per package (TBC)', related='item_id.package_id.item_total')
     scm_package_name = fields.Char(string='SCM Package Name', related='scm_package_line_id.scm_package_name')
     scm_package_id = fields.Char(string='SCM Package ID', related='scm_package_line_id.scm_package_id')
-    delivery_address_ids = fields.One2many(string='Delivery Addresses', related='item_id.package_id.delivery_address_ids')
     final_delivery_address_id = fields.Many2one(string='Delivery Address', related='scm_package_line_id.delivery_address_id')
-    delivery_address = fields.Char(string='Delivery Address - Full', related='scm_package_line_id.delivery_address')
+    delivery_address = fields.Char(string='Delivery Address - Full', related='scm_package_line_id.delivery_address_id.contact_address_complete')
     delivery_date = fields.Date(string='Delivery Date', compute='_compute_delivery_date')
     shipping_date = fields.Date(string='Shipping Date', compute='_compute_shipping_date')
     date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
@@ -61,6 +61,7 @@ class ItemLine (models.Model):
     def _compute_quantity(self):
         for rec in self:
             rec.quantity = rec.scm_package_line_id.total_quantity * rec.item_id.package_quantity
+            rec.main_address_quantity = rec.scm_package_line_id.quantity * rec.item_id.package_quantity
 
     # TODO: implement more complexe logic if needed
     @api.depends('item_id.name')
@@ -171,3 +172,31 @@ class ItemLine (models.Model):
         for p in packages_lines:
             if p.package_id not in package_item_lines:
                 p.unlink()
+
+    def get_address_id_quantity(self):
+        self.ensure_one()
+        result = [{
+            "delivery_address_id": self.final_delivery_address_id.id,
+            "quantity": self.main_address_quantity
+        }]
+
+        for second_add in self.package_id.secondary_address_ids:
+            result.append({
+                "delivery_address_id": second_add.address_id.id,
+                "quantity": second_add.backup_quantity
+            })
+
+        return result
+
+    def create_delivery_line(self):
+        self.ensure_one()
+        vals = []
+        address_qunatity = self.get_address_id_quantity()
+        for ad in address_qunatity:
+            vals.append({
+                "scm_id": self.scm_id.id,
+                "scm_entry_item_line_id": self.id,
+                "delivery_address_id": ad.get('delivery_address_id'),
+                "quantity": ad.get("quantity"),
+            })
+        self.env['scm.entry.delivery.line'].sudo().create(vals)

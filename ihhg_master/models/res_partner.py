@@ -4,7 +4,7 @@ from odoo import models, fields
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    package_id = fields.Many2one(comodel_name="ihh.package")
+    package_ids = fields.Many2many(comodel_name="ihh.package")
     # cpid = fields.Datetime(string='CPID')
     # date_from = fields.Datetime(string='Date From')
     # date_to = fields.Datetime(string='Date To')

@@ -10,34 +10,14 @@ class SelectionCriterium(models.Model):
     scm_id = fields.Many2one(comodel_name="scm.entry")
     package_id = fields.Many2one('ihh.package', string='Package')
     package_name = fields.Char(string='Package Name', related="package_id.long_name")
-    delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_id', '=', package_id)]")
+    delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_ids', 'in', package_id)]")
     quantity = fields.Integer(compute='_compute_quantity', store=True, readonly=False)
     total_quantity = fields.Integer(compute="_compute_total_quantity")
     backup_quantity = fields.Integer(compute="_compute_total_quantity")
-    scm_entry_item_line_id = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
-    brand_id = fields.Many2one('ihh.item.tag', string='Brand Name')
+    scm_entry_item_line_ids = fields.One2many(comodel_name="scm.entry.item.line", inverse_name="scm_package_line_id", readonly=True)
+    brand_id = fields.Many2one('ihh.item.tag', string='Brand Name', inverse="_inverse_add_brand_to_items")
     scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
     scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
-
-    delivery_address = fields.Char(compute="_compute_delivery_address", string='Delivery Address - Full')
-    item_date_from = fields.Date(string='Finally Modified Date', related='scm_entry_item_line_id.item_date_from')
-    project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
-    channel_id = fields.Many2one(string='Channel', related='package_id.channel_id')
-    uom_id = fields.Many2one(string='Units of Measure', related='scm_entry_item_line_id.product_id.uom_id')
-    delivery_date = fields.Date(string='Delivery Date', related='scm_entry_item_line_id.delivery_date')
-    shipping_date = fields.Date(string='Shipping Date', related='scm_entry_item_line_id.shipping_date')
-    date_from = fields.Date(string='Campaign Start', related='scm_id.date_from')
-    date_to = fields.Date(string='Campaign End', related='scm_id.date_to')
-    extra = fields.Text(string='Extra info...', related='scm_entry_item_line_id.extra')
-    description = fields.Text(string='Description')
-    vacant_instruction = fields.Text(string='Vacant Instruction')
-    tbd = fields.Text(string='TBD')
-    seihin_number = fields.Text(string='Seihin Number')
-    seihin_name = fields.Text(string='Seihin Name')
-    packing_size = fields.Text(string='Packing Size')
-    packing_weight = fields.Text(string='Packing weight')
-    manufacturing_company_name = fields.Text(string='Manufacturing Company Name')
-    manufacturer_location = fields.Text(string='Manufacturer location')
 
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
@@ -84,7 +64,8 @@ class SelectionCriterium(models.Model):
         for rec in self:
             rec.quantity = rec.package_id.quantity
 
-    @api.depends('delivery_address_id.street', 'delivery_address_id.street2', 'delivery_address_id.city', 'delivery_address_id.state_id.name', 'delivery_address_id.country_id.name')
-    def _compute_delivery_address(self):
+    def _inverse_add_brand_to_items(self):
         for rec in self:
-            rec.delivery_address = f"{rec.delivery_address_id.street},{rec.delivery_address_id.street2},{rec.delivery_address_id.city},{rec.delivery_address_id.state_id.name},{rec.delivery_address_id.country_id.name}."
+            rec.scm_entry_item_line_ids.write({
+                "item_tags_ids": (4, rec.brand_id.id, 0)
+            })

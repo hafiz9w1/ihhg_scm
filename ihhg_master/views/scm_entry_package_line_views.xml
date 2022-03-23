@@ -43,7 +43,7 @@
                     </group>
                     <group>
                         <!-- TODO - add context to be able to create line only from package -->
-                        <field name="scm_entry_item_line_id" context="{'tree_view_ref': 'ihhg_master.view_item_line_tree_edit_bottom', 'default_package_id': package_id, 'default_scm_package_line_id': id}"/>
+                        <field name="scm_entry_item_line_ids" context="{'tree_view_ref': 'ihhg_master.view_item_line_tree_edit_bottom', 'default_package_id': package_id, 'default_scm_package_line_id': id}"/>
                     </group>
               </sheet>
               </form>

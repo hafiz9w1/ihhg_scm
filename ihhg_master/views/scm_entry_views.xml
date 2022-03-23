@@ -241,27 +241,26 @@
 
                         <field name="package_line_ids_delivery" context="{'scm_id': id}">
                             <tree string="SCM Item Delivery" >
+                                <field name="final_modify_date" string="Finally Modified Date"/>
                                 <field name="delivery_address_id" string="Delivery Address"/>
                                 <field name="delivery_address" string="Delivery Address - Full"/>
-                                <field name="scm_entry_item_line_id" string="Finally Modified Date"/>
                                 <field name="project_id" string="Project Name"/>
                                 <field name="channel_id" string="Channel" />
                                 <field name="package_name" string="Packing Name"/>
                                 <field name="package_id" string="Packing ID"/>
-                                <field name="extra"/>
+                                <field name="extra" optional="hide"/>
                                 <field name="description" string="Description" optional="hide"/>
                                 <field name="vacant_instruction" string="Vacant Instruction" optional="hide"/>
-                                <field name="quantity" optional="hide"/>
+                                <field name="quantity" optional="show"/>
                                 <field name="uom_id" optional="hide"/>
-                                <field name="tbd" string="TBD" optional="hide"/>
-                                <field name="seihin_number" string="Seihin Number" optional="hide"/>
-                                <field name="seihin_name" string="Seihin Name" optional="hide"/>
-                                <field name="delivery_date" optional="hide"/>
-                                <field name="shipping_date" optional="hide"/>
+                                <field name="scm_package_id" string="SCM package ID" optional="hide"/>
+                                <field name="scm_package_name" string="SCM Pacakge Name" optional="hide"/>
+                                <field name="delivery_date" optional="display"/>
+                                <field name="shipping_date" optional="display"/>
                                 <field name="date_from" optional="hide"/>
                                 <field name="date_to" optional="hide"/>
-                                <field name="packing_size" string="TBD" optional="hide"/>
-                                <field name="packing_weight" string="Packing weight" optional="hide"/>
+                                <field name="final_dimension" string="TBD" optional="hide"/>
+                                <field name="weight" string="Packing weight" optional="hide"/>
                                 <field name="manufacturing_company_name" string="Manufacturing Company Name" optional="hide"/>
                                 <field name="manufacturer_location" string="Manufacturer location" optional="hide"/>
                             </tree>

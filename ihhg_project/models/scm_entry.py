@@ -22,23 +22,23 @@ class SCMEntry(models.Model):
 
     # Add project to SCM
     def action_add_project(self):
-        for rec in self:
-            if not rec.date_from:
-                raise UserError(_('Please input Campaign Duration'))
-            self.ensure_one()
-            add_project = self.env['scm.entry.add.project'].create({
-                "scm_id": rec.id
-            })
+        self.ensure_one()
+        if not self.date_from:
+            raise UserError(_('Please input Campaign Duration'))
 
-            context = dict(self.env.context)
+        add_project = self.env['scm.entry.add.project'].create({
+            "scm_id": self.id
+        })
 
-            return {
-                'name': _('Select Project'),
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'view_id': self.env.ref('ihhg_project.view_scm_entry_add_project').id,
-                'res_model': 'scm.entry.add.project',
-                'res_id': add_project.id,
-                'target': 'new',
-                'context': context
-            }
+        context = dict(self.env.context)
+
+        return {
+            'name': _('Select Project'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_id': self.env.ref('ihhg_project.view_scm_entry_add_project').id,
+            'res_model': 'scm.entry.add.project',
+            'res_id': add_project.id,
+            'target': 'new',
+            'context': context
+        }
