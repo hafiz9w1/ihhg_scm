@@ -67,5 +67,5 @@ class SelectionCriterium(models.Model):
     def _inverse_add_brand_to_items(self):
         for rec in self:
             rec.scm_entry_item_line_ids.write({
-                "item_tags_ids": (4, rec.brand_id.id, 0)
+                "item_tags_ids": (6, 0, rec.brand_id.ids)
             })
