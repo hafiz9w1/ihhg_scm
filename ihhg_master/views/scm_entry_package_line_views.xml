@@ -17,10 +17,11 @@
                   <field name="brand_id"/>
                   <field name="scm_package_name"/>
                   <field name="scm_package_id"/>
-                  <field name="manufacturing_company_name"/>
-                  <field name="manufacturer_location"/>
-                  <field name="package_size"/>
-                  <field name="package_weight"/>
+                  <field name="state" invisible="1"/>
+                  <field name="manufacturing_company_name" attrs="{'invisible':[('state', 'in', ('draft', 'lock', 'cancel'))]}"/>
+                  <field name="manufacturer_location" attrs="{'invisible':[('state', 'in', ('draft', 'lock', 'cancel'))]}"/>
+                  <field name="package_size" attrs="{'invisible':[('state', 'in', ('draft', 'lock', 'cancel'))]}"/>
+                  <field name="package_weight" attrs="{'invisible':[('state', 'in', ('draft', 'lock', 'cancel'))]}"/>
               </tree>
           </field>
       </record>
@@ -44,7 +45,7 @@
                             <field name="scm_package_name"/>
                             <field name="scm_package_id"/>
                             <field name="manufacturing_company_name" />
-                            <field name="manufacturer_location"/>
+                            <field name="manufacturer_location" />
                             <field name="package_size" />
                             <field name="package_weight" />
                         </group>

@@ -23,6 +23,7 @@ class SelectionCriterium(models.Model):
     manufacturer_location = fields.Many2one('res.partner', string='Manufacturer location')
     package_size = fields.Text(string='Package Size')
     package_weight = fields.Text(string='Package Weight')
+    state = fields.Selection(string='State', related="scm_id.state")
 
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
