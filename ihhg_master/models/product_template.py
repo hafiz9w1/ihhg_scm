@@ -23,3 +23,7 @@ class ProductTemplate(models.Model):
     packing_instruction = fields.Char(string='Packing Instruction')
     description = fields.Char(string='Description')
     ihh_notes = fields.Text(string='Notes')
+
+    _sql_constraints = [
+        ('posm_item_id_uniq', 'unique (posm_item_id)', "POSM Item ID already exists!"),
+    ]

@@ -27,7 +27,7 @@ class ItemLine (models.Model):
         ('allocating', 'Allocating')
     ], string='Shipping / Allocating')
     quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
-    main_address_quantity = fields.Integer(string='Quantity', compute="_compute_quantity")
+    main_address_quantity = fields.Integer(string='Quantity ', compute="_compute_quantity")
     item_tags_ids = fields.Many2many('ihh.item.tag', string='Brand Name')
     item_tags_names = fields.Char(compute="_compute_item_tags_names")
     state = fields.Selection(related='scm_id.state', string='SCM Status', readonly=True, copy=False, store=True)
@@ -57,6 +57,7 @@ class ItemLine (models.Model):
     project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
     show_in_vc = fields.Boolean(related="item_id.product_template_id.show_in_vc", store=True)
     extra = fields.Text(string='Extra Info...')
+    active = fields.Boolean('Active', related="scm_id.active")
 
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
     def _compute_quantity(self):

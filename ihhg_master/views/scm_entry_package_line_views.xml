@@ -17,6 +17,10 @@
                   <field name="brand_id"/>
                   <field name="scm_package_name"/>
                   <field name="scm_package_id"/>
+                  <field name="manufacturing_company_name"/>
+                  <field name="manufacturer_location"/>
+                  <field name="package_size"/>
+                  <field name="package_weight"/>
               </tree>
           </field>
       </record>
@@ -39,6 +43,10 @@
                             <field name="brand_id"/>
                             <field name="scm_package_name"/>
                             <field name="scm_package_id"/>
+                            <field name="manufacturing_company_name" />
+                            <field name="manufacturer_location"/>
+                            <field name="package_size" />
+                            <field name="package_weight" />
                         </group>
                     </group>
                     <group>

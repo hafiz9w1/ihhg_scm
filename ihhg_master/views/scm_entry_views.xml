@@ -261,8 +261,10 @@
                                 <field name="date_to" optional="hide"/>
                                 <field name="final_dimension" string="TBD" optional="hide"/>
                                 <field name="weight" string="Packing weight" optional="hide"/>
-                                <field name="manufacturing_company_name" string="Manufacturing Company Name" optional="hide"/>
-                                <field name="manufacturer_location" string="Manufacturer location" optional="hide"/>
+                                <field name="manufacturing_company_name" string="Manufacturer location" optional="hide"/>
+                                <field name="manufacturer_location" string="Manufacturing Company Name" optional="hide"/>
+                                <field name="package_size" optional="hide"/>
+                                <field name="package_weight" optional="hide"/>
                             </tree>
                         </field>
                       </page>

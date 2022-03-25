@@ -23,13 +23,16 @@ class SelectionCriterium(models.Model):
     scm_package_id = fields.Char(string='SCM Package ID', related='scm_entry_item_line_id.scm_package_id')
     weight = fields.Char(string='Weight', related='scm_entry_item_line_id.weight')
     final_dimension = fields.Char(string='Final Dimension', related='scm_entry_item_line_id.final_dimension')
-    manufacturing_company_name = fields.Text(string='Manufacturing Company Name')
-    manufacturer_location = fields.Text(string='Manufacturer location')
     delivery_date = fields.Date(string='Delivery Date', related='scm_entry_item_line_id.delivery_date')
     shipping_date = fields.Date(string='Shipping Date', related='scm_entry_item_line_id.shipping_date')
     date_from = fields.Date(string='Campaign Start', related='scm_entry_item_line_id.date_from')
     date_to = fields.Date(string='Campaign End', related='scm_entry_item_line_id.date_to')
     final_modify_date = fields.Datetime(compute="_compute_final_modify_date")
+
+    manufacturing_company_name = fields.Text(string='Manufacturing Company Name', related='scm_entry_item_line_id.scm_package_line_id.manufacturing_company_name')
+    manufacturer_location = fields.Many2one(string='Manufacturer location', related='scm_entry_item_line_id.scm_package_line_id.manufacturer_location')
+    package_size = fields.Text(string='Package Size', related='scm_entry_item_line_id.scm_package_line_id.package_size')
+    package_weight = fields.Text(string='Package Weight', related='scm_entry_item_line_id.scm_package_line_id.package_weight')
 
     def _compute_final_modify_date(self):
         for rec in self:

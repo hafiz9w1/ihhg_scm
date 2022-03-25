@@ -19,6 +19,11 @@ class SelectionCriterium(models.Model):
     scm_package_name = fields.Char(compute="_compute_scm_package_name", string='SCM Package Name', store=True, readonly=False)
     scm_package_id = fields.Char(compute="_compute_scm_package_id", string='SCM Package ID', store=True, readonly=False)
 
+    manufacturing_company_name = fields.Text(string='Manufacturing Company')
+    manufacturer_location = fields.Many2one('res.partner', string='Manufacturer location')
+    package_size = fields.Text(string='Package Size')
+    package_weight = fields.Text(string='Package Weight')
+
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
     def _compute_name(self):
@@ -46,7 +51,7 @@ class SelectionCriterium(models.Model):
             if rec.package_id.naming_convention == 'DY':
                 name = f"PM_{brand}_{month}{day}_{package_name}"
             if rec.package_id.naming_convention == 'SCMART':
-                name = f"{int(month)}月{int(day)}日展開開始_{package_name}"
+                name = f"{month}月{day}日展開開始_{package_name}"
 
             rec.scm_package_name = name
 
@@ -56,7 +61,7 @@ class SelectionCriterium(models.Model):
             year = rec.scm_id.date_from.strftime("%y") if rec.scm_id.date_from else ""
             day = rec.scm_id.date_from.strftime("%d") if rec.scm_id.date_from else ""
             month = rec.scm_id.date_from.strftime("%m") if rec.scm_id.date_from else ""
-            rec.scm_package_id = (year + day + month + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
+            rec.scm_package_id = (year + month + day + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
 
     # Preset quantity from package_id.quantity
     @api.depends('package_id.quantity')
