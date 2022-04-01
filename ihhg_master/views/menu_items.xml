@@ -60,12 +60,6 @@
         sequence="10"
         parent="menu_scm_configuration" />
 
-    <menuitem id="menu_scm_configuration_campaign_type"
-        action="ihhg_master.action_campaign_type_open"
-        name="Campaign Type"
-        sequence="12"
-        parent="menu_scm_configuration" />
-
     <menuitem id="menu_scm_configuration_posm_master"
         action="product.product_template_action"
         name="Product Master Data"

@@ -6,6 +6,5 @@ class Channel (models.Model):
     _description = 'Channel'
 
     name = fields.Char(string='Channel')
-    owner = fields.Char(string='Owner')
     package_ids = fields.One2many(comodel_name="ihh.package", inverse_name="channel_id")
     active = fields.Boolean('Active', default=True)

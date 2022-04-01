@@ -8,7 +8,6 @@
               <kanban class="o_kanban_mobile">
                   <field name="name"/>
                   <field name="channel_ids"/>
-                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <field name="state"/>
@@ -54,7 +53,6 @@
                   <field name="user_budget_id"/>
                   <field name="user_project_id"/>
                   <field name="channel_ids" widget="many2many_tags" optional="show"/>
-                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <field name="state" decoration-info="state == 'draft' or state == 'done'" decoration-success="state == 'cancel'" widget="badge" optional="show"/>
@@ -113,7 +111,6 @@
                                 <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow" attrs="{'invisible': [('date_from', '=', False), ('date_to', '=', False)]}"/>
                                 <field name="date_to" widget="daterange" options='{"related_start_date": "date_from"}'/>
                             </div>
-                            <field name="campaign_type_id"/>
                             <field name="category_id"/>
                         </group>
                       </group>
@@ -175,14 +172,14 @@
                         <field name="item_line_ids_mass_production" context="{'scm_id': id}">
                           <tree string="SCM Item Mass Production" >
                               <field name="item_date_from" string="Date"/>
+                              <field name="project_id" string="Project Name"/>
+                              <field name="channel_id" string="Channel" />
                               <field name="categ_id" string="POSM Item Category"/>
-                              <field name="package_name" string="Package Name"/>
                               <field name="package_id" string="Packing ID"/>
+                              <field name="package_name" string="Package Name"/>
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
                               <field name="item_tags_names" string="Brand Name"/>
-                              <field name="extra"/>
-
                               <field name="material" optional="hide"/>
                               <field name="weight" optional="hide"/>
                               <field name="final_dimension" optional="hide"/>
@@ -192,7 +189,8 @@
                               <field name="surface_coating" optional="hide"/>
                               <field name="finishing" optional="hide"/>
                               <field name="packing_instruction" optional="hide"/>
-                              <field name="description" optional="hide"/>
+                              <field name="notes" optional="hide"/>
+                              <field name="extra_instruction" optional="hide"/>
                               <field name="quantity" optional="hide"/>
                               <field name="uom_id" optional="hide"/>
                               <field name="item_total" optional="hide"/>
@@ -204,6 +202,12 @@
                               <field name="shipping_date" optional="hide"/>
                               <field name="date_from" optional="hide"/>
                               <field name="date_to" optional="hide"/>
+                              <field name="extra" optional="hide"/>
+                              <field name="exposal_date" optional="hide"/>
+                              <field name="user_id" optional="hide"/>
+                              <field name="user_project_id" optional="hide"/>
+                              <field name="manufacturing_company_name" optional="hide"/>
+                              <field name="manufacturer_location" optional="hide"/>
                           </tree>
                         </field>
                        </page>
@@ -214,13 +218,12 @@
 
                         <field name="item_line_ids_adaption_work" context="{'scm_id': id}">
                           <tree string="SCM Item Adaption Work" >
-                              <field name="item_date_from" string="Finally Modified Date"/>
+                              <field name="item_date_from" string="Date"/>
                               <field name="project_id" string="Project Name"/>
                               <field name="channel_id" string="Channel" />
                               <field name="item_id" string="POSM Item ID"/>
                               <field name="name" string="POSM Item Name"/>
                               <field name="item_tags_names" string="Brand Name"/>
-                              <field name="extra"/>
                               <field name="material" string="Material" optional="hide"/>
                               <field name="weight" string="Weight" optional="hide"/>
                               <field name="final_dimension" string="Final Dimension" optional="hide"/>
@@ -229,8 +232,12 @@
                               <field name="printing_color" string="Color" optional="hide"/>
                               <field name="surface_coating" string="Surface Coating" optional="hide"/>
                               <field name="finishing" string="Finishing" optional="hide"/>
+                              <field name="manufacturing_company_name" optional="hide"/>
+                              <field name="manufacturer_location" optional="hide"/>
                               <field name="date_from" optional="hide"/>
                               <field name="date_to" optional="hide"/>
+                              <field name="notes" optional="hide"/>
+                              <field name="extra_instruction" optional="hide"/>
                           </tree>
                         </field>
                       </page>
@@ -241,17 +248,23 @@
 
                         <field name="package_line_ids_delivery" context="{'scm_id': id}">
                             <tree string="SCM Item Delivery" >
+                                <!--
                                 <field name="final_modify_date" string="Finally Modified Date"/>
+                                -->
                                 <field name="delivery_address_id" string="Delivery Address"/>
                                 <field name="delivery_address" string="Delivery Address - Full"/>
                                 <field name="project_id" string="Project Name"/>
                                 <field name="channel_id" string="Channel" />
-                                <field name="package_name" string="Packing Name"/>
                                 <field name="package_id" string="Packing ID"/>
-                                <field name="extra" optional="hide"/>
+                                <field name="package_name" string="Packing Name"/>
+                                <field name="scm_entry_item_line_ids" string="Items 1"/>
+                                <!--
+                                <field name="extra" />
+                                -->
                                 <field name="description" string="Description" optional="hide"/>
                                 <field name="vacant_instruction" string="Vacant Instruction" optional="hide"/>
                                 <field name="quantity" optional="show"/>
+                                <!--
                                 <field name="uom_id" optional="hide"/>
                                 <field name="scm_package_id" string="SCM package ID" optional="hide"/>
                                 <field name="scm_package_name" string="SCM Pacakge Name" optional="hide"/>
@@ -261,10 +274,13 @@
                                 <field name="date_to" optional="hide"/>
                                 <field name="final_dimension" string="TBD" optional="hide"/>
                                 <field name="weight" string="Packing weight" optional="hide"/>
+                                -->
                                 <field name="manufacturing_company_name" string="Manufacturer location" optional="hide"/>
                                 <field name="manufacturer_location" string="Manufacturing Company Name" optional="hide"/>
+                                <!--
                                 <field name="package_size" optional="hide"/>
                                 <field name="package_weight" optional="hide"/>
+                                -->
                             </tree>
                         </field>
                       </page>
@@ -329,11 +345,9 @@
           <field name="arch" type="xml">
               <search string="Search SCM Entry">
                   <field name="channel_ids"/>
-                  <field name="campaign_type_id"/>
                   <field name="date_from"/>
                   <field name="date_to"/>
                   <group expand="0" string="Group By">
-                      <filter string="Campaign Type" name="campaign_type_id" domain="[]" context="{'group_by': 'campaign_type_id'}"/>
                       <filter string="Project" name="project_id" domain="[]" context="{'group_by': 'project_id'}"/>
                       <filter string="Project Manager" name="user_project_id" domain="[]" context="{'group_by': 'user_project_id'}"/>
                       <filter string="Owner" name="user_id" domain="[]" context="{'group_by': 'user_id'}"/>

@@ -8,7 +8,6 @@
           <field name="arch" type="xml">
               <tree string="Channel">
                   <field name="name"/>
-                  <field name="owner"/>
               </tree>
           </field>
       </record>
@@ -22,7 +21,6 @@
                 <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
                     <group>
                         <field name="name"/>
-                        <field name="owner"/>
                         <field name="package_ids" context="{'tree_view_ref': 'ihhg_master.view_package_tree_for_channel', 'default_channel_id': id}"/>
                         <field name="active" invisible="1"/>
                     </group>
@@ -38,7 +36,6 @@
           <field name="arch" type="xml">
               <search string="Search channel">
                   <field name="name"/>
-                  <field name="owner"/>
              </search>
           </field>
       </record>

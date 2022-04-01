@@ -43,7 +43,10 @@ class ItemLine (models.Model):
     surface_coating = fields.Char(string='Surface Coating', related='product_id.surface_coating')
     finishing = fields.Char(string='Finishing', related='product_id.finishing')
     packing_instruction = fields.Char(string='Packing Instruction', related='product_id.packing_instruction')
-    description = fields.Char(string='Description', related='product_id.description')
+    # description = fields.Char(string='Description', related='product_id.description')
+    uom_id = fields.Many2one(string='Units of Measure', related='product_id.uom_id')
+    notes = fields.Text(string='Notes', related='product_template_id.ihh_notes')
+    extra_instruction = fields.Text(string='Extra Instruction')
     uom_id = fields.Many2one(string='Units of Measure', related='product_id.uom_id')
     item_total = fields.Integer(string='Items per package (TBC)', related='item_id.package_id.item_total')
     scm_package_name = fields.Char(string='SCM Package Name', related='scm_package_line_id.scm_package_name')
@@ -57,6 +60,11 @@ class ItemLine (models.Model):
     project_id = fields.Many2one(string='Project Name', related='scm_id.project_id')
     show_in_vc = fields.Boolean(related="item_id.product_template_id.show_in_vc", store=True)
     extra = fields.Text(string='Extra Info...')
+    exposal_date = fields.Date(string='Exposal date')
+    user_id = fields.Many2one(string='Owner', related='scm_id.user_id')
+    user_project_id = fields.Many2one(string='Project Manager', related='scm_id.user_project_id')
+    manufacturing_company_name = fields.Text(string='Manufacturing Company', related='scm_package_line_id.manufacturing_company_name')
+    manufacturer_location = fields.Many2one(string='Manufacturer location', related='scm_package_line_id.manufacturer_location')
     active = fields.Boolean('Active', related="scm_id.active")
 
     @api.depends('scm_package_line_id.total_quantity', 'item_id.package_quantity')
@@ -174,31 +182,3 @@ class ItemLine (models.Model):
         for p in packages_lines:
             if p.package_id not in package_item_lines:
                 p.unlink()
-
-    def get_address_id_quantity(self):
-        self.ensure_one()
-        result = [{
-            "delivery_address_id": self.final_delivery_address_id.id,
-            "quantity": self.main_address_quantity
-        }]
-
-        for second_add in self.package_id.secondary_address_ids:
-            result.append({
-                "delivery_address_id": second_add.address_id.id,
-                "quantity": second_add.backup_quantity
-            })
-
-        return result
-
-    def create_delivery_line(self):
-        self.ensure_one()
-        vals = []
-        address_qunatity = self.get_address_id_quantity()
-        for ad in address_qunatity:
-            vals.append({
-                "scm_id": self.scm_id.id,
-                "scm_entry_item_line_id": self.id,
-                "delivery_address_id": ad.get('delivery_address_id'),
-                "quantity": ad.get("quantity"),
-            })
-        self.env['scm.entry.delivery.line'].sudo().create(vals)

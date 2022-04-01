@@ -29,7 +29,6 @@ class SCMEntry(models.Model):
     package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
     item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
     category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    campaign_type_id = fields.Many2one('ihh.campaign.type', string='Campaign Type', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     note = fields.Text(string='Extra note...')
@@ -106,7 +105,8 @@ class SCMEntry(models.Model):
                 line.write({
                     "product_id": product.id
                 })
-                line.create_delivery_line()
+            for address in rec.package_line_ids:
+                address.create_delivery_line()
         self.state = 'phase2'
 
     # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
@@ -160,9 +160,11 @@ class SCMEntry(models.Model):
                 "model": 'scm.entry.item.line',
                 "fields": [
                     {"name": "item_date_from", "label": _("Date")},
+                    {"name": "project_id", "label": _("Project Name")},
+                    {"name": "channel_id", "label": _("Channel")},
                     {"name": "categ_id", "label": _("POSM Item Category")},
-                    {"name": "package_name", "label": _("Package Name")},
                     {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "package_name", "label": _("Package Name")},
                     {"name": "item_id", "label": _("POSM Item ID")},
                     {"name": "name", "label": _("POSM Item Name")},
                     {"name": "item_tags_names", "label": _("Brand Name")},
@@ -175,7 +177,8 @@ class SCMEntry(models.Model):
                     {"name": "surface_coating", "label": _("Surface Coating")},
                     {"name": "finishing", "label": _("Finishing")},
                     {"name": "packing_instruction", "label": _("Packing Instruction")},
-                    {"name": "description", "label": _("Description")},
+                    {"name": "notes", "label": _("Notes")},
+                    {"name": "extra_instruction", "label": _("Extra Instruction")},
                     {"name": "quantity", "label": _("Quantity")},
                     {"name": "uom_id", "label": _("Units of Measure")},
                     {"name": "item_total", "label": _("Items per package (TBC)")},
@@ -187,6 +190,12 @@ class SCMEntry(models.Model):
                     {"name": "shipping_date", "label": _("Shipping Date")},
                     {"name": "date_from", "label": _("Campaign Start")},
                     {"name": "date_to", "label": _("Campaign End")},
+                    {"name": "extra", "label": _("Extra Info...")},
+                    {"name": "exposal_date", "label": _("Exposal Date")},
+                    {"name": "user_id", "label": _("Owner")},
+                    {"name": "user_project_id", "label": _("Project Manager")},
+                    {"name": "manufacturing_company_name", "label": _("Manufacturing Company")},
+                    {"name": "manufacturer_location", "label": _("Manufacturer location")},
                 ],
                 "ids": self.item_line_ids_mass_production.ids,
                 "domain": [],
@@ -219,8 +228,12 @@ class SCMEntry(models.Model):
                     {"name": "printing_color", "label": _("Color")},
                     {"name": "surface_coating", "label": _("Surface Coating")},
                     {"name": "finishing", "label": _("Finishing")},
+                    {"name": "manufacturing_company_name", "label": _("Manufacturing Company")},
+                    {"name": "manufacturer_location", "label": _("Manufacturer location")},
                     {"name": "date_from", "label": _("Campaign Start")},
                     {"name": "date_to", "label": _("Campaign End")},
+                    {"name": "notes", "label": _("Notes")},
+                    {"name": "extra_instruction", "label": _("Extra Instruction")},
                 ],
                 "ids": self.item_line_ids_adaption_work.ids,
                 "domain": [],
@@ -239,28 +252,29 @@ class SCMEntry(models.Model):
             "data": json.dumps({
                 "model": 'scm.entry.delivery.line',
                 "fields": [
-                    {"name": "final_modify_date", "label": _("Finally Modified Date")},
+                    # {"name": "final_modify_date", "label": _("Finally Modified Date")},
                     {"name": "delivery_address_id", "label": _("Delivery Address")},
                     {"name": "delivery_address", "label": _("Delivery Address - Full")},
                     {"name": "project_id", "label": _("Project Name")},
                     {"name": "channel_id", "label": _("Channel")},
-                    {"name": "package_name", "label": _("Package Name")},
                     {"name": "package_id", "label": _("Packing ID")},
+                    {"name": "package_name", "label": _("Package Name")},
                     {"name": "description", "label": _("Description")},
                     {"name": "vacant_instruction", "label": _("Vacant Instruction")},
                     {"name": "quantity", "label": _("Quantity")},
-                    {"name": "uom_id", "label": _("Units of Measure")},
-                    {"name": "scm_package_id", "label": _("Seihin Number")},
-                    {"name": "scm_package_name", "label": _("Seihin Name")},
-                    {"name": "delivery_date", "label": _("Delivery Date")},
-                    {"name": "shipping_date", "label": _("Shipping Date")},
-                    {"name": "date_from", "label": _("Campaign Start")},
-                    {"name": "date_to", "label": _("Campaign End")},
-                    {"name": "final_dimension", "label": _("Packing Size")},
-                    {"name": "weight", "label": _("Packing weight")},
+                    # {"name": "uom_id", "label": _("Units of Measure")},
+                    # {"name": "scm_package_id", "label": _("Seihin Number")},
+                    # {"name": "scm_package_name", "label": _("Seihin Name")},
+                    # {"name": "delivery_date", "label": _("Delivery Date")},
+                    # {"name": "shipping_date", "label": _("Shipping Date")},
+                    # {"name": "date_from", "label": _("Campaign Start")},
+                    # {"name": "date_to", "label": _("Campaign End")},
+                    # {"name": "final_dimension", "label": _("Packing Size")},
+                    # {"name": "weight", "label": _("Packing weight")},
                     {"name": "manufacturing_company_name", "label": _("Manufacturing Company Name")},
                     {"name": "manufacturer_location", "label": _("Manufacturer location")},
-                    {"name": "extra", "label": _("Extra Info...")},
+                    # {"name": "extra", "label": _("Extra Info...")},
+                    {"name": "scm_entry_item_line_ids", "label": _("Items")},
                 ],
                 "ids": self.package_line_ids_delivery.ids,
                 "domain": [],

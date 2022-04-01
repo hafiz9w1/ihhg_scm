@@ -10,6 +10,7 @@ class SelectionCriterium(models.Model):
     scm_id = fields.Many2one(comodel_name="scm.entry")
     package_id = fields.Many2one('ihh.package', string='Package')
     package_name = fields.Char(string='Package Name', related="package_id.long_name")
+    channel_id = fields.Many2one(string='Channel', related="package_id.channel_id")
     delivery_address_id = fields.Many2one(comodel_name="res.partner", domain="[('package_ids', 'in', package_id)]")
     quantity = fields.Integer(compute='_compute_quantity', store=True, readonly=False)
     total_quantity = fields.Integer(compute="_compute_total_quantity")
@@ -24,6 +25,7 @@ class SelectionCriterium(models.Model):
     package_size = fields.Text(string='Package Size')
     package_weight = fields.Text(string='Package Weight')
     state = fields.Selection(string='State', related="scm_id.state")
+    # main_address_quantity = fields.Integer(string='Quantity ', related="scm_entry_item_line_ids.main_address_quantity")
 
     # TODO see if more complexe name need to be done
     @api.depends('package_id.name')
@@ -75,3 +77,32 @@ class SelectionCriterium(models.Model):
             rec.scm_entry_item_line_ids.write({
                 "item_tags_ids": [(6, 0, rec.brand_id.ids)]
             })
+
+    def get_address_id_quantity(self):
+        self.ensure_one()
+        result = [{
+            "delivery_address_id": self.delivery_address_id.id,
+            # "quantity": self.main_address_quantity
+        }]
+
+        for second_add in self.package_id.secondary_address_ids:
+            result.append({
+                "delivery_address_id": second_add.address_id.id,
+                "quantity": second_add.backup_quantity
+            })
+
+        return result
+
+    def create_delivery_line(self):
+        self.ensure_one()
+        vals = []
+        address_quantity = self.get_address_id_quantity()
+        for ad in address_quantity:
+            vals.append({
+                "scm_id": self.scm_id.id,
+                # "scm_entry_item_line_id": self.scm_entry_item_line_ids.ids,
+                "scm_entry_package_line_id": self.id,
+                "delivery_address_id": ad.get('delivery_address_id'),
+                "quantity": ad.get("quantity"),
+            })
+        self.env['scm.entry.delivery.line'].sudo().create(vals)

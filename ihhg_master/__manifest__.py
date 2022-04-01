@@ -52,7 +52,6 @@ Functionalities:
         'views/scm_entry_item_line_views.xml',
         'views/scm_entry_package_line_views.xml',
         'views/category_views.xml',
-        'views/campaign_type_views.xml',
         'views/item_tags_views.xml',
         'views/scm_entry_views.xml',
         'views/res_partner_views.xml',
