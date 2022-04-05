@@ -2,7 +2,7 @@ from odoo import models, fields, api
 from datetime import datetime
 
 
-class SelectionCriterium(models.Model):
+class SCMEntryPackageLine(models.Model):
     _name = "scm.entry.package.line"
     _description = "Package Lines"
 
@@ -67,10 +67,11 @@ class SelectionCriterium(models.Model):
             rec.scm_package_id = (year + month + day + str(rec.scm_id.category_id.name)[:1] + str(rec.package_id.name)).replace(' ', '')
 
     # Preset quantity from package_id.quantity
-    @api.depends('package_id.quantity')
+    @api.depends('quantity', 'package_id.quantity')
     def _compute_quantity(self):
         for rec in self:
-            rec.quantity = rec.package_id.quantity
+            if not rec.quantity:
+                rec.quantity = rec.package_id.quantity
 
     def _inverse_add_brand_to_items(self):
         for rec in self:
