@@ -1,6 +1,6 @@
 {
-    'name': "iHH Project",
-    'version': "15.0.1.0.1",
+    'name': 'iHH Project',
+    'version': '15.0.1.0.1',
     'category': 'project',
     'summary': """ Custom module""",
 
@@ -8,9 +8,8 @@
     Update for project part
     """,
 
-    'author': "Hafiz Abbas",
-    'email': "hafiz@portcities.net",
-    'website': "http://portcities.net",
+    'author': 'Hafiz Abbas',
+    'email': 'hafizabbas9w1@gmail.com',
     'depends': [
         'base',
         'project',
