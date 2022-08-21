@@ -118,12 +118,10 @@
                       <page name="channel_subselection" string="Channel Subselection">
                           <field name="channel_ids" context="{'tree_view_ref': 'ihhg_master.view_channel_tree', 'scm_id': id}"/>
                       </page>
-                      <!-- TODO use a smart button to open them in a new full view -->
                       <page name="package_selection" string="Package Selection">
                         <button name="action_add_packages" type="object" string="Add Packages" class="oe_highlight" states="draft"/>
                         <field name="package_line_ids" context="{'tree_view_ref': 'ihhg_master.view_package_line_tree_scm_entry', 'scm_id': id}"/>
                       </page>
-                      <!-- TODO add a smart button to open them in a new full view also -->
                       <page name="item_planning" string="Item Planning">
                           <field name="allocated_item_ids" invisible="1" />
                           <button name="action_add_packages" type="object" string="Add Packages" class="oe_highlight" states="draft"/>
@@ -248,9 +246,6 @@
 
                         <field name="package_line_ids_delivery" context="{'scm_id': id}">
                             <tree string="SCM Item Delivery" >
-                                <!--
-                                <field name="final_modify_date" string="Finally Modified Date"/>
-                                -->
                                 <field name="delivery_address_id" string="Delivery Address"/>
                                 <field name="delivery_address" string="Delivery Address - Full"/>
                                 <field name="project_id" string="Project Name"/>
@@ -258,29 +253,11 @@
                                 <field name="package_id" string="Packing ID"/>
                                 <field name="package_name" string="Packing Name"/>
                                 <field name="scm_entry_item_line_ids" string="Items 1"/>
-                                <!--
-                                <field name="extra" />
-                                -->
                                 <field name="description" string="Description" optional="hide"/>
                                 <field name="vacant_instruction" string="Vacant Instruction" optional="hide"/>
                                 <field name="quantity" optional="show"/>
-                                <!--
-                                <field name="uom_id" optional="hide"/>
-                                <field name="scm_package_id" string="SCM package ID" optional="hide"/>
-                                <field name="scm_package_name" string="SCM Pacakge Name" optional="hide"/>
-                                <field name="delivery_date" optional="display"/>
-                                <field name="shipping_date" optional="display"/>
-                                <field name="date_from" optional="hide"/>
-                                <field name="date_to" optional="hide"/>
-                                <field name="final_dimension" string="TBD" optional="hide"/>
-                                <field name="weight" string="Packing weight" optional="hide"/>
-                                -->
                                 <field name="manufacturing_company_name" string="Manufacturer location" optional="hide"/>
                                 <field name="manufacturer_location" string="Manufacturing Company Name" optional="hide"/>
-                                <!--
-                                <field name="package_size" optional="hide"/>
-                                <field name="package_weight" optional="hide"/>
-                                -->
                             </tree>
                         </field>
                       </page>

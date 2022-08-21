@@ -22,31 +22,6 @@
                 <group>
                   <field name="package_ids" />
                 </group>
-
-                  <!-- <sheet>
-                  <group>
-                    <group>
-                      <field name="is_dc"/>
-                      <field name="is_represents"/>
-                      <field name="is_reserve"/>
-                      <field name="cpid"/>
-                      <field name="date_from"/>
-                      <field name="date_to"/>
-                      <field name="delivery_type"/>
-                      <field name="channel_id"/>
-                      <field name="selection_criteria_id"/>
-                    </group>
-                    <group>
-                      <field name="post_number"/>
-                      <field name="prefecture"/>
-                      <field name="territory_code"/>
-                      <field name="scm_shipping_address"/>
-                      <field name="targets_represented"/>
-                      <field name="user_id"/>
-                      <field name="store_regulations_id"/>
-                    </group>
-                  </group>
-                </sheet> -->
               </page>
           </xpath>
         </field>

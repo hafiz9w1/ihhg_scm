@@ -5,32 +5,160 @@ from urllib.parse import urlencode
 
 
 class SCMEntry(models.Model):
-    _name = "scm.entry"
-    _description = "SCM Entry"
+    _name = 'scm.entry'
+    _description = 'SCM Entry'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='SCM Name', tracking=True, required=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    project_id = fields.Many2one('project.project', string='Related Project', tracking=True, readonly=True, copy=False)
-    project_scm_id = fields.Char(string='Project ID', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, required=True, tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    user_budget_id = fields.Many2one('res.users', string='Budget Owner', default=lambda self: self.env.user.has_group('ihhg_master.group_scm_cp_team'), tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    user_project_id = fields.Many2one('res.users', string='Project Manager', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    channel_ids = fields.Many2many('ihh.channel', string='Channel', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    item_line_ids = fields.One2many('scm.entry.item.line', 'scm_id', string='Items', states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=True)
-    item_line_ids_mass_production = fields.One2many(string='Items Mass Production', related='item_line_ids')
-    item_line_ids_adaption_work = fields.One2many(string='Items Adaption Work', related='item_line_ids')
-
-    package_line_ids_delivery = fields.One2many(comodel_name="scm.entry.delivery.line", inverse_name="scm_id", string='Items Delivery', readonly=True)
-
-    allocated_item_ids = fields.Many2many(comodel_name="ihh.package.item", compute="_compute_allocated_item_ids")
-    package_line_ids = fields.One2many('scm.entry.package.line', 'scm_id', string='Packages', states={'lock': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]}, copy=False)
-    allocated_package_ids = fields.Many2many(comodel_name="ihh.package", compute="_compute_allocated_package_ids")
-    channel_ids_total = fields.Integer(compute='_compute_total', string='Total Channel')
-    package_line_ids_total = fields.Integer(compute='_compute_total', string='Total Package')
-    item_line_ids_total = fields.Integer(compute='_compute_total', string='Total Item')
-    category_id = fields.Many2one('ihh.category', string='Campaign Category', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    date_from = fields.Date(string='Campaign Start', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    date_to = fields.Date(string='Campaign Stop', tracking=True, states={'lock': [('readonly', True)], 'phase2': [('readonly', True)], 'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    name = fields.Char(
+        string='SCM Name',
+        tracking=True,
+        required=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    project_id = fields.Many2one(
+        'project.project',
+        string='Related Project',
+        tracking=True,
+        readonly=True,
+        copy=False,
+    )
+    project_scm_id = fields.Char(
+        string='Project ID',
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    user_id = fields.Many2one(
+        'res.users',
+        string='Owner',
+        default=lambda self: self.env.user,
+        required=True,
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    user_budget_id = fields.Many2one(
+        'res.users',
+        string='Budget Owner',
+        default=lambda self: self.env.user.has_group(
+            'ihhg_master.group_scm_cp_team'),
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    user_project_id = fields.Many2one(
+        'res.users',
+        string='Project Manager',
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    channel_ids = fields.Many2many(
+        'ihh.channel',
+        string='Channel',
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    item_line_ids = fields.One2many(
+        'scm.entry.item.line',
+        'scm_id', string='Items',
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+        copy=True,
+    )
+    item_line_ids_mass_production = fields.One2many(
+        string='Items Mass Production',
+        related='item_line_ids',
+    )
+    item_line_ids_adaption_work = fields.One2many(
+        string='Items Adaption Work',
+        related='item_line_ids',
+    )
+    package_line_ids_delivery = fields.One2many(
+        comodel_name='scm.entry.delivery.line',
+        inverse_name='scm_id',
+        string='Items Delivery',
+        readonly=True,
+    )
+    allocated_item_ids = fields.Many2many(
+        comodel_name='ihh.package.item',
+        compute='_compute_allocated_item_ids',
+    )
+    package_line_ids = fields.One2many(
+        'scm.entry.package.line',
+        'scm_id', string='Packages',
+        states={
+            'lock': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+        copy=False,
+    )
+    allocated_package_ids = fields.Many2many(
+        comodel_name='ihh.package',
+        compute='_compute_allocated_package_ids',
+    )
+    channel_ids_total = fields.Integer(
+        compute='_compute_total',
+        string='Total Channel',
+    )
+    package_line_ids_total = fields.Integer(
+        compute='_compute_total',
+        string='Total Package',
+    )
+    item_line_ids_total = fields.Integer(
+        compute='_compute_total',
+        string='Total Item',
+    )
+    category_id = fields.Many2one(
+        'ihh.category',
+        string='Campaign Category',
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    date_from = fields.Date(
+        string='Campaign Start',
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
+    date_to = fields.Date(
+        string='Campaign Stop',
+        tracking=True,
+        states={
+            'lock': [('readonly', True)],
+            'phase2': [('readonly', True)],
+            'done': [('readonly', True)],
+            'cancel': [('readonly', True)]},
+    )
     note = fields.Text(string='Extra note...')
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -38,12 +166,14 @@ class SCMEntry(models.Model):
         ('cancel', 'Cancelled'),
         ('phase2', 'Item Confirmed'),
         ('done', 'Done'),
-    ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
+    ],string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
     active = fields.Boolean('Active', default=True)
 
-    # Count total number of Channel, Package and Item per SCM
     @api.depends('channel_ids', 'package_line_ids', 'item_line_ids')
     def _compute_total(self):
+        """
+        Count total number of Channel, Package and Item per SCM
+        """
         for rec in self:
             rec.channel_ids_total = len(rec.channel_ids)
             rec.package_line_ids_total = len(rec.package_line_ids)
@@ -59,24 +189,35 @@ class SCMEntry(models.Model):
         for rec in self:
             rec.allocated_package_ids = rec.package_line_ids.package_id.ids
 
-    # Change SCM state to cancelled
     def action_scm_cancel(self):
+        """
+        Change SCM state to cancelled
+        """
         self.state = 'cancel'
 
-    # Change SCM state to draft from cancelled
     def action_scm_draft(self):
+        """
+        Change SCM state to draft from cancelled
+        """
         self.state = 'draft'
 
-    # Lock SCM
     def action_scm_lock(self):
+        """
+        Lock SCM
+        """
         self.state = 'lock'
 
-    # Unlock SCM
     def action_scm_unlock(self):
+        """
+        Unlock SCM
+        """
         self.state = 'draft'
 
-    # Button for creating product.product from items and setting state to phase2
     def action_scm_confirm_items(self):
+        """
+        Button for creating product.product from items and
+        setting state to phase2
+        """
         for rec in self:
             for line in rec.item_line_ids:
                 product = self.env['product.product'].create({
@@ -103,46 +244,37 @@ class SCMEntry(models.Model):
                     'disposal_date': rec.date_to + timedelta(days=line.item_id.product_template_id.dispose_after),
                 })
                 line.write({
-                    "product_id": product.id
+                    "product_id": product.id,
                 })
             for address in rec.package_line_ids:
                 address.create_delivery_line()
         self.state = 'phase2'
 
-    # Button for deleting product.product created by CONFRIM ITEM and setting state to lock
     def action_scm_reset(self):
-        item_product_product = self.env['product.product'].search([('scm_id', 'in', self.ids)])
+        """
+        Button for deleting product.product created by CONFRIM ITEM and
+        setting state to lock
+        """
+        item_product_product = self.env['product.product'].search(
+            [('scm_id', 'in', self.ids)])
         item_product_product.unlink()
-        self.write({"package_line_ids_delivery": [(5, 0, 0)]})
+        self.write({'package_line_ids_delivery': [(
+            5, 0, 0)]})
 
         self.state = 'lock'
 
-    # Change state to done
     def action_scm_finish(self):
+        """
+        Change state to done
+        """
         self.state = 'done'
-
-    # # Prevent SCM deletion in DONE state.
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state in ('done'):
-    #             raise UserError(_('Deleting is not allowed for SCM in DONE state'))
-    #     return super(SCMEntry, self).unlink()
-
-    # # Prevent SCM duplication in DONE state.
-    # def copy(self):
-    #     for rec in self:
-    #         if rec.state in ('done'):
-    #             raise UserError(_('Duplication is not allowed for SCM in DONE state'))
-    #     return super(SCMEntry, self).copy()
 
     def action_add_packages(self):
         self.ensure_one()
         add_package = self.env['scm.entry.add.package'].create({
-            "scm_id": self.id
+            'scm_id': self.id,
         })
-
         context = dict(self.env.context)
-
         return {
             'name': _('Add package'),
             'type': 'ir.actions.act_window',
@@ -150,11 +282,13 @@ class SCMEntry(models.Model):
             'res_model': 'scm.entry.add.package',
             'res_id': add_package.id,
             'target': 'new',
-            'context': context
+            'context': context,
         }
 
-    # Download Mass Production
     def action_mass_production_download(self):
+        """
+        Download Mass Production to excel
+        """
         data = {
             "data": json.dumps({
                 "model": 'scm.entry.item.line',
@@ -208,8 +342,10 @@ class SCMEntry(models.Model):
             'target': 'self',
         }
 
-    # Download Adaption Work
     def action_adaption_work_download(self):
+        """
+        Download Adaption Work to excel
+        """
         data = {
             "data": json.dumps({
                 "model": 'scm.entry.item.line',
@@ -246,14 +382,15 @@ class SCMEntry(models.Model):
             'target': 'self',
         }
 
-    # Download Delivery
     def action_delivery_download(self):
+        """
+        Download Delivery to excel
+        """
         data = {
-            "data": json.dumps({
-                "model": 'scm.entry.delivery.line',
+            'data': json.dumps({
+                'model': 'scm.entry.delivery.line',
                 "fields": [
-                    # {"name": "final_modify_date", "label": _("Finally Modified Date")},
-                    {"name": "delivery_address_id", "label": _("Delivery Address")},
+                    {'name': "delivery_address_id", "label": _("Delivery Address")},
                     {"name": "delivery_address", "label": _("Delivery Address - Full")},
                     {"name": "project_id", "label": _("Project Name")},
                     {"name": "channel_id", "label": _("Channel")},
@@ -262,18 +399,8 @@ class SCMEntry(models.Model):
                     {"name": "description", "label": _("Description")},
                     {"name": "vacant_instruction", "label": _("Vacant Instruction")},
                     {"name": "quantity", "label": _("Quantity")},
-                    # {"name": "uom_id", "label": _("Units of Measure")},
-                    # {"name": "scm_package_id", "label": _("Seihin Number")},
-                    # {"name": "scm_package_name", "label": _("Seihin Name")},
-                    # {"name": "delivery_date", "label": _("Delivery Date")},
-                    # {"name": "shipping_date", "label": _("Shipping Date")},
-                    # {"name": "date_from", "label": _("Campaign Start")},
-                    # {"name": "date_to", "label": _("Campaign End")},
-                    # {"name": "final_dimension", "label": _("Packing Size")},
-                    # {"name": "weight", "label": _("Packing weight")},
                     {"name": "manufacturing_company_name", "label": _("Manufacturing Company Name")},
                     {"name": "manufacturer_location", "label": _("Manufacturer location")},
-                    # {"name": "extra", "label": _("Extra Info...")},
                     {"name": "scm_entry_item_line_ids", "label": _("Items")},
                 ],
                 "ids": self.package_line_ids_delivery.ids,

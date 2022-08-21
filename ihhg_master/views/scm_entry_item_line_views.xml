@@ -87,9 +87,6 @@
         <field name="model">scm.entry.item.line</field>
         <field name="arch" type="xml">
             <tree string="SCM Item Lines" editable="bottom" >
-                <!-- <control>
-                    <create name="add_item_control" string="Add an Item"/>
-                </control> -->
                 <field name="scm_id" invisible="1"/>
                 <field name="sequence" widget="handle"/>
                 <field name="item_id"/>

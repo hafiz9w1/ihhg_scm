@@ -2,11 +2,11 @@ from odoo import models, fields
 
 
 class ProductTemplate(models.Model):
-    _inherit = "product.template"
+    _inherit = 'product.template'
 
     posm_item_id = fields.Char(string='POSM Item ID')
-    show_in_vc = fields.Boolean(string="Show in VC")
-    dispose_after = fields.Integer(string="Dispose After (days)")
+    show_in_vc = fields.Boolean(string='Show in VC')
+    dispose_after = fields.Integer(string='Dispose After (days)')
 
     extra_instruction = fields.Char(string='Extra Instruction')
     material = fields.Char(string='Material')
@@ -25,5 +25,9 @@ class ProductTemplate(models.Model):
     ihh_notes = fields.Text(string='Notes')
 
     _sql_constraints = [
-        ('posm_item_id_uniq', 'unique (posm_item_id)', "POSM Item ID already exists!"),
+        (
+            'posm_item_id_uniq',
+            'unique (posm_item_id)',
+            'POSM Item ID already exists!',
+        ),
     ]

@@ -2,13 +2,18 @@ from odoo import models, fields
 
 
 class ProductProduct(models.Model):
-    _inherit = "product.product"
+    _inherit = 'product.product'
 
-    # remove computation, we are not use variant normally use it to put a value linked to SCM
+    # remove computation, we are not use variant normally use
+    # it to put a value linked to SCM
     combination_indices = fields.Char(compute=False)
     posm_item_id = fields.Char(string='POSM Item ID')
-    scm_id = fields.Many2one(comodel_name="scm.entry", readonly=True)
-    project_id = fields.Many2one(comodel_name="project.project", related="scm_id.project_id", store=True)
+    scm_id = fields.Many2one(comodel_name='scm.entry', readonly=True)
+    project_id = fields.Many2one(
+        comodel_name='project.project',
+        related='scm_id.project_id',
+        store=True,
+    )
 
     # Use to store the value for prdocut
     extra_instruction = fields.Char(string='Extra Instruction')
@@ -32,7 +37,7 @@ class ProductProduct(models.Model):
         names = []
         for rec in self:
             names.append((
-                rec.id, f"[{rec.posm_item_id}-{rec.scm_id.name}] {rec.name}"
+                rec.id, f'[{rec.posm_item_id}-{rec.scm_id.name}] {rec.name}',
             ))
 
         return names

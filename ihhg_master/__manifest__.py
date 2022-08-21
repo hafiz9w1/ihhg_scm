@@ -1,11 +1,12 @@
 {
-    'name': "iHH Group Custom Addon",
-    'version': "15.0.1.0.1",
+    'name': 'iHH Group Custom Addon',
+    'version': '15.0.1.0.1',
     'category': 'management',
-    'summary': """ Custom module""",
+    'summary': """ Custom supply chain management module """,
 
     'description': """
-    This module adds the following functionalities to extend the project Module.
+    This module adds the following functionalities to extend the
+    project Module.
 
 Functionalities:
 - Extend project model to add selection_criteria_id, scm_entry_id models
@@ -32,9 +33,8 @@ Functionalities:
 
     """,
 
-    'author': "Hafiz Abbas",
-    'email': "hafiz@portcities.net",
-    'website': "http://portcities.net",
+    'author': 'Hafiz Abbas',
+    'email': 'hafizabbas9w1@gmail.com',
     'depends': [
         'product',
         'project',

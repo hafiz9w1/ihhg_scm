@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields
 
 
 class Package (models.Model):
@@ -7,5 +7,5 @@ class Package (models.Model):
     _rec_name = 'address_id'
 
     package_id = fields.Many2one(comodel_name='ihh.package', string='Channel')
-    address_id = fields.Many2one(comodel_name="res.partner")
+    address_id = fields.Many2one(comodel_name='res.partner')
     backup_quantity = fields.Integer()
